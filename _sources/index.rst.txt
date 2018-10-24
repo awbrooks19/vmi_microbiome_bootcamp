@@ -1,0 +1,79 @@
+.. VMI Bootcamp II documentation master file, created by
+   sphinx-quickstart on Tue Oct  2 18:45:36 2018.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Welcome to the Second VMI Bootcamp!
+===========================================
+
+
+.. figure:: ./images/vmi_logo_stacked.png
+   :scale: 30 %
+   :alt: VMI Logo Stacked
+
+VMI Website: `Vanderbilt Microbiome Initiative <https://my.vanderbilt.edu/microbiome/>`_.
+
+   - Organized by the Vanderbilt Microbiome Initiative (VMI) and funded by Vanderbilt University Trans-Institutional Programs (TIPs).
+   - Founded by members of the Dept. Biological Sciences, Peabody college, School of Engineering and the Medical center
+   - Research – 120 Vanderbilt scholars committed to fundamental and translational microbiome research
+   - Members include undergraduates, graduate, postdocs, and faculty
+   - Multidisciplinary community - Biological Sciences, Biostatistics, Cell and Developmental Biology, Chemistry, Medicine, Epidemiology, PMI, GHN, Vantage
+   - Education and training – Campus-wide programs to deploy state-of-the-art tools to propel microbiome research
+   - Ongoing Clinical Trial - Multi'omic, dietary intervention, temporal sampling, multi-ethnic
+
+Microbiome Bootcamp
+-------------------
+This workshop is a basic introduction into microbiome analysis
+
+Goals:
+
+   1. Understand the importance of good experimental design 
+
+   2. Explore the critical steps in a typical microbiome analysis
+
+   3. Utilize the QIIME2 pipeline to process microbiome datasets
+
+Microbiome Introduction
+-----------------------
+
+.. toctree::
+   :maxdepth: 2
+   
+   1_microbiome_introduction
+   
+Experimental Design and Data Generation
+---------------------------------------
+   
+   - Sampling Strategy
+   - Sampling Method and Storage
+      - Randomization
+      - Contamination
+      - Low Biomass
+      - Cage Effects
+   - Collecting Metadata
+      - Bioinformatics Rule #1
+   - DNA Extraction
+   - PCR Amplification
+      - Amplicon Options
+      - Variable Region Choices
+      - EMP
+   - Sequencing Technologies
+      - Library Preparation
+      - Multiplexing
+      
+   
+   
+Command Line Tutorials
+----------------------
+
+.. toctree::
+   :maxdepth: 2  
+   
+   2_command_line_introduction
+
+Other Resources
+===============
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
