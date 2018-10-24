@@ -1,0 +1,485 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Microbiome Introduction &#8212; VMI Bootcamp II 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Command Line Tutorial" href="2_command_line_introduction.html" />
+    <link rel="prev" title="Welcome to the Second VMI Bootcamp!" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="2_command_line_introduction.html" title="Command Line Tutorial"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to the Second VMI Bootcamp!"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">VMI Bootcamp II 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="microbiome-introduction">
+<h1>Microbiome Introduction<a class="headerlink" href="#microbiome-introduction" title="Permalink to this headline">¶</a></h1>
+<div class="figure">
+<a class="reference internal image-reference" href="_images/microbiome_human.jpg"><img alt="Human Microbiome" src="_images/microbiome_human.jpg" style="width: 450.0px; height: 513.6px;" /></a>
+</div>
+<p>A <strong>biome</strong> is a complex ecosystem of biological organisms, often defined and shaped by a shared ecosystem.</p>
+<p>Therefore, a <strong>microbiome</strong> is a complex ecosystem of microorganisms:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Bacteria</li>
+<li>Eukaryotic Fungi and Protists</li>
+<li>Archaea</li>
+<li>Viruses and Phages</li>
+</ul>
+</div></blockquote>
+<div class="figure" id="id1">
+<a class="reference internal image-reference" href="_images/microbial_community.jpg"><img alt="Microbial Community" src="_images/microbial_community.jpg" style="width: 600.0px; height: 300.0px;" /></a>
+<p class="caption"><span class="caption-text">Scanning electron image of a complex microbial community. <em>Colors are artificial.</em></span></p>
+</div>
+<p><strong>There are very few places on earth where microbiomes do not exist!</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>Deep sea vents</li>
+<li>A mile underground</li>
+<li>High Atmosphere</li>
+<li>Middle of the ocean</li>
+<li><em>On</em> and <em>inside</em> pretty much every animal (<em>outside of the lab</em>)</li>
+</ul>
+</div></blockquote>
+<p><strong>Since animals arose they have been ubiquitously interacting with and evolving alongside microbial communities.</strong></p>
+<div class="section" id="definitions">
+<h2>Definitions<a class="headerlink" href="#definitions" title="Permalink to this headline">¶</a></h2>
+<p>In popular science and among the public the term microbiome is often thrown around as above: “a community of microorganisms.”</p>
+<p>Within the research community however there is more nuance (but microbiome is still used loosely), so let’s clearly define some important terms:</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="first docutils">
+<dt><strong>Microbiota</strong> - The microorganisms forming a complex community, often charicterized using taxonomy.</dt>
+<dd><ul class="first last">
+<li>The bacterial component is what we will examine with <strong>16S Amplicon Sequencing</strong>.</li>
+<li><em>Who is there?</em></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>Microbiome</strong> - The total genomic composition of all organisms in a <em>microbiota</em>.</dt>
+<dd><ul class="first last">
+<li>Examined with <strong>Metagenomic Shotgun Sequencing</strong>. Not restricted to bacteria.</li>
+<li><em>What could they do?</em></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>Metagenome</strong> - The <em>microbiome</em> as captured with high-throughput genetic sequencing.</dt>
+<dd><ul class="first last">
+<li>Captures random sections of DNA from all <em>microorganisms</em> and <em>macroorganisms</em>.</li>
+<li><em>What functions are available to the community?</em></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>Metatranscriptome</strong> - The expressed RNA components of a <em>microbiome</em> captured with high-throughput genetic sequencing.</dt>
+<dd><ul class="first last">
+<li>RNA is extracted, reverse transcribed, and sequenced.</li>
+<li><em>What are they trying to do?</em></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>Proteome</strong> - The protein profile resulting from transcription and translation of the <em>microbiome</em>.</dt>
+<dd><ul class="first last">
+<li>Often examined with mass spectrometry or sometimes NMR.</li>
+<li><em>What are the actively able to do?</em></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>Metabolome</strong> - The profile of metabolites and biologically active chemicals.</dt>
+<dd><ul class="first last">
+<li>The <em>metabolome</em> is shaped by enzymatic activity of the <em>proteome</em>.</li>
+<li>Most often examined with targeted or untargeted mass spectrometry.</li>
+<li><em>How do their actions shape the abiotic environment?</em></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<div class="figure" id="id2">
+<a class="reference internal image-reference" href="_images/nesting_dolls.gif"><img alt="Nesting Dolls" src="_images/nesting_dolls.gif" style="width: 600.0px; height: 253.0px;" /></a>
+<p class="caption"><span class="caption-text">Like a nesting doll family, there are many layers that can each tell their own part of the story.</span></p>
+</div>
+</div>
+<div class="section" id="the-human-microbiome">
+<h2>The Human Microbiome<a class="headerlink" href="#the-human-microbiome" title="Permalink to this headline">¶</a></h2>
+<div class="figure" id="id3">
+<a class="reference internal image-reference" href="_images/microbe_human2.jpg"><img alt="Microbial Human 2" src="_images/microbe_human2.jpg" style="width: 770.0px; height: 372.0px;" /></a>
+<p class="caption"><span class="caption-text">What are the biomes of microbes on and inside the human body?</span></p>
+</div>
+<p><strong>It is estimated that there are roughly the same number of human and microbial cells in your body!</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>This encompases trillions of living microorganisms.</li>
+<li>Surveys often report hundreds to thousands of unique bacterial species.</li>
+<li>Microbiome diversity of 10 million+ unique genes, outnumbering our genetic repertoire 500:1.</li>
+<li>Vast majority are along digestive tract, but skin and vagina have unique communities as well.</li>
+</ul>
+</div></blockquote>
+<div class="figure" id="id4">
+<a class="reference internal image-reference" href="_images/human_vs_microbial_cells.png"><img alt="Number of Cells" src="_images/human_vs_microbial_cells.png" style="width: 808.8px; height: 211.2px;" /></a>
+<p class="caption"><span class="caption-text">Estimating counts and mass of cells in the human body. Source: Sender, R. et al. <em>PLoS Biology</em>. 2016.</span></p>
+</div>
+<p><strong>While highly abundant, microbes are much smaller than human cells.</strong></p>
+<div class="figure" id="id5">
+<a class="reference internal image-reference" href="_images/microbe_size.png"><img alt="Size of Microorganisms" src="_images/microbe_size.png" style="width: 826.58px; height: 391.46px;" /></a>
+<p class="caption"><span class="caption-text">Most microbes are 10-100x smaller than human cells (<em>same size as mitochondria</em>).</span></p>
+</div>
+</div>
+<div class="section" id="s-ribosomal-dna-and-phylogenetic-markers">
+<h2>16S Ribosomal DNA and Phylogenetic Markers<a class="headerlink" href="#s-ribosomal-dna-and-phylogenetic-markers" title="Permalink to this headline">¶</a></h2>
+<p><strong>So how can we look at which microbes make up a microbiota?</strong></p>
+<p>The methodology we are discussing today falls under the umbrella of <strong>Amplicon Sequencing</strong>.</p>
+<p>In <em>amplicon sequencing</em>, one gene shared by all microorganisms of interest is amplified and sequenced to charicterize <em>who is in the microbiota</em>?</p>
+<dl class="docutils">
+<dt><strong>Amplicon sequencing involves:</strong></dt>
+<dd><ol class="first last arabic simple">
+<li>Extracting all DNA from a microbial community.</li>
+<li>PCR amplifying a specific marker gene shared by the microbes of interest.</li>
+<li>Sequencing all of the PCR amplicons.</li>
+<li>Assigning the genetic sequences back to reference databases of known microbes.</li>
+<li>Compiling counts of the number of sequences representing each taxon.</li>
+</ol>
+</dd>
+</dl>
+<p>This is most often done for <em>bacterial communities</em> with sections of the DNA coding region of <strong>16S Ribosomal RNA</strong>.</p>
+<div class="figure" id="id6">
+<a class="reference internal image-reference" href="_images/16s_structure.jpg"><img alt="16S rRNA Structure" src="_images/16s_structure.jpg" style="width: 473.0px; height: 634.0px;" /></a>
+<p class="caption"><span class="caption-text">Secondary hairpin structure of 16S rRNA.</span></p>
+</div>
+<p><strong>16S rRNA Structure</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>The RNA component of bacteria ribosomes forms bonds between nucleotide bases.</li>
+<li>The attraction of these bases forms secondary loop and hairpin structures.</li>
+<li>Tertiary structure forms and combines with protein components of the ribosome to form an active unit.</li>
+</ul>
+</div></blockquote>
+<div class="figure" id="id7">
+<a class="reference internal image-reference" href="_images/ribosome.gif"><img alt="Ribosome Small Subunit" src="_images/ribosome.gif" style="width: 396.0px; height: 396.0px;" /></a>
+<p class="caption"><span class="caption-text">30S ribosome small subunit with <em>16S rRNA in orange</em> and a number of <em>purple proteins</em>.</span></p>
+</div>
+<p><strong>This is a useful gene because:</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>It is shared by all bacteria.</li>
+<li>The ribosome is crucial to life, and RNA sequence is critical for tertiary structure leading to stabilizing selection.</li>
+<li>For this reason it is slow evolving, particularly in some functionally important regions to the overall structure.</li>
+<li>Thus it has regions that are more conserved and regions that are more variable (<em>evolutionary changes accrue more quickly</em>).</li>
+</ul>
+</div></blockquote>
+<div class="figure" id="id8">
+<a class="reference internal image-reference" href="_images/16s_variable_regions.jpg"><img alt="16S Variable Regions" src="_images/16s_variable_regions.jpg" style="width: 706.4px; height: 236.8px;" /></a>
+<p class="caption"><span class="caption-text">Nine variable regions are each separated by highly conserved regions.</span></p>
+</div>
+<p><strong>16S rDNA is not the only marker gene used for amplicon sequencing, just the most common.</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="first docutils">
+<dt>Fungal communities are often targeted with the ITS (Internally Transcribed Spacer).</dt>
+<dd><ul class="first last">
+<li>Region between the 18S and 5.8S rRNA genes in Eukaryotes.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Archaea are generally targeted with different 16S primers.</dt>
+<dd><ul class="first last">
+<li>They do not have enough homology with bacteria (slightly captured with bacterial amplicons, but very biased).</li>
+<li>Also bacteria usually vastly outnumber so it brings out only archaeal diversity.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li>I’ve heard of 18S and 28S being used for protists and fungi, but could really use many genes. Except…</li>
+</ul>
+</div></blockquote>
+<p><strong>Keep in mind before you try to design your own amplicons…</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="first docutils">
+<dt>Many genes are not under such strict conserving selection.</dt>
+<dd><ul class="first last">
+<li>Homology and even presence may be far more taxon restricted.</li>
+<li>Harder to target because of lack of conserved regions.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>PCR amplicons to a new gene or region require extensive validation.</dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>May not amplify different homologs equally, thus biasing abundance.</dt>
+<dd><ul class="first last">
+<li>Could use mock community with known abundance as a control.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<p><strong>Therefore, don’t try to design your own primers unless you have a really good reason… and lot of time to validate.</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="first docutils">
+<dt>The main application would be interest in a smaller subset of taxa (i.e. betaproteobacteria class).</dt>
+<dd><ul class="first last">
+<li>Could provide better strain resolution, but I wouldn’t trust abundance.</li>
+<li>Allows more reads from organisms of interest, but miss everything else.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="advantages-and-disadvantages">
+<h2>Advantages and Disadvantages<a class="headerlink" href="#advantages-and-disadvantages" title="Permalink to this headline">¶</a></h2>
+<p><strong>Key advantages of Amplicon Sequencing</strong></p>
+<blockquote>
+<div><ul>
+<li><p class="first">There are very well studied protocols, amplicons, and tools.</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="first docutils">
+<dt>The <a class="reference external" href="http://www.earthmicrobiome.org/protocols-and-standards/">Earth Microbiome Project</a> protocol is the most widely accepted.</dt>
+<dd><ul class="first last">
+<li>Very well validated, and used in many studies including the <a class="reference external" href="https://hmpdacc.org/">Human Microbiome Project</a>.</li>
+<li>Have protocols for 16S, 18S, and ITS detailing steps and best practices.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>There are great comprehensive tools to analyze the data.</dt>
+<dd><ul class="first last">
+<li>We will use <a class="reference external" href="https://qiime2.org/">QIIME2</a> but <a class="reference external" href="https://www.mothur.org/">Mothur</a> is also widely used.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Generally the cheapest and most approachable method (compared to metagenomic sequencing as an alternative).</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="first docutils">
+<dt>Requires less sequencing depth per sample to get confident profile.</dt>
+<dd><ul class="first last">
+<li>This allows far more samples to be on a sequencing run.</li>
+<li>In 16S we usually want 10-100k assigned sequences per sample.</li>
+<li>In metagenomics 1-2 million sequences is the extreme low end, often want 10X that.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Much more computationally approachable.</dt>
+<dd><ul class="first last">
+<li>Search against database of one gene vs all full genomes (including eukaryotic, host, viral…).</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Less likely to get any relevant amount of human DNA.</dt>
+<dd><ul class="first last">
+<li>Could make IRB approval easier.</li>
+<li><dl class="first docutils">
+<dt>Don’t need to remove human DNA before publicly sharing, or having to restrict access to approved parties i.e. dbGAP.</dt>
+<dd><ul class="first last">
+<li>However, if there is very little microbial DNA I have seen mostly off target sequences from human mitochondria.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+<p><strong>Key disadvantages of Amplicon Sequencing</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="first docutils">
+<dt>Amplicons can only tell you who is there and in what abundance.</dt>
+<dd><ul class="first last">
+<li>It cannot tell anything about the functional capabilities of the microbes.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>It is semi-quantitative at best, not absolute.</dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>Can really only examine relative abundance.</dt>
+<dd><ul class="first last">
+<li>Thus never know if one sample has more or less microbes, only a microbe’s ratio with other microbes.</li>
+<li>No idea if changes over time are because the total number of microbes increased, decreased, or just shifted members.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Resolution is limited because the amplicons are short, so generally family or genera is the most that can be distinguished.</dt>
+<dd><ul class="first last">
+<li>Really cannot confidently distinguish species or strains within a genus.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<div class="figure" id="id9">
+<a class="reference internal image-reference" href="_images/amplicon_alignment.png"><img alt="amplicon alignment" src="_images/amplicon_alignment.png" style="width: 614.4px; height: 457.2px;" /></a>
+<p class="caption"><span class="caption-text">Aligning short reads means there may be very few differences to distinguish related taxa.</span></p>
+<div class="legend">
+<ul class="simple">
+<li><dl class="first docutils">
+<dt>16S rRNA gene copy number can vary by an order of magnitude between bacterial species.</dt>
+<dd><ul class="first last">
+<li>The databases try to correct for this, but it’s not perfect.</li>
+<li>This means there is some bias in the relative abundance of members.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+<div class="figure" id="id10">
+<a class="reference internal image-reference" href="_images/rrna_copy_number.png"><img alt="rRNA copy number" src="_images/rrna_copy_number.png" style="width: 479.0px; height: 360.0px;" /></a>
+<p class="caption"><span class="caption-text">Most bacteria have two or more copies of rDNA in their genomes, which must be corrected for when counting totals.</span></p>
+<div class="legend">
+<blockquote>
+<div><ul class="simple">
+<li>Seeing DNA in a sample does not confirm that there are live microbes, just that their DNA was present.</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Microbiome Introduction</a><ul>
+<li><a class="reference internal" href="#definitions">Definitions</a></li>
+<li><a class="reference internal" href="#the-human-microbiome">The Human Microbiome</a></li>
+<li><a class="reference internal" href="#s-ribosomal-dna-and-phylogenetic-markers">16S Ribosomal DNA and Phylogenetic Markers</a></li>
+<li><a class="reference internal" href="#advantages-and-disadvantages">Advantages and Disadvantages</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to the Second VMI Bootcamp!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="2_command_line_introduction.html"
+                        title="next chapter">Command Line Tutorial</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/1_microbiome_introduction.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="2_command_line_introduction.html" title="Command Line Tutorial"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to the Second VMI Bootcamp!"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">VMI Bootcamp II 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Andrew Brooks, Matt Scholz, Seth Bordenstein.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+    </div>
+  </body>
+</html>
