@@ -1,0 +1,573 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Concepts of Community Analysis &#8212; VMI Bootcamp II 1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Command Line Introduction" href="command_line_introduction.html" />
+    <link rel="prev" title="From Sequences to Community Composition" href="3_sequences_to_composition.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="command_line_introduction.html" title="Command Line Introduction"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="3_sequences_to_composition.html" title="From Sequences to Community Composition"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">VMI Bootcamp II 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="concepts-of-community-analysis">
+<h1>Concepts of Community Analysis<a class="headerlink" href="#concepts-of-community-analysis" title="Permalink to this headline">¶</a></h1>
+<p><strong>How can we examine microbial communities?</strong></p>
+<div class="section" id="community-examination-and-quality-control">
+<h2>Community Examination and Quality Control<a class="headerlink" href="#community-examination-and-quality-control" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt><strong>How is our community taxonomically distributed?</strong></dt>
+<dd><ul class="first last simple">
+<li>Let’s examine barplots of the taxonomic distribution for each sample</li>
+<li>These plots are based on relative abundance within a total sample</li>
+<li>Do not provide information about absolute microbial load</li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">### MAKE TAXONOMY BARPLOT ###</span>
+qiime taxa barplot <span class="se">\</span>
+   --i-table 1_7_deblur_table.qza <span class="se">\</span>
+   --i-taxonomy 1_16_assigned_greengenes_13_5_99_taxonomy.qza <span class="se">\</span>
+   --m-metadata-file <span class="s2">&quot;</span><span class="nv">$map_path</span><span class="s2">&quot;</span> <span class="se">\</span>
+   --o-visualization 1_18_taxonomy_barplot.qzv
+
+qiime tools view 1_18_taxonomy_barplot.qzv
+</pre></div>
+</div>
+<p><strong>What should we do to improve the resolution and remove noise?</strong></p>
+<p><strong>1. We can remove particular microbial taxon:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">### OPTIONAL: FILTER SPECIFIC TAXON ###</span>
+qiime taxa filter-table <span class="se">\</span>
+   --i-table 1_7_deblur_table.qza <span class="se">\</span>
+   --i-taxonomy 1_16_assigned_greengenes_13_5_99_taxonomy.qza <span class="se">\</span>
+   --p-exclude Wolbachia <span class="se">\</span>
+   --o-filtered-table 1_19_table_no_Wolbachia.qza
+</pre></div>
+</div>
+<p><strong>2. We could go back and remove sequences:</strong></p>
+<p>This is useful to exclude known contaminant amplicons, or remove those found in blank samples…</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>qiime quality-control exclude-seqs <span class="se">\</span>
+   --i-query-sequences query-seqs.qza <span class="se">\</span>
+   --i-reference-sequences reference-seqs.qza <span class="se">\</span>
+   --p-method blast <span class="se">\</span>
+   --p-perc-identity <span class="m">0</span>.97 <span class="se">\</span>
+   --p-perc-query-aligned <span class="m">0</span>.97 <span class="se">\</span>
+   --o-sequence-hits hits.qza <span class="se">\</span>
+   --o-sequence-misses misses.qza
+</pre></div>
+</div>
+<dl class="docutils">
+<dt><strong>3. Filter from the actual observation table by:</strong></dt>
+<dd><ul class="first last simple">
+<li>Minimum or maximum frequency (counts across samples)</li>
+<li>Minimum or maximum ubiquity (proportion of samples)</li>
+<li>Where metadata is equal to acertain value</li>
+<li>Removing specific samples by the unqiue id</li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>qiime feature-table filter-features <span class="se">\</span>
+   --i-table query-table.qza <span class="se">\</span>
+   --m-metadata-file hits.qza <span class="se">\</span>
+   --o-filtered-table no-hits-filtered-table.qza <span class="se">\</span>
+   --p-exclude-ids
+</pre></div>
+</div>
+<p><strong>Options for specifically filtering features:</strong></p>
+<blockquote>
+<div><table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--i-table <var>ARTIFACT_PATH</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>The feature table from which features should
+be filtered.  [required]</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--p-min-frequency <var>INTEGER</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>The minimum total frequency that a feature
+must have to be retained.  [default: 0]</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--p-max-frequency <var>INTEGER</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>The maximum total frequency that a feature
+can have to be retained. If no value is
+provided this will default to infinity
+(i.e., no maximum frequency filter will be
+applied).  [optional]</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--p-min-samples <var>INTEGER</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>The minimum number of samples that a feature
+must be observed in to be retained.
+[default: 0]</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--p-max-samples <var>INTEGER</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>The maximum number of samples that a feature
+can be observed in to be retained. If no
+value is provided this will default to
+infinity (i.e., no maximum sample filter
+will be applied).  [optional]</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--m-metadata-file <var>MULTIPLE_PATH</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>Metadata file or artifact viewable as
+metadata. This option may be supplied
+multiple times to merge metadata. Feature
+metadata used with <cite>where</cite> parameter when
+selecting features to retain, or with
+<cite>exclude_ids</cite> when selecting features to
+discard.  [optional]</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--p-where <var>TEXT</var></span></kbd></td>
+<td>SQLite WHERE clause specifying feature
+metadata criteria that must be met to be
+included in the filtered feature table. If
+not provided, all features in <cite>metadata</cite>
+that are also in the feature table will be
+retained.  [optional]</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--p-exclude-ids</span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>Samples to remove</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--p-no-exclude-ids</span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>If true, the features selected by <cite>metadata</cite>
+or <cite>where</cite> parameters will be excluded from
+the filtered table instead of being
+retained.  [default: False]</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--o-filtered-table <var>ARTIFACT_PATH</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>FeatureTable[Frequency] The resulting feature table filtered by feature.  [required if not passing –output-dir]</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--output-dir <var>DIRECTORY</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>Output unspecified results to a directory</td></tr>
+</tbody>
+</table>
+</div></blockquote>
+<p><strong>To filter a list of samples:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> SampleID &gt; samples-to-keep.tsv
+<span class="nb">echo</span> L1S8 &gt;&gt; samples-to-keep.tsv
+<span class="nb">echo</span> L1S105 &gt;&gt; samples-to-keep.tsv
+
+qiime feature-table filter-samples <span class="se">\</span>
+   --i-table table.qza <span class="se">\</span>
+   --m-metadata-file samples-to-keep.tsv <span class="se">\</span>
+   --o-filtered-table id-filtered-table.qza
+</pre></div>
+</div>
+<p><strong>To filter by metadata categories:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>qiime feature-table filter-samples <span class="se">\</span>
+   --i-table table.qza <span class="se">\</span>
+   --m-metadata-file sample-metadata.tsv <span class="se">\</span>
+   --p-where <span class="s2">&quot;BodySite IN (&#39;left palm&#39;, &#39;right palm&#39;)&quot;</span> <span class="se">\</span>
+   --o-filtered-table skin-filtered-table.qza
+</pre></div>
+</div>
+<p><strong>4. Evaluating how well the mock community matches the expected distribution:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>qiime quality-control evaluate-composition <span class="se">\</span>
+   --i-expected-features qc-mock-3-expected.qza <span class="se">\</span>
+   --i-observed-features qc-mock-3-observed.qza <span class="se">\</span>
+   --o-visualization qc-mock-3-comparison.qzv
+</pre></div>
+</div>
+<p><strong>5. There are many other ways to transform or filter the table, look at the documentation:</strong></p>
+<p><a class="reference external" href="https://docs.qiime2.org/2018.8/tutorials/filtering/">More extensive filtering documentation</a>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>qiime feature-table --help
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>Commands:</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-c<var>ore-features</var></span></kbd></td>
+<td>Identify core features in table</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-f<var>ilter-features</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>Filter features from table</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-f<var>ilter-samples</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>Filter samples from table</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-f<var>ilter-seqs</var></span></kbd></td>
+<td>Filter features from sequences</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-g<var>roup</var></span></kbd></td>
+<td>Group samples or features by a metadata column</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-h<var>eatmap</var></span></kbd></td>
+<td>Generate a heatmap representation of a feature table</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-m<var>erge</var></span></kbd></td>
+<td>Combine multiple tables</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-m<var>erge-seqs</var></span></kbd></td>
+<td>Combine collections of feature sequences</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-m<var>erge-taxa</var></span></kbd></td>
+<td>Combine collections of feature taxonomies</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-p<var>resence-absence</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>Convert to presence/absence</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-r<var>arefy</var></span></kbd></td>
+<td>Rarefy table</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-r<var>elative-frequency</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>Convert to relative frequencies</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-s<var>ubsample</var></span></kbd></td>
+<td>Subsample table</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-s<var>ummarize</var></span></kbd></td>
+<td>Summarize table</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-t<var>abulate-seqs</var></span></kbd></td>
+<td>View sequence associated with each feature</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</div>
+<div class="section" id="rarefaction-and-normalization">
+<h2>Rarefaction and Normalization<a class="headerlink" href="#rarefaction-and-normalization" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt><strong>Raw counts are biased:</strong></dt>
+<dd><ul class="first last simple">
+<li>Samples have different numbers of sequence counts</li>
+<li>Not indicative of absolute bacterial abundance</li>
+<li>Artefact of extraction, library preparation and pooling, and sequencing efficiency</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Some ways to transform the counts:</strong></p>
+<blockquote>
+<div><table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-p<var>resence-absence</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>Convert to presence/absence</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-r<var>arefy</var></span></kbd></td>
+<td>Rarefy table</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-r<var>elative-frequency</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>Convert to relative frequencies</td></tr>
+</tbody>
+</table>
+</div></blockquote>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>qiime feature-table presence-absence <span class="se">\ </span>...
+qiime feature-table rarefy <span class="se">\ </span>...
+qiime feature-table relative-frequency <span class="se">\ </span>...
+</pre></div>
+</div>
+<p><strong>Presence / Absence</strong>: value of 1 if taxon is present in sample, 0 otherwise
+<strong>Rarefy</strong>: subsample the same number of sequence from each sample
+<strong>Relative Frequency</strong>: propotion of each feature out of the total feature counts for each sample</p>
+<dl class="docutils">
+<dt><strong>There are other normalization methods, often based on RNA sequencing methods.</strong></dt>
+<dd><ul class="first last simple">
+<li>Generally seem more biased than rarefy / relative abundance</li>
+<li>Better fit in standard sense, don’t seem to adapt well to wide bias across different datasets</li>
+</ul>
+</dd>
+</dl>
+<p>I’d suggest sticking to relative abundance and rarefied communities!</p>
+</div>
+<div class="section" id="alpha-and-beta-diversity">
+<h2>Alpha and Beta Diversity<a class="headerlink" href="#alpha-and-beta-diversity" title="Permalink to this headline">¶</a></h2>
+<p><strong>We can use ecological metrics to understand community composition and inter-sample microbiome similarity!</strong></p>
+<p><strong>Alpha Diversity</strong>: Measure of diversity within a sample</p>
+<p><strong>Beta Diversity</strong>: Measure of microbiome similarity between a pair of samples</p>
+<p><a class="reference external" href="https://forum.qiime2.org/t/alpha-and-beta-diversity-explanations-and-commands/2282">There are many metrics (ways to measure) Alpha and Beta Diversity</a></p>
+<p><strong>Both Alpha and Beta Diversity can take into account the microbial phylogeny with certain metrics</strong></p>
+<p>Metrics are assigned with the <em>-p-metric</em> argument:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Alpha Diversity - Non-Phylogenetic Observed OTUs</span>
+qiime diversity alpha <span class="se">\</span>
+  --i-table table.qza <span class="se">\</span>
+  --p-metric observed_otus <span class="se">\</span>
+  --o-alpha-diversity observed_otus_vector.qza
+
+<span class="c1"># Alpha Diversity - Non-Phylogenetic Observed OTUs</span>
+qiime diversity alpha-phylogenetic <span class="se">\</span>
+  --i-table table.qza <span class="se">\</span>
+  --i-phylogeny rooted-tree.qza <span class="se">\</span>
+  --p-metric faith_pd <span class="se">\</span>
+  --o-alpha-diversity faith_pd_vector.qza
+
+<span class="c1"># Beta Diversity - Non-Phylogenetic Bray-Curtis</span>
+qiime diversity beta <span class="se">\</span>
+  --i-table table.qza <span class="se">\</span>
+  --p-metric braycurtis <span class="se">\</span>
+  --o-distance-matrix unweighted_unifrac_distance_matrix.qza
+
+<span class="c1"># Beta Diversity - Phylogenetic Unweighted UNIFRAC</span>
+qiime diversity beta-phylogenetic <span class="se">\</span>
+   --i-table table.qza <span class="se">\</span>
+   --i-phylogeny rooted-tree.qza <span class="se">\</span>
+   --p-metric unweighted_unifrac <span class="se">\</span>
+   --o-distance-matrix unweighted_unifrac_distance_matrix.qza
+</pre></div>
+</div>
+<dl class="docutils">
+<dt><strong>QIIME2 has done a good job wrapping diversity computation with my favorite metrics into one easy script:</strong></dt>
+<dd><blockquote class="first">
+<div><ul class="simple">
+<li>Rarefies the table to a specified depth (necessary for diversity to be computed accurately)</li>
+<li><dl class="first docutils">
+<dt>Calculates Alpha and Beta Diversity</dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>Alpha Metrics:</dt>
+<dd><ul class="first last">
+<li>Faith’s PD: Phylogenetic diversity</li>
+<li>Observed OTUs: Richness of community</li>
+<li>Shannon: Balances richness and evenness</li>
+<li>Pielou’s Evenness: Evenness of community</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Beta Diversity</dt>
+<dd><ul class="first last">
+<li>Unweighted Unifrac: Presence / absence phylogenetic distance between samples</li>
+<li>Weighted Unifrac: Abundance weighted phylogenetic distance between samples</li>
+<li>Jaccard: Presence / absence distance between samples</li>
+<li>Bray Curtis: Abundance weighted distance between samples</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li>Can be parallelized across multiple CPUs</li>
+<li>Generates output visuals</li>
+</ul>
+</div></blockquote>
+<dl class="last docutils">
+<dt>Options:</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--i-table <var>ARTIFACT_PATH</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>The feature table containing the samples
+over which diversity metrics should be
+computed.  [required]</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--i-phylogeny <var>ARTIFACT_PATH</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>Phylogenetic tree containing tip identifiers
+that correspond to the feature identifiers
+in the table. This tree can contain tip ids
+that are not present in the table, but all
+feature ids in the table must be present in
+this tree.  [required]</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--p-sampling-depth <var>INTEGER_RANGE</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>The total frequency that each sample should
+be rarefied to prior to computing diversity
+metrics.  [required]</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--m-metadata-file <var>MULTIPLE_PATH</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>Metadata file or artifact viewable as
+metadata. This option may be supplied
+multiple times to merge metadata. The sample
+metadata to use in the emperor plots.
+[required]</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--p-n-jobs <var>INTEGER_RANGE</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>The number of jobs to use for the computation. This works
+by breaking down the pairwise matrix into
+n_jobs even slices and computing them in
+parallel. If -1 all CPUs are used. If 1 is
+given, no parallel computing code is used at
+all, which is useful for debugging. For
+n_jobs below -1, (n_cpus + 1 + n_jobs) are
+used. Thus for n_jobs = -2, all CPUs but one
+are used. (Description from
+sklearn.metrics.pairwise_distances)
+[default: 1]</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">###############################################################################</span>
+<span class="c1">##### SETUP DIVERSITY ANALYSES #####</span>
+<span class="c1"># !!! SET RAREFACTION DEPTH BASED ON SAMPLE COUNTS !!! #</span>
+qiime tools view 1_10_deblur_table.qzv
+<span class="nv">rarefaction_depth</span><span class="o">==</span><span class="m">4000</span>
+<span class="c1">### SET PATH TO MAPPING FILE ###</span>
+<span class="c1"># map_path=map.txt</span>
+
+<span class="c1">### RUN DIVERSITY ANALYSES ###</span>
+<span class="nv">diversity_folder</span><span class="o">=</span>1_16_core_metrics_phylogenetic
+qiime diversity core-metrics-phylogenetic <span class="se">\</span>
+  --i-phylogeny 1_15_deblur_tree.qza <span class="se">\</span>
+  --i-table 1_7_deblur_table.qza <span class="se">\</span>
+  --p-sampling-depth <span class="nv">$rarefaction_depth</span> <span class="se">\</span>
+  --m-metadata-file <span class="s2">&quot;</span><span class="nv">$map_path</span><span class="s2">&quot;</span> <span class="se">\</span>
+  --output-dir <span class="s2">&quot;</span><span class="nv">$diversity_folder</span><span class="s2">&quot;</span>
+
+<span class="c1">### VIEW PCoA PLOTS ###</span>
+qiime tools view 1_16_core_metrics_phylogenetic/bray_curtis_emperor.qzv
+qiime tools view 1_16_core_metrics_phylogenetic/jaccard_emperor.qzv
+qiime tools view 1_16_core_metrics_phylogenetic/unweighted_unifrac_emperor.qzv
+qiime tools view 1_16_core_metrics_phylogenetic/weighted_unifrac_emperor.qzv
+
+<span class="c1">##### ALPHA DIVERSITY ANALYSES #####</span>
+<span class="k">for</span> alpha_metric in faith_pd shannon observed_otus evenness
+<span class="k">do</span>
+    <span class="nb">echo</span> <span class="s2">&quot;</span><span class="nv">$diversity_folder</span><span class="s2">&quot;</span>/<span class="s2">&quot;</span><span class="nv">$alpha_metric</span><span class="s2">&quot;</span>_vector.qza
+
+    <span class="c1">### ALPHA ASSOCIATION CATEGORICAL MAPPING ###</span>
+    qiime diversity alpha-group-significance <span class="se">\</span>
+      --i-alpha-diversity <span class="s2">&quot;</span><span class="nv">$divers</span><span class="s2">\ity_folder&quot;</span>/<span class="s2">&quot;</span><span class="nv">$alpha_metric</span><span class="s2">&quot;</span>_vector.qza <span class="se">\</span>
+      --m-metadata-file <span class="s2">&quot;</span><span class="nv">$map_path</span><span class="s2">&quot;</span> <span class="se">\</span>
+      --o-visualization 1_17_<span class="s2">&quot;</span><span class="nv">$alpha_metric</span><span class="s2">&quot;</span>_group_significance.qzv
+
+    <span class="c1">### ALPHA ASSOCIATION CONTINUOUS MAPPING ###</span>
+
+<span class="k">done</span>
+
+qiime diversity filter-distance-matrix <span class="se">\</span>
+  --i-distance-matrix distance-matrix.qza <span class="se">\</span>
+  --m-metadata-file samples-to-keep.tsv <span class="se">\</span>
+  --o-filtered-distance-matrix identifier-filtered-distance-matrix.qza
+
+<span class="c1">### VIEW RESULTS ###</span>
+<span class="c1"># CATEGORICAL #</span>
+qiime tools view 1_17_shannon_group_significance.qzv
+qiime tools view 1_17_observed_otus_group_significance.qzv
+qiime tools view 1_17_evenness_group_significance.qzv
+qiime tools view 1_17_faith_pd_group_significance.qzv
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Concepts of Community Analysis</a><ul>
+<li><a class="reference internal" href="#community-examination-and-quality-control">Community Examination and Quality Control</a></li>
+<li><a class="reference internal" href="#rarefaction-and-normalization">Rarefaction and Normalization</a></li>
+<li><a class="reference internal" href="#alpha-and-beta-diversity">Alpha and Beta Diversity</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="3_sequences_to_composition.html"
+                        title="previous chapter">From Sequences to Community Composition</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="command_line_introduction.html"
+                        title="next chapter">Command Line Introduction</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/rst/4_concepts_of_community_analysis.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="command_line_introduction.html" title="Command Line Introduction"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="3_sequences_to_composition.html" title="From Sequences to Community Composition"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">VMI Bootcamp II 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Andrew Brooks, Matt Scholz, Seth Bordenstein.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+    </div>
+  </body>
+</html>

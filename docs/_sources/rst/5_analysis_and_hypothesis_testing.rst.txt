@@ -1,0 +1,24 @@
+Microbiome Analysis and Hypothesis Testing
+============================================
+
+**How do we ask the questions we are actually interested in?**
+   - Observations of the community are great, but don't address a hypothesis
+   
+
+Ordination and Composition Analysis
+------------------------------------------------------------------
+
+Diversity Analysis
+-----------------------------------------------
+
+Community and Taxonomic Differential Abundance Analysis
+------------------------------------------------------------------
+
+Specific Hypotheses and Covariates
+------------------------------------------------------------------
+
+Random Forest and Modeling
+------------------------------------------------------------------
+
+Advanced Analyses
+------------------------------------------------------------------

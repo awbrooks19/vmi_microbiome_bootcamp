@@ -1,0 +1,63 @@
+Command Line Introduction
+==================================================================================================
+
+**What is the command line?**
+
+A user interface to all operations of your computer. 
+
+   - All programs you use on a regular basis are really just user interfaces to more easily call actions on the command line!
+   - Anything you normally do on your computer could be done directly through the command line.
+   
+Can also be refered to as bash, shell or terminal.
+
+**Why do you need to use the command line for bioinformatics?**
+
+   1. Actions are reproducible, sharable as scripts, and *generally* consistent across platforms.
+   2. Many bioinformatics tools can only be run directly from the commnd line.
+   3. Many tasks are easier and can run more efficiently...
+      
+	  - Editing and moving files
+	  - Performing repetetive tasks
+	  - Acting on very large files that cannot open with other programs
+
+**Rule Number 1: "With great power comes great responsibility, think before you type!"**
+
+The command line is a *very powerful* tool, and thus could cause a *lot* of problems if you aren't careful.
+
+Don't be scared, but also don't be sloppy. 
+
+   - One particular line of code could wipe every personal file off your computer permanantly...
+   - However, consequences of this magnitude are highly unlikely. Usually commands will just fail...
+   - Just remember there is no ctrl-z to undo actions on the command line.
+      - And be extra careful with the **rm** command, it deletes files and folders with no way to recover.
+
+Navigation
+--------------------------------------------------------------------------------------------------
+
+**How do you move around in the folder hierarcy of your computer?**
+
+.. figure:: ../images/folder_hierarchy.jpg
+   :scale: 60 %
+   :alt: folder_hierarchy 
+   
+   Source: https://www.linuxtrainingacademy.com/linux-directory-structure-and-file-system-hierarchy/
+
+We will learn some things and stuff
+
+
+What is the terminal?
+---------------------
+
+
+
+
+Basic Commands
+--------------
+
+
+.. code-block:: python
+
+   for i in (1..100)
+   do
+      echo $i
+   done 

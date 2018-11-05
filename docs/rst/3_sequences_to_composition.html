@@ -1,0 +1,814 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>From Sequences to Community Composition &#8212; VMI Bootcamp II 1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Concepts of Community Analysis" href="4_concepts_of_community_analysis.html" />
+    <link rel="prev" title="Experimental Design and Sample Preparation" href="2_experimental_design.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="4_concepts_of_community_analysis.html" title="Concepts of Community Analysis"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="2_experimental_design.html" title="Experimental Design and Sample Preparation"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">VMI Bootcamp II 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="from-sequences-to-community-composition">
+<h1>From Sequences to Community Composition<a class="headerlink" href="#from-sequences-to-community-composition" title="Permalink to this headline">¶</a></h1>
+<p><strong>What to do when you get back your sequence files?</strong></p>
+<div class="section" id="sequence-file-formats">
+<h2>Sequence File Formats<a class="headerlink" href="#sequence-file-formats" title="Permalink to this headline">¶</a></h2>
+<p><strong>What do sequence file formats look like?</strong></p>
+<p>They can be displayed in a couple ways.</p>
+<p><strong>The first is as two separate files for the sequences and the quality scores</strong></p>
+<div class="figure" id="id3">
+<a class="reference internal image-reference" href="../_images/fasta_qual_format.png"><img alt="fasta_qual_format" src="../_images/fasta_qual_format.png" style="width: 695.6px; height: 542.4px;" /></a>
+<p class="caption"><span class="caption-text">Fasta and quality score file formats</span></p>
+<div class="legend">
+<ul>
+<li><p class="first">Fasta files - The genetic sequences of your amplicons</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="first docutils">
+<dt>Header lines always starts with a ‘&gt;’</dt>
+<dd><ul class="first last">
+<li>Describes the sequence, often an id or incremental number</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li>Next line is the genetic sequence of your amplicon itself (A,T,C,G’s)</li>
+</ul>
+</div></blockquote>
+</li>
+<li><dl class="first docutils">
+<dt>Quality score files</dt>
+<dd><ul class="first last simple">
+<li>Start with the same headers as the fasta file</li>
+<li>Contain scores that describe how confident the sequencer is in that particular base call</li>
+<li>Often these are expressed as Phred scores:</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+<div class="figure" id="id4">
+<a class="reference internal image-reference" href="../_images/phred_score.png"><img alt="phred_score" src="../_images/phred_score.png" style="width: 694.8px; height: 242.8px;" /></a>
+<p class="caption"><span class="caption-text">Phred score translation to base call accuracy</span></p>
+</div>
+<p><strong>A second way you may find you files is a fastq file</strong></p>
+<div class="figure" id="id5">
+<a class="reference internal image-reference" href="../_images/fastq_format.png"><img alt="fastq_format" src="../_images/fastq_format.png" style="width: 649.6px; height: 373.2px;" /></a>
+<p class="caption"><span class="caption-text">Fastq file format</span></p>
+<div class="legend">
+<ul class="simple">
+<li><dl class="first docutils">
+<dt>Fastq is essentially a combination of fasta and quality score files</dt>
+<dd><ul class="first last">
+<li>Header lines often start with ‘&#64;’</li>
+<li>Followed by the genetic sequence like a fasta file</li>
+<li>The third line is generally just a ‘+’</li>
+<li>The fourth line is a condensed form of the quality scores</li>
+<li>Then the pattern repeats for the next sequence</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+<p><strong>Some sequencing centers perform some quality processing, others don’t. Make sure you ask what has been done!</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>If they try to provide another format or raw data, ask for one of these two options. This is standard.</li>
+<li>Always get quality scores, even if they “did quality control for you”</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="types-of-sequences-in-qiime2">
+<h2>Types of Sequences in QIIME2<a class="headerlink" href="#types-of-sequences-in-qiime2" title="Permalink to this headline">¶</a></h2>
+<p><strong>How do you make QIIME2 aware of your sequences and mapping file?</strong></p>
+<div class="figure" id="id6">
+<a class="reference internal image-reference" href="../_images/multiplexing.jpg"><img alt="multiplexing" src="../_images/multiplexing.jpg" style="width: 768.0px; height: 576.0px;" /></a>
+<p class="caption"><span class="caption-text">Source: Martha Park - Institute for Quantitative &amp; Computational Biosciences Workshop</span></p>
+<div class="legend">
+<ul class="simple">
+<li><dl class="first docutils">
+<dt><strong>QIIME2 must import all data files and convert them</strong></dt>
+<dd><ul class="first last">
+<li>They become custom QIIME2 format files</li>
+<li>Allows for compression to save space and allow faster access</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>Importing sequences has lots of options</strong></dt>
+<dd><ul class="first last">
+<li>Some sequencing centers may demultiplex into fastq file for each sample</li>
+<li>Single versus paired end sequencing</li>
+<li>Quality scores or not (if you generated the data you should have these)</li>
+<li>Barcodes may be in a separate file</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+<div class="figure" id="id7">
+<a class="reference internal image-reference" href="../_images/qiime2_import_demultiplex.png"><img alt="qiime2_import_demultiplex" src="../_images/qiime2_import_demultiplex.png" style="width: 1191.6px; height: 591.0px;" /></a>
+<p class="caption"><span class="caption-text">Source: QIIME2 - <a class="reference external" href="https://docs.qiime2.org/2018.8/tutorials/overview/#demultiplexing">https://docs.qiime2.org/2018.8/tutorials/overview/#demultiplexing</a></span></p>
+</div>
+<p><strong>Generally importing sequences will follow this format:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>qiime tools import <span class="se">\</span>
+   --type XXX <span class="se">\ </span><span class="c1"># The format of your sequence files</span>
+   --input-path XXX <span class="se">\ </span><span class="c1"># The folder or manifest file where sequences are located</span>
+   --input-format XXX <span class="se">\ </span><span class="c1"># Tell QIIME2 how to import the sequences properly</span>
+   --output-path XXX <span class="c1"># Where the processed sequences should be saved</span>
+</pre></div>
+</div>
+<p><strong>Fastq Manifest Format</strong></p>
+<p>This is the most flexible approach if the sequencing center demultiplexed your samples</p>
+<dl class="docutils">
+<dt><strong>Make a manifest telling QIIME2:</strong></dt>
+<dd><ul class="first last simple">
+<li>Which files align to which samples</li>
+<li>The paths to each of those files</li>
+<li>The direction: forward or reverse</li>
+</ul>
+</dd>
+<dt><strong>Manifest Format</strong></dt>
+<dd><ul class="first last simple">
+<li>CSV - comma separated values in each column</li>
+<li>sample-id must match the sample names in your mapping file</li>
+<li>Header line must match below</li>
+<li>Save as CSV file</li>
+</ul>
+</dd>
+</dl>
+<p>sample-id,absolute-filepath,direction #header line
+sample-1,$PWD/some/filepath/sample1_R1.fastq,forward
+sample-1,$PWD/some/filepath/sample1_R2.fastq,reverse</p>
+<dl class="docutils">
+<dt><strong>Phred 33 vs 64</strong></dt>
+<dd><ul class="first last simple">
+<li>Phred scores are sometimes offset by 31, depends on sequencer software</li>
+<li>This is important because they are always converted to 33 - Ask sequencing center!</li>
+</ul>
+</dd>
+<dt><strong>Command options:</strong></dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-i<var>nput-format</var></span></kbd></td>
+<td><ul class="first last simple">
+<li>SingleEndFastqManifestPhred33</li>
+<li>SingleEndFastqManifestPhred64</li>
+<li>PairedEndFastqManifestPhred33</li>
+<li>PairedEndFastqManifestPhred64</li>
+</ul>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-t<var>ype</var></span></kbd></td>
+<td><ul class="first last simple">
+<li>‘SampleData[SequencesWithQuality]’</li>
+<li>‘SampleData[PairedEndSequencesWithQuality]’</li>
+</ul>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-i<var>nput-path</var></span></kbd></td>
+<td><ul class="first last simple">
+<li>Path to your manifest file</li>
+</ul>
+</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-o<var>utput-path</var></span></kbd></td>
+<td><ul class="first last simple">
+<li>Where QIIME2 will save the processed sequences in .qza format</li>
+</ul>
+</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+<p>Depending on your formats it will look something like:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example for Paired end with Phred 64</span>
+qiime tools import <span class="se">\</span>
+  --type <span class="s1">&#39;SampleData[PairedEndSequencesWithQuality]&#39;</span> <span class="se">\ </span><span class="c1"># Change for paired/single end sequences</span>
+  --input-path my_manifest.txt <span class="se">\</span>
+  --output-path 1_0_input_seqs.qza <span class="se">\</span>
+  --source-format PairedEndFastqManifestPhred64 <span class="c1"># Change for paired/single and phred format</span>
+</pre></div>
+</div>
+<p><strong>Earth Microbiome Project format</strong></p>
+<p>This is a more specific format if you follow the EMP protocols and the sequencing center does as well</p>
+<p>A good approach if your sequences are not demultiplexed (all samples sequences together)</p>
+<blockquote>
+<div><ul class="simple">
+<li>All files in fastq format - often .gz indicates GunZip compression</li>
+<li><dl class="first docutils">
+<dt>Single End:</dt>
+<dd><ul class="first last">
+<li>Fastq file of sequences - sequences.fastq.gz</li>
+<li>Fastq file of separated barcodes (by sequencing center) - barcodes.fastq.gz</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Paired End:</dt>
+<dd><ul class="first last">
+<li>Fastq file of forward sequences - forward.fastq.gz</li>
+<li>Fastq file of reverse sequences - reverse.fastq.gz</li>
+<li>Fastq file of separated barcodes (by sequencing center) - barcodes.fastq.gz</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<p>Place these files in a folder (my_seqs/), and use that folder name as the –input-path argument:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Single End</span>
+qiime tools import <span class="se">\</span>
+  --type EMPSingleEndSequences <span class="se">\</span>
+  --input-path my_seqs <span class="se">\</span>
+  --output-path 1_0_input_seqs.qza
+
+<span class="c1"># Paired End</span>
+qiime tools import <span class="se">\</span>
+  --type EMPPairedEndSequences <span class="se">\</span>
+  --input-path my_seqs <span class="se">\</span>
+  --output-path 1_0_input_seqs.qza
+</pre></div>
+</div>
+<p><strong>There are other options for inputting sequences</strong>, check the <a class="reference external" href="https://docs.qiime2.org/2018.8/tutorials/importing/">QIIME2 documentation</a> if these don’t fit your data</p>
+</div>
+<div class="section" id="importing-demultiplexing-and-sequence-quality-control">
+<h2>Importing, Demultiplexing, and Sequence Quality Control<a class="headerlink" href="#importing-demultiplexing-and-sequence-quality-control" title="Permalink to this headline">¶</a></h2>
+<p><strong>Let’s try it out with some example data!</strong></p>
+<p>First lets take a look at the mapping file to understand how QIIME2 creates visuals</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>qiime metadata tabulate <span class="se">\</span>
+  --m-input-file paired_end/metadata.tsv <span class="se">\</span>
+  --o-visualization paired_end/1_0_metadata_stats
+
+qiime tools view paired_end/1_0_metadata_stats.qzv
+</pre></div>
+</div>
+<p><strong>To import sequences and demultiplex we will…</strong></p>
+<ol class="arabic simple">
+<li>You should navigate to the folder called data/</li>
+<li>We will use the folder paired_end
+- This contains multiplexed sequence files and a metadata file
+1. Forward sequences - reverse.fastq.gz
+2. Reverse sequences - forward.fastq.gz
+3. Barcode sequences - barcodes.fastq.gz
+4. Metadata file - metadata.tsv</li>
+<li>We will import the sequences into QIIME2 format</li>
+<li>We will demultiplex the sequences</li>
+<li>We will examine the distribution of sequences across each sample</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># See the files</span>
+ls -lsh paired_end/raw_seqs/
+
+<span class="c1"># Import the files into QIIME2 format</span>
+qiime tools import <span class="se">\</span>
+   --type EMPPairedEndSequences <span class="se">\</span>
+   --input-path paired_end/raw_seqs/ <span class="se">\</span>
+   --output-path paired_end/1_0_input_seqs.qza
+
+<span class="c1"># See the new output file</span>
+ls -lsh paired_end
+
+<span class="c1"># Demultiplex the sequences based on barcodes in mapping file</span>
+qiime demux emp-paired <span class="se">\</span>
+   --m-barcodes-file paired_end/metadata.tsv <span class="se">\</span>
+   --m-barcodes-column BarcodeSequence <span class="se">\</span>
+   --i-seqs paired_end/1_0_input_seqs.qza <span class="se">\</span>
+   --o-per-sample-sequences paired_end/1_1_demultiplexed_seqs <span class="se">\</span>
+   --p-rev-comp-mapping-barcodes
+
+<span class="c1"># See the new output file</span>
+ls -lsh paired_end
+
+<span class="c1"># Summarize the sequences per sample</span>
+qiime demux summarize <span class="se">\</span>
+   --i-data paired_end/1_1_demultiplexed_seqs.qza <span class="se">\</span>
+   --o-visualization paired_end/1_2_demultiplexed_seqs_summary.qzv
+
+<span class="c1"># Open the summary</span>
+qiime tools view paired_end/1_2_demultiplexed_seqs_summary.qzv
+</pre></div>
+</div>
+<p>Click the ‘Interactive Quality Plot’ tab to view Phred scores</p>
+<p><strong>QIIME2 has our sequences… now what?</strong></p>
+<dl class="docutils">
+<dt><strong>If they are paired end then we need to join them</strong></dt>
+<dd><ul class="first last simple">
+<li>Aligns forward and reverse sequences</li>
+</ul>
+</dd>
+</dl>
+<div class="figure" id="id8">
+<a class="reference internal image-reference" href="../_images/pe_quality.png"><img alt="pe_quality" src="../_images/pe_quality.png" style="width: 765.0px; height: 450.9px;" /></a>
+<p class="caption"><span class="caption-text">Paired end quality scores across sequence. Source: Kwon, S. Lee, B. Yoon, S. doi: 10.1186/1471-2105-15-S9-S10</span></p>
+</div>
+<p><strong>Let’s align the paired end sequences and then look at some summary info</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">##### JOIN PAIRED ENDS #####</span>
+qiime vsearch join-pairs <span class="se">\</span>
+   --i-demultiplexed-seqs paired_end/1_1_demultiplexed_seqs.qza <span class="se">\</span>
+   --o-joined-sequences paired_end/1_3_joined_seqs.qza
+
+<span class="c1"># See the new output file</span>
+ls -lsh paired_end
+
+<span class="c1">##### SUMMARIZE JOINED SEQUENCES #####</span>
+qiime demux summarize <span class="se">\</span>
+   --i-data paired_end/1_3_joined_seqs.qza <span class="se">\</span>
+   --o-visualization paired_end/1_4_joined_summary
+
+<span class="c1"># VIEW THE RESULTS IN BROWSER #</span>
+qiime tools view paired_end/1_4_joined_summary.qzv
+</pre></div>
+</div>
+<dl class="docutils">
+<dt><strong>Note how input and output files are named incrementally!</strong></dt>
+<dd><ul class="first last simple">
+<li>This keeps them in order when you open in a folder</li>
+<li>Allows logic flow of code and files to align</li>
+<li>Keeps everything organized when you may generate hundreds of files!!!</li>
+</ul>
+</dd>
+</dl>
+<p>There are other ways to join reads, <a class="reference external" href="https://docs.qiime2.org/2018.8/tutorials/read-joining/">here are some other read joining options</a>.</p>
+<p>** Finally we should filter low quality sequences with Phred scores**</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">##### PERFORM QUALITY CONTROL BASED ON PHRED Q SCORES #####</span>
+qiime quality-filter q-score-joined <span class="se">\</span>
+  --i-demux paired_end/1_3_joined_seqs.qza <span class="se">\</span>
+  --o-filtered-sequences paired_end/1_5_qc_seqs.qza <span class="se">\</span>
+  --o-filter-stats paired_end/1_6_qc_seqs_summary.qza
+
+<span class="c1">#### SUMMARIZE JOINED SEQUENCES #####</span>
+qiime demux summarize <span class="se">\</span>
+   --i-data paired_end/1_5_qc_seqs.qza <span class="se">\</span>
+   --o-visualization paired_end/1_7_qc_summary
+
+<span class="c1"># VIEW THE RESULTS IN BROWSER #</span>
+qiime tools view paired_end/1_7_qc_summary.qzv
+</pre></div>
+</div>
+<p><strong>Keep in mind there are often more options than just the ones I am showing here…</strong></p>
+<p>To view all of the parameters available in a QIIME2 script follow just the function call with –help</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># LIST ALL PARAMETERS FOR quality-filter q-score-joined SCRIPT #</span>
+qiime quality-filter q-score-joined --help
+</pre></div>
+</div>
+<p><strong>For example here are all of the useful options for filtering by quality scores</strong></p>
+<blockquote>
+<div><table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--i-demux <var>ARTIFACT_PATH</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>The demultiplexed sequence data to be
+quality filtered.  [required]</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--p-min-quality <var>INTEGER</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>The minimum acceptable PHRED score. All
+PHRED scores less that this value are
+considered to be low PHRED scores.
+[default: 4]</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--p-quality-window <var>INTEGER</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>The maximum number of low PHRED scores that
+can be observed in direct succession before
+truncating a sequence read.  [default: 3]</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--p-min-length-fraction <var>FLOAT</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>The minimum length that a sequence read can
+be following truncation and still be
+retained. This length should be provided as
+a fraction of the input sequence length.
+[default: 0.75]</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--p-max-ambiguous <var>INTEGER</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>The maximum number of ambiguous (i.e., N)
+base calls. This is applied after trimming
+sequences based on <cite>min_length_fraction</cite>.
+[default: 0]</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--o-filtered-sequences <var>ARTIFACT_PATH</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>SampleData[JoinedSequencesWithQuality]
+The resulting quality-filtered sequences.
+[required if not passing –output-dir]</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--o-filter-stats <var>ARTIFACT_PATH</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>Summary statistics of the filtering process. [required if not passing –output-dir]</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--output-dir <var>DIRECTORY</var></span></kbd></td>
+</tr>
+<tr><td>&#160;</td><td>Output unspecified results to a directory</td></tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+<div class="section" id="deblur-the-new-otu">
+<h2>Deblur - The New OTU<a class="headerlink" href="#deblur-the-new-otu" title="Permalink to this headline">¶</a></h2>
+<div class="figure" id="id9">
+<a class="reference internal image-reference" href="../_images/otu_traditional.png"><img alt="otu_traditional" src="../_images/otu_traditional.png" style="width: 646.2px; height: 446.4px;" /></a>
+<p class="caption"><span class="caption-text">Traditional Operational Taxonomic Unit (OTU) clustering</span></p>
+</div>
+<p><strong>How do we actually charicterize a community?</strong></p>
+<ol class="arabic">
+<li><p class="first">Lump similar sequences together
+- There are a variety of algorithms</p>
+<blockquote>
+<div><ul class="simple">
+<li>OTUs - Sequence similarity % cutoff</li>
+<li>Deblur - Identical sequences based on likelihood of being biological versus artifactual noise</li>
+<li>DADA2 - Similar sequences based on likelihood of being biological versus artifactual noise</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Assign taxonomy to each of the sequence clusters or OTUs
+- Done using reference databases of known taxon for the amplicon of interest</p>
+</li>
+<li><p class="first">Total the counts for each cluster across each sample into observation table</p>
+</li>
+</ol>
+<p><strong>We will use Deblur. DADA2 is now really the other option (don’t use traditional % cutoffs).</strong></p>
+<p>There are advantages and caveats to each, but they get very similar results for the most part.</p>
+<dl class="docutils">
+<dt><strong>To get Deblur ‘features’ we will:</strong></dt>
+<dd><ol class="first last arabic simple">
+<li>Evaluate the quality (Phred) scores along the sequences</li>
+<li>Trim the sequences to the same length</li>
+<li>Use Deblur to ‘denoise’ - remove likely sequencing errors</li>
+<li>Use Deblur to count the remaining sequences for each feature</li>
+</ol>
+</dd>
+</dl>
+<p><strong>First let’s decide where to trim our sequences… click the ‘Interactive Quality Plot’ tab</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">##### INVESTIGATE THE QUALITY SCORE PLOT TO PICK TRIM LENGTHS BELOW #####</span>
+qiime tools view paired_end/1_7_qc_summary.qzv
+</pre></div>
+</div>
+<p>Note in the middle how the paired end overlap leads to higher Phred confidence!</p>
+<p><strong>Let’s trim to 240bp just before the dip…</strong></p>
+<p>This is somewhat arbitrary, but generally pick a point where the quality drops and make sure you change in your script!</p>
+<p>There are many options for the next step, think about your situation</p>
+<p><strong>Deblur! Lets denoise our sequences into a feature table</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">##### DEBLUR DENOISE DUPLICATE SEQUENCES AND CREATE OBSERVATIONS #####</span>
+qiime deblur denoise-16S <span class="se">\</span>
+  --i-demultiplexed-seqs paired_end/1_5_qc_seqs.qza <span class="se">\</span>
+  --p-trim-length <span class="m">240</span> <span class="se">\</span>
+  --o-representative-sequences paired_end/2_0_deblur_representative_seqs.qza <span class="se">\</span>
+  --o-table paired_end/2_1_deblur_table.qza <span class="se">\</span>
+  --p-sample-stats <span class="se">\</span>
+  --o-stats paired_end/2_2_deblur_stats.qza
+
+<span class="c1"># See output files</span>
+ls -lsh paired_end
+</pre></div>
+</div>
+<p><em>Deblur can take a while to run, for our purposes you can just move the output files from the extras folder</em></p>
+<p>To cancel the run press ctrl-c</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Remove any files if generated</span>
+rm paired_end/2_*
+
+<span class="c1"># See current files</span>
+ls -lsh paired_end
+
+<span class="c1"># Move the files</span>
+cp paired_end/extras/* paired_end/
+
+<span class="c1"># See output files</span>
+ls -lsh paired_end
+</pre></div>
+</div>
+<p><strong>Now we have generated:</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="first docutils">
+<dt>Representative sequences: 2_0_deblur_representative_seqs.qza</dt>
+<dd><ul class="first last">
+<li>These will be used for alignment, phylogeny building, and taxonomic assignment</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Observation table: 2_1_deblur_table.qza</dt>
+<dd><ul class="first last">
+<li>These are the counts for each representative sequence across each sample</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Statistics: 2_2_deblur_stats.qza</dt>
+<dd><ul class="first last">
+<li>Allows us to examine counts across samples</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<p><strong>Let’s look at the stats…</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">##### DEBLUR VISUALIZE STATISTICS #####</span>
+qiime deblur visualize-stats <span class="se">\</span>
+   --i-deblur-stats paired_end/2_2_deblur_stats.qza <span class="se">\</span>
+   --o-visualization paired_end/2_3_deblur_stats_summary.qzv
+
+qiime tools view paired_end/2_3_deblur_stats_summary.qzv
+</pre></div>
+</div>
+<p><strong>And summarize the table…</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">##### DEBLUR SUMMARIZE TABLE #####</span>
+qiime feature-table summarize <span class="se">\</span>
+   --i-table paired_end/2_1_deblur_table.qza <span class="se">\</span>
+   --o-visualization paired_end/2_4_deblur_table_summary.qzv <span class="se">\</span>
+   --m-sample-metadata-file paired_end/metadata.tsv
+
+qiime tools view paired_end/2_4_deblur_table_summary.qzv
+</pre></div>
+</div>
+<p><strong>And look at the representative sequences…</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">##### DEBLUR SUMMARIZE SEQUENCES #####</span>
+qiime feature-table tabulate-seqs <span class="se">\</span>
+   --i-data paired_end/2_0_deblur_representative_seqs.qza <span class="se">\</span>
+   --o-visualization paired_end/2_5_deblur_representative_seqs_summary.qzv
+
+qiime tools view paired_end/2_5_deblur_representative_seqs_summary.qzv
+</pre></div>
+</div>
+<p><strong>Neat! Well done!</strong></p>
+</div>
+<div class="section" id="alignment-into-amplicon-phylogeny">
+<h2>Alignment into Amplicon Phylogeny<a class="headerlink" href="#alignment-into-amplicon-phylogeny" title="Permalink to this headline">¶</a></h2>
+<div class="figure" id="id10">
+<a class="reference internal image-reference" href="../_images/16s_phylogeny.png"><img alt="16s_phylogeny" src="../_images/16s_phylogeny.png" style="width: 680.0px; height: 912.0px;" /></a>
+<p class="caption"><span class="caption-text">Example phylogeny. Source: Rob Onyenwoke <em>et. al.</em> doi: 10.1007/s00203-004-0696-y</span></p>
+</div>
+<dl class="docutils">
+<dt><strong>A phylogeny depicts the genetic relatedness between each of our amplicons</strong></dt>
+<dd><ul class="first last simple">
+<li>Used for diversity metrics incorporating genetic relatedness of features</li>
+</ul>
+</dd>
+<dt><strong>To construct a phylogeny of our representative sequences we will..</strong></dt>
+<dd><ol class="first last arabic simple">
+<li>Align the sequences using Mafft</li>
+<li>Mask highly variable positions in the alignment (removes uninformative noise)</li>
+<li>Construct an unrooted phylogeny with FastTree</li>
+<li>Root the phylogeny at the tree’s midpoint</li>
+</ol>
+</dd>
+</dl>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">##### CREATE ALIGNMENT OF REPRESENTATIVE SEQUENCES #####</span>
+qiime alignment mafft <span class="se">\</span>
+   --i-sequences paired_end/2_0_deblur_representative_seqs.qza <span class="se">\</span>
+   --o-alignment paired_end/3_0_deblur_aligned_seqs.qza
+
+<span class="c1">##### MASK HIGHLY VARIABLE NOISY POSITIONS IN ALIGNMENT #####</span>
+qiime alignment mask <span class="se">\</span>
+   --i-alignment paired_end/3_0_deblur_aligned_seqs.qza <span class="se">\</span>
+   --o-masked-alignment paired_end/3_1_deblur_aligned_masked.qza
+
+<span class="c1">##### CREATE PHYLOGENY WITH FASTTREE #####</span>
+qiime phylogeny fasttree <span class="se">\</span>
+   --i-alignment paired_end/3_1_deblur_aligned_masked.qza <span class="se">\</span>
+   --o-tree paired_end/3_2_deblur_tree_unrooted.qza
+
+<span class="c1">##### ROOT PHYLOGENY AT MIDPOINT #####</span>
+qiime phylogeny midpoint-root <span class="se">\</span>
+   --i-tree paired_end/3_2_deblur_tree_unrooted.qza <span class="se">\</span>
+   --o-rooted-tree paired_end/3_3_deblur_tree.qza
+
+<span class="c1"># look at files</span>
+ls -lsh paired_end
+</pre></div>
+</div>
+</div>
+<div class="section" id="taxonomy-assignment">
+<h2>Taxonomy Assignment<a class="headerlink" href="#taxonomy-assignment" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt><strong>Finally before we can start analysis we want to assign taxonomy to each of our representative sequences</strong></dt>
+<dd><ul class="first last simple">
+<li>More biologically informative than sequences with arbitrary ids</li>
+<li>Allows us to bin by known classifications</li>
+</ul>
+</dd>
+<dt><strong>We will use the GreenGenes 94% reference database for a minimal example, but I would suggest another database for your actual project</strong></dt>
+<dd><ul class="first last simple">
+<li>Silva</li>
+<li>GreenGenes 99%</li>
+<li>Another? Others might be better for your goals</li>
+</ul>
+</dd>
+<dt><a href="#id1"><span class="problematic" id="id2">**</span></a>First import the GreenGenes Database*</dt>
+<dd><ul class="first last simple">
+<li>94% Unique 16S Sequences</li>
+<li><dl class="first docutils">
+<dt>Taxonomy Reference Table</dt>
+<dd><ul class="first last">
+<li>Contains number of ribosomal DNA copies for each taxon</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">##### ASSIGN TAXONOMY #####</span>
+<span class="c1"># !!! SET PATH TO TAXONOMY REFERENCE !!! #</span>
+<span class="nv">greengenes_path</span><span class="o">=</span>greengenes/
+
+<span class="c1">### IMPORT TAXONOMY REFERENCE SEQUENCES ###</span>
+qiime tools import <span class="se">\</span>
+   --type <span class="s1">&#39;FeatureData[Sequence]&#39;</span> <span class="se">\</span>
+   --input-path <span class="s2">&quot;</span><span class="nv">$greengenes_path</span><span class="s2">&quot;</span>94_otus.fasta <span class="se">\</span>
+   --output-path paired_end/greengenes_94_otus.qza
+
+<span class="c1">### IMPORT TAXONOMY REFERENCE TABLE ###</span>
+qiime tools import <span class="se">\</span>
+   --type <span class="s1">&#39;FeatureData[Taxonomy]&#39;</span> <span class="se">\</span>
+   --source-format HeaderlessTSVTaxonomyFormat <span class="se">\</span>
+   --input-path <span class="s2">&quot;</span><span class="nv">$greengenes_path</span><span class="s2">&quot;</span>94_otu_taxonomy.txt <span class="se">\</span>
+   --output-path paired_end/greengenes_94_taxonomy.qza
+</pre></div>
+</div>
+<dl class="docutils">
+<dt><strong>Next we will:</strong></dt>
+<dd><ul class="first last simple">
+<li><dl class="first docutils">
+<dt>Train a taxonomy classifier for our amplicon region in the reference database</dt>
+<dd><ul class="first last">
+<li>Naive Bayes Classifier</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>We will identify our region of interestusing the primer seqeunces</dt>
+<dd><ul class="first last">
+<li>Select only region of the total 16S that was amplified and sequenced</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Apply the classifier to our 16S Amplicon Sequences</dt>
+<dd><ul class="first last">
+<li>Each sequence is queried and taxonomy assigned to the closest confident level</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">### EXTRACT REFERENCE READS BASED ON PRIMERS AND TRIM LENGTH ###</span>
+qiime feature-classifier extract-reads <span class="se">\</span>
+   --i-sequences paired_end/greengenes_94_otus.qza <span class="se">\</span>
+   --p-f-primer AGAGTTTGATCCTGGCTCAG <span class="se">\</span>
+   --p-r-primer GCTGCCTCCCGTAGGAGT <span class="se">\</span>
+   --p-trunc-len <span class="m">320</span> <span class="se">\</span>
+   --o-reads paired_end/greengenes_94_seqs_extracted.qza
+
+<span class="c1">### TRAIN NAIVE BAYES CLASSIFIER FOR TAXONOMY ASSIGNMENT ###</span>
+qiime feature-classifier fit-classifier-naive-bayes <span class="se">\</span>
+   --i-reference-reads paired_end/greengenes_94_seqs_extracted.qza <span class="se">\</span>
+   --i-reference-taxonomy paired_end/greengenes_94_taxonomy.qza <span class="se">\</span>
+   --o-classifier paired_end/greengenes_94_classifier.qza
+
+<span class="c1">### ASSIGN TAXONOMY WITH TRAINED CLASSIFIER ###</span>
+qiime feature-classifier classify-sklearn <span class="se">\</span>
+   --i-classifier paired_end/greengenes_94_classifier.qza <span class="se">\</span>
+   --i-reads paired_end/2_0_deblur_representative_seqs.qza <span class="se">\</span>
+   --o-classification paired_end/3_4_assigned_greengenes_94_taxonomy.qza
+</pre></div>
+</div>
+<p><strong>Finally let’s visualize our taxonomic assignment</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">### MAKE TAXONOMY OUTPUT VISUALIZATION ###</span>
+qiime metadata tabulate <span class="se">\</span>
+   --m-input-file paired_end/3_4_assigned_greengenes_94_taxonomy.qza <span class="se">\</span>
+   --o-visualization paired_end/3_5_taxonomy_visualization.qzv
+
+qiime tools view paired_end/3_5_taxonomy_visualization.qzv
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">From Sequences to Community Composition</a><ul>
+<li><a class="reference internal" href="#sequence-file-formats">Sequence File Formats</a></li>
+<li><a class="reference internal" href="#types-of-sequences-in-qiime2">Types of Sequences in QIIME2</a></li>
+<li><a class="reference internal" href="#importing-demultiplexing-and-sequence-quality-control">Importing, Demultiplexing, and Sequence Quality Control</a></li>
+<li><a class="reference internal" href="#deblur-the-new-otu">Deblur - The New OTU</a></li>
+<li><a class="reference internal" href="#alignment-into-amplicon-phylogeny">Alignment into Amplicon Phylogeny</a></li>
+<li><a class="reference internal" href="#taxonomy-assignment">Taxonomy Assignment</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="2_experimental_design.html"
+                        title="previous chapter">Experimental Design and Sample Preparation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="4_concepts_of_community_analysis.html"
+                        title="next chapter">Concepts of Community Analysis</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/rst/3_sequences_to_composition.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="4_concepts_of_community_analysis.html" title="Concepts of Community Analysis"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="2_experimental_design.html" title="Experimental Design and Sample Preparation"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">VMI Bootcamp II 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Andrew Brooks, Matt Scholz, Seth Bordenstein.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+    </div>
+  </body>
+</html>

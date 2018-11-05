@@ -11,7 +11,18 @@ Welcome to the Second VMI Bootcamp!
    :scale: 30 %
    :alt: VMI Logo Stacked
 
-VMI Website: `Vanderbilt Microbiome Initiative <https://my.vanderbilt.edu/microbiome/>`_.
+
+This bootcamp is an introduction to microbiota community composition analysis.
+
+Goals:
+
+   1. Understand the importance of good experimental design 
+
+   2. Explore the critical steps in a typical microbiome analysis
+
+   3. Utilize the QIIME2 pipeline to process microbiome datasets
+   
+About the `Vanderbilt Microbiome Initiative <https://my.vanderbilt.edu/microbiome/>`_.
 
    - Organized by the Vanderbilt Microbiome Initiative (VMI) and funded by Vanderbilt University Trans-Institutional Programs (TIPs).
    - Founded by members of the Dept. Biological Sciences, Peabody college, School of Engineering and the Medical center
@@ -21,55 +32,43 @@ VMI Website: `Vanderbilt Microbiome Initiative <https://my.vanderbilt.edu/microb
    - Education and training – Campus-wide programs to deploy state-of-the-art tools to propel microbiome research
    - Ongoing Clinical Trial - Multi'omic, dietary intervention, temporal sampling, multi-ethnic
 
-Microbiome Bootcamp
--------------------
-This workshop is a basic introduction into microbiome analysis
-
-Goals:
-
-   1. Understand the importance of good experimental design 
-
-   2. Explore the critical steps in a typical microbiome analysis
-
-   3. Utilize the QIIME2 pipeline to process microbiome datasets
 
 Microbiome Introduction
------------------------
-
+----------------------------------------------------------------------------------------------------------------------
 .. toctree::
    :maxdepth: 2
    
-   1_microbiome_introduction
+   ./rst/1_microbiome_introduction
+
+Experimental Design and Sample Preparation
+----------------------------------------------------------------------------------------------------------------------
+.. toctree::
+   :maxdepth: 2
    
-Experimental Design and Data Generation
----------------------------------------
+   ./rst/2_experimental_design
+
+Turning Sequences into Community Composition
+----------------------------------------------------------------------------------------------------------------------
+.. toctree::
+   :maxdepth: 2
    
-   - Sampling Strategy
-   - Sampling Method and Storage
-      - Randomization
-      - Contamination
-      - Low Biomass
-      - Cage Effects
-   - Collecting Metadata
-      - Bioinformatics Rule #1
-   - DNA Extraction
-   - PCR Amplification
-      - Amplicon Options
-      - Variable Region Choices
-      - EMP
-   - Sequencing Technologies
-      - Library Preparation
-      - Multiplexing
-      
+   ./rst/3_sequences_to_composition
+
+Concepts of Community Analysis
+----------------------------------------------------------------------------------------------------------------------
+.. toctree::
+   :maxdepth: 2
    
-   
-Command Line Tutorials
+   ./rst/4_concepts_of_community_analysis
+
+
+Command Line Tutorial
 ----------------------
 
 .. toctree::
    :maxdepth: 2  
    
-   2_command_line_introduction
+   ./rst/command_line_introduction
 
 Other Resources
 ===============

@@ -18,7 +18,7 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Microbiome Introduction" href="1_microbiome_introduction.html" /> 
+    <link rel="next" title="Microbiome Introduction" href="rst/1_microbiome_introduction.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -27,7 +27,7 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="1_microbiome_introduction.html" title="Microbiome Introduction"
+          <a href="rst/1_microbiome_introduction.html" title="Microbiome Introduction"
              accesskey="N">next</a> |</li>
         <li class="nav-item nav-item-0"><a href="#">VMI Bootcamp II 1.0 documentation</a> &#187;</li> 
       </ul>
@@ -43,7 +43,16 @@
 <div class="figure">
 <a class="reference internal image-reference" href="_images/vmi_logo_stacked.png"><img alt="VMI Logo Stacked" src="_images/vmi_logo_stacked.png" style="width: 755.4px; height: 282.9px;" /></a>
 </div>
-<p>VMI Website: <a class="reference external" href="https://my.vanderbilt.edu/microbiome/">Vanderbilt Microbiome Initiative</a>.</p>
+<p>This bootcamp is an introduction to microbiota community composition analysis.</p>
+<p>Goals:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Understand the importance of good experimental design</li>
+<li>Explore the critical steps in a typical microbiome analysis</li>
+<li>Utilize the QIIME2 pipeline to process microbiome datasets</li>
+</ol>
+</div></blockquote>
+<p>About the <a class="reference external" href="https://my.vanderbilt.edu/microbiome/">Vanderbilt Microbiome Initiative</a>.</p>
 <blockquote>
 <div><ul class="simple">
 <li>Organized by the Vanderbilt Microbiome Initiative (VMI) and funded by Vanderbilt University Trans-Institutional Programs (TIPs).</li>
@@ -55,87 +64,73 @@
 <li>Ongoing Clinical Trial - Multi’omic, dietary intervention, temporal sampling, multi-ethnic</li>
 </ul>
 </div></blockquote>
-<div class="section" id="microbiome-bootcamp">
-<h2>Microbiome Bootcamp<a class="headerlink" href="#microbiome-bootcamp" title="Permalink to this headline">¶</a></h2>
-<p>This workshop is a basic introduction into microbiome analysis</p>
-<p>Goals:</p>
-<blockquote>
-<div><ol class="arabic simple">
-<li>Understand the importance of good experimental design</li>
-<li>Explore the critical steps in a typical microbiome analysis</li>
-<li>Utilize the QIIME2 pipeline to process microbiome datasets</li>
-</ol>
-</div></blockquote>
-</div>
 <div class="section" id="microbiome-introduction">
 <h2>Microbiome Introduction<a class="headerlink" href="#microbiome-introduction" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="1_microbiome_introduction.html">Microbiome Introduction</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="1_microbiome_introduction.html#definitions">Definitions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="1_microbiome_introduction.html#the-human-microbiome">The Human Microbiome</a></li>
-<li class="toctree-l2"><a class="reference internal" href="1_microbiome_introduction.html#s-ribosomal-dna-and-phylogenetic-markers">16S Ribosomal DNA and Phylogenetic Markers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="1_microbiome_introduction.html#advantages-and-disadvantages">Advantages and Disadvantages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst/1_microbiome_introduction.html">Microbiome Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rst/1_microbiome_introduction.html#definitions">Definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst/1_microbiome_introduction.html#the-human-microbiome">The Human Microbiome</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst/1_microbiome_introduction.html#s-ribosomal-dna-and-phylogenetic-markers">16S Ribosomal DNA and Phylogenetic Markers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst/1_microbiome_introduction.html#advantages-and-disadvantages">Advantages and Disadvantages</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<div class="section" id="experimental-design-and-data-generation">
-<h2>Experimental Design and Data Generation<a class="headerlink" href="#experimental-design-and-data-generation" title="Permalink to this headline">¶</a></h2>
-<blockquote>
-<div><ul class="simple">
-<li>Sampling Strategy</li>
-<li><dl class="first docutils">
-<dt>Sampling Method and Storage</dt>
-<dd><ul class="first last">
-<li>Randomization</li>
-<li>Contamination</li>
-<li>Low Biomass</li>
-<li>Cage Effects</li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt>Collecting Metadata</dt>
-<dd><ul class="first last">
-<li>Bioinformatics Rule #1</li>
-</ul>
-</dd>
-</dl>
-</li>
-<li>DNA Extraction</li>
-<li><dl class="first docutils">
-<dt>PCR Amplification</dt>
-<dd><ul class="first last">
-<li>Amplicon Options</li>
-<li>Variable Region Choices</li>
-<li>EMP</li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt>Sequencing Technologies</dt>
-<dd><ul class="first last">
-<li>Library Preparation</li>
-<li>Multiplexing</li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-</div></blockquote>
-</div>
-<div class="section" id="command-line-tutorials">
-<h2>Command Line Tutorials<a class="headerlink" href="#command-line-tutorials" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="experimental-design-and-sample-preparation">
+<h2>Experimental Design and Sample Preparation<a class="headerlink" href="#experimental-design-and-sample-preparation" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="2_command_line_introduction.html">Command Line Tutorial</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="2_command_line_introduction.html#learning-goals">Learning Goals</a></li>
-<li class="toctree-l2"><a class="reference internal" href="2_command_line_introduction.html#what-is-the-terminal">What is the terminal?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="2_command_line_introduction.html#basic-commands">Basic Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst/2_experimental_design.html">Experimental Design and Sample Preparation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rst/2_experimental_design.html#experimental-design">Experimental Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst/2_experimental_design.html#sampling-and-controls">Sampling and Controls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst/2_experimental_design.html#dna-extraction">DNA Extraction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst/2_experimental_design.html#amplification">Amplification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst/2_experimental_design.html#sequencing-platforms">Sequencing Platforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst/2_experimental_design.html#mapping-file">Mapping File</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="turning-sequences-into-community-composition">
+<h2>Turning Sequences into Community Composition<a class="headerlink" href="#turning-sequences-into-community-composition" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rst/3_sequences_to_composition.html">From Sequences to Community Composition</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rst/3_sequences_to_composition.html#sequence-file-formats">Sequence File Formats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst/3_sequences_to_composition.html#types-of-sequences-in-qiime2">Types of Sequences in QIIME2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst/3_sequences_to_composition.html#importing-demultiplexing-and-sequence-quality-control">Importing, Demultiplexing, and Sequence Quality Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst/3_sequences_to_composition.html#deblur-the-new-otu">Deblur - The New OTU</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst/3_sequences_to_composition.html#alignment-into-amplicon-phylogeny">Alignment into Amplicon Phylogeny</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst/3_sequences_to_composition.html#taxonomy-assignment">Taxonomy Assignment</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="concepts-of-community-analysis">
+<h2>Concepts of Community Analysis<a class="headerlink" href="#concepts-of-community-analysis" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rst/4_concepts_of_community_analysis.html">Concepts of Community Analysis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rst/4_concepts_of_community_analysis.html#community-examination-and-quality-control">Community Examination and Quality Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst/4_concepts_of_community_analysis.html#rarefaction-and-normalization">Rarefaction and Normalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst/4_concepts_of_community_analysis.html#alpha-and-beta-diversity">Alpha and Beta Diversity</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="command-line-tutorial">
+<h2>Command Line Tutorial<a class="headerlink" href="#command-line-tutorial" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rst/command_line_introduction.html">Command Line Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rst/command_line_introduction.html#navigation">Navigation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst/command_line_introduction.html#what-is-the-terminal">What is the terminal?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst/command_line_introduction.html#basic-commands">Basic Commands</a></li>
 </ul>
 </li>
 </ul>
@@ -160,17 +155,18 @@
   <h3><a href="#">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Welcome to the Second VMI Bootcamp!</a><ul>
-<li><a class="reference internal" href="#microbiome-bootcamp">Microbiome Bootcamp</a></li>
 <li><a class="reference internal" href="#microbiome-introduction">Microbiome Introduction</a></li>
-<li><a class="reference internal" href="#experimental-design-and-data-generation">Experimental Design and Data Generation</a></li>
-<li><a class="reference internal" href="#command-line-tutorials">Command Line Tutorials</a></li>
+<li><a class="reference internal" href="#experimental-design-and-sample-preparation">Experimental Design and Sample Preparation</a></li>
+<li><a class="reference internal" href="#turning-sequences-into-community-composition">Turning Sequences into Community Composition</a></li>
+<li><a class="reference internal" href="#concepts-of-community-analysis">Concepts of Community Analysis</a></li>
+<li><a class="reference internal" href="#command-line-tutorial">Command Line Tutorial</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#other-resources">Other Resources</a></li>
 </ul>
 
   <h4>Next topic</h4>
-  <p class="topless"><a href="1_microbiome_introduction.html"
+  <p class="topless"><a href="rst/1_microbiome_introduction.html"
                         title="next chapter">Microbiome Introduction</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
@@ -202,7 +198,7 @@
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="1_microbiome_introduction.html" title="Microbiome Introduction"
+          <a href="rst/1_microbiome_introduction.html" title="Microbiome Introduction"
              >next</a> |</li>
         <li class="nav-item nav-item-0"><a href="#">VMI Bootcamp II 1.0 documentation</a> &#187;</li> 
       </ul>

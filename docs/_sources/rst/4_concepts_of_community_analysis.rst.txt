@@ -1,0 +1,342 @@
+Concepts of Community Analysis
+============================================
+
+**How can we examine microbial communities?**
+
+Community Examination and Quality Control
+------------------------------------------------------------------
+
+**How is our community taxonomically distributed?**
+   - Let's examine barplots of the taxonomic distribution for each sample
+   - These plots are based on relative abundance within a total sample
+   - Do not provide information about absolute microbial load
+
+.. code-block:: bash
+
+   ### MAKE TAXONOMY BARPLOT ###
+   qiime taxa barplot \
+      --i-table 1_7_deblur_table.qza \
+      --i-taxonomy 1_16_assigned_greengenes_13_5_99_taxonomy.qza \
+      --m-metadata-file "$map_path" \
+      --o-visualization 1_18_taxonomy_barplot.qzv 
+
+   qiime tools view 1_18_taxonomy_barplot.qzv
+
+**What should we do to improve the resolution and remove noise?**
+
+**1. We can remove particular microbial taxon:**
+
+.. code-block:: bash
+
+   ### OPTIONAL: FILTER SPECIFIC TAXON ###
+   qiime taxa filter-table \
+      --i-table 1_7_deblur_table.qza \
+      --i-taxonomy 1_16_assigned_greengenes_13_5_99_taxonomy.qza \
+      --p-exclude Wolbachia \
+      --o-filtered-table 1_19_table_no_Wolbachia.qza
+
+**2. We could go back and remove sequences:**
+
+This is useful to exclude known contaminant amplicons, or remove those found in blank samples...
+
+.. code-block:: bash
+
+   qiime quality-control exclude-seqs \
+      --i-query-sequences query-seqs.qza \
+      --i-reference-sequences reference-seqs.qza \
+      --p-method blast \
+      --p-perc-identity 0.97 \
+      --p-perc-query-aligned 0.97 \
+      --o-sequence-hits hits.qza \
+      --o-sequence-misses misses.qza
+
+**3. Filter from the actual observation table by:**
+   - Minimum or maximum frequency (counts across samples)
+   - Minimum or maximum ubiquity (proportion of samples)
+   - Where metadata is equal to acertain value
+   - Removing specific samples by the unqiue id
+
+.. code-block:: bash
+
+   qiime feature-table filter-features \
+      --i-table query-table.qza \
+      --m-metadata-file hits.qza \
+      --o-filtered-table no-hits-filtered-table.qza \
+      --p-exclude-ids
+
+**Options for specifically filtering features:**
+
+  --i-table ARTIFACT_PATH   The feature table from which features should
+                                  be filtered.  [required]
+  --p-min-frequency INTEGER       The minimum total frequency that a feature
+                                  must have to be retained.  [default: 0]
+  --p-max-frequency INTEGER       The maximum total frequency that a feature
+                                  can have to be retained. If no value is
+                                  provided this will default to infinity
+                                  (i.e., no maximum frequency filter will be
+                                  applied).  [optional]
+  --p-min-samples INTEGER         The minimum number of samples that a feature
+                                  must be observed in to be retained.
+                                  [default: 0]
+  --p-max-samples INTEGER         The maximum number of samples that a feature
+                                  can be observed in to be retained. If no
+                                  value is provided this will default to
+                                  infinity (i.e., no maximum sample filter
+                                  will be applied).  [optional]
+  --m-metadata-file MULTIPLE_PATH   Metadata file or artifact viewable as
+                                  metadata. This option may be supplied
+                                  multiple times to merge metadata. Feature
+                                  metadata used with `where` parameter when
+                                  selecting features to retain, or with
+                                  `exclude_ids` when selecting features to
+                                  discard.  [optional]
+  --p-where TEXT                  SQLite WHERE clause specifying feature
+                                  metadata criteria that must be met to be
+                                  included in the filtered feature table. If
+                                  not provided, all features in `metadata`
+                                  that are also in the feature table will be
+                                  retained.  [optional]
+  --p-exclude-ids                 Samples to remove
+  --p-no-exclude-ids              If true, the features selected by `metadata`
+                                  or `where` parameters will be excluded from
+                                  the filtered table instead of being
+                                  retained.  [default: False]
+  --o-filtered-table ARTIFACT_PATH   FeatureTable[Frequency] The resulting feature table filtered by feature.  [required if not passing --output-dir]
+  --output-dir DIRECTORY          Output unspecified results to a directory
+
+**To filter a list of samples:**
+
+.. code-block:: bash
+
+   echo SampleID > samples-to-keep.tsv
+   echo L1S8 >> samples-to-keep.tsv
+   echo L1S105 >> samples-to-keep.tsv
+
+   qiime feature-table filter-samples \
+      --i-table table.qza \
+      --m-metadata-file samples-to-keep.tsv \
+      --o-filtered-table id-filtered-table.qza
+
+**To filter by metadata categories:**
+
+.. code-block:: bash
+
+   qiime feature-table filter-samples \
+      --i-table table.qza \
+      --m-metadata-file sample-metadata.tsv \
+      --p-where "BodySite IN ('left palm', 'right palm')" \
+      --o-filtered-table skin-filtered-table.qza
+
+**4. Evaluating how well the mock community matches the expected distribution:**
+
+.. code-block:: bash
+
+   qiime quality-control evaluate-composition \
+      --i-expected-features qc-mock-3-expected.qza \
+      --i-observed-features qc-mock-3-observed.qza \
+      --o-visualization qc-mock-3-comparison.qzv
+
+**5. There are many other ways to transform or filter the table, look at the documentation:**
+
+`More extensive filtering documentation <https://docs.qiime2.org/2018.8/tutorials/filtering/>`_.
+
+.. code-block:: bash
+
+   qiime feature-table --help
+
+
+Commands:
+  -core-features       Identify core features in table
+  -filter-features     Filter features from table
+  -filter-samples      Filter samples from table
+  -filter-seqs         Filter features from sequences
+  -group               Group samples or features by a metadata column
+  -heatmap             Generate a heatmap representation of a feature table
+  -merge               Combine multiple tables
+  -merge-seqs          Combine collections of feature sequences
+  -merge-taxa          Combine collections of feature taxonomies
+  -presence-absence    Convert to presence/absence
+  -rarefy              Rarefy table
+  -relative-frequency  Convert to relative frequencies
+  -subsample           Subsample table
+  -summarize           Summarize table
+  -tabulate-seqs       View sequence associated with each feature
+
+
+Rarefaction and Normalization
+------------------------------------------------------------------
+
+**Raw counts are biased:**
+   - Samples have different numbers of sequence counts
+   - Not indicative of absolute bacterial abundance
+   - Artefact of extraction, library preparation and pooling, and sequencing efficiency
+   
+**Some ways to transform the counts:**
+
+  -presence-absence    Convert to presence/absence
+  -rarefy              Rarefy table
+  -relative-frequency  Convert to relative frequencies
+  
+.. code-block:: bash
+
+   qiime feature-table presence-absence \ ...
+   qiime feature-table rarefy \ ...
+   qiime feature-table relative-frequency \ ...
+   
+**Presence / Absence**: value of 1 if taxon is present in sample, 0 otherwise
+**Rarefy**: subsample the same number of sequence from each sample
+**Relative Frequency**: propotion of each feature out of the total feature counts for each sample
+
+**There are other normalization methods, often based on RNA sequencing methods.**
+   - Generally seem more biased than rarefy / relative abundance
+   - Better fit in standard sense, don't seem to adapt well to wide bias across different datasets
+   
+I'd suggest sticking to relative abundance and rarefied communities!
+   
+
+Alpha and Beta Diversity
+------------------------------------------------------------------
+
+**We can use ecological metrics to understand community composition and inter-sample microbiome similarity!**
+
+**Alpha Diversity**: Measure of diversity within a sample
+
+**Beta Diversity**: Measure of microbiome similarity between a pair of samples 
+
+`There are many metrics (ways to measure) Alpha and Beta Diversity <https://forum.qiime2.org/t/alpha-and-beta-diversity-explanations-and-commands/2282>`_
+
+**Both Alpha and Beta Diversity can take into account the microbial phylogeny with certain metrics**
+
+Metrics are assigned with the *-p-metric* argument:
+
+.. code-block:: bash
+   
+   # Alpha Diversity - Non-Phylogenetic Observed OTUs
+   qiime diversity alpha \
+     --i-table table.qza \
+     --p-metric observed_otus \
+     --o-alpha-diversity observed_otus_vector.qza
+   
+   # Alpha Diversity - Non-Phylogenetic Observed OTUs
+   qiime diversity alpha-phylogenetic \
+     --i-table table.qza \
+     --i-phylogeny rooted-tree.qza \
+     --p-metric faith_pd \
+     --o-alpha-diversity faith_pd_vector.qza
+   
+   # Beta Diversity - Non-Phylogenetic Bray-Curtis
+   qiime diversity beta \
+     --i-table table.qza \
+     --p-metric braycurtis \
+     --o-distance-matrix unweighted_unifrac_distance_matrix.qza
+   
+   # Beta Diversity - Phylogenetic Unweighted UNIFRAC
+   qiime diversity beta-phylogenetic \
+      --i-table table.qza \
+      --i-phylogeny rooted-tree.qza \
+      --p-metric unweighted_unifrac \
+      --o-distance-matrix unweighted_unifrac_distance_matrix.qza
+ 
+**QIIME2 has done a good job wrapping diversity computation with my favorite metrics into one easy script:**
+   - Rarefies the table to a specified depth (necessary for diversity to be computed accurately)
+   - Calculates Alpha and Beta Diversity
+      - Alpha Metrics:
+         - Faith's PD: Phylogenetic diversity
+         - Observed OTUs: Richness of community
+         - Shannon: Balances richness and evenness
+         - Pielou's Evenness: Evenness of community
+      - Beta Diversity
+         - Unweighted Unifrac: Presence / absence phylogenetic distance between samples
+         - Weighted Unifrac: Abundance weighted phylogenetic distance between samples
+         - Jaccard: Presence / absence distance between samples
+         - Bray Curtis: Abundance weighted distance between samples
+   - Can be parallelized across multiple CPUs
+   - Generates output visuals
+   
+ 
+ Options:
+   --i-table ARTIFACT_PATH         The feature table containing the samples
+                                   over which diversity metrics should be
+                                   computed.  [required]
+   --i-phylogeny ARTIFACT_PATH     Phylogenetic tree containing tip identifiers
+                                   that correspond to the feature identifiers
+                                   in the table. This tree can contain tip ids
+                                   that are not present in the table, but all
+                                   feature ids in the table must be present in
+                                   this tree.  [required]
+   --p-sampling-depth INTEGER_RANGE     The total frequency that each sample should
+                                   be rarefied to prior to computing diversity
+                                   metrics.  [required]
+   --m-metadata-file MULTIPLE_PATH    Metadata file or artifact viewable as
+                                   metadata. This option may be supplied
+                                   multiple times to merge metadata. The sample
+                                   metadata to use in the emperor plots.
+                                   [required]
+   --p-n-jobs INTEGER_RANGE        The number of jobs to use for the computation. This works
+                                   by breaking down the pairwise matrix into
+                                   n_jobs even slices and computing them in
+                                   parallel. If -1 all CPUs are used. If 1 is
+                                   given, no parallel computing code is used at
+                                   all, which is useful for debugging. For
+                                   n_jobs below -1, (n_cpus + 1 + n_jobs) are
+                                   used. Thus for n_jobs = -2, all CPUs but one
+                                   are used. (Description from
+                                   sklearn.metrics.pairwise_distances)
+                                   [default: 1]
+ 
+.. code-block:: bash
+
+   ###############################################################################
+   ##### SETUP DIVERSITY ANALYSES #####
+   # !!! SET RAREFACTION DEPTH BASED ON SAMPLE COUNTS !!! #
+   qiime tools view 1_10_deblur_table.qzv
+   rarefaction_depth==4000
+   ### SET PATH TO MAPPING FILE ###
+   # map_path=map.txt
+
+   ### RUN DIVERSITY ANALYSES ###
+   diversity_folder=1_16_core_metrics_phylogenetic
+   qiime diversity core-metrics-phylogenetic \
+     --i-phylogeny 1_15_deblur_tree.qza \
+     --i-table 1_7_deblur_table.qza \
+     --p-sampling-depth $rarefaction_depth \
+     --m-metadata-file "$map_path" \
+     --output-dir "$diversity_folder"
+
+   ### VIEW PCoA PLOTS ###
+   qiime tools view 1_16_core_metrics_phylogenetic/bray_curtis_emperor.qzv
+   qiime tools view 1_16_core_metrics_phylogenetic/jaccard_emperor.qzv
+   qiime tools view 1_16_core_metrics_phylogenetic/unweighted_unifrac_emperor.qzv
+   qiime tools view 1_16_core_metrics_phylogenetic/weighted_unifrac_emperor.qzv
+
+   ##### ALPHA DIVERSITY ANALYSES #####
+   for alpha_metric in faith_pd shannon observed_otus evenness
+   do
+       echo "$diversity_folder"/"$alpha_metric"_vector.qza
+
+       ### ALPHA ASSOCIATION CATEGORICAL MAPPING ###
+       qiime diversity alpha-group-significance \
+         --i-alpha-diversity "$divers\ity_folder"/"$alpha_metric"_vector.qza \
+         --m-metadata-file "$map_path" \
+         --o-visualization 1_17_"$alpha_metric"_group_significance.qzv
+
+       ### ALPHA ASSOCIATION CONTINUOUS MAPPING ###
+
+   done
+
+   qiime diversity filter-distance-matrix \
+     --i-distance-matrix distance-matrix.qza \
+     --m-metadata-file samples-to-keep.tsv \
+     --o-filtered-distance-matrix identifier-filtered-distance-matrix.qza
+
+   ### VIEW RESULTS ###
+   # CATEGORICAL #
+   qiime tools view 1_17_shannon_group_significance.qzv
+   qiime tools view 1_17_observed_otus_group_significance.qzv
+   qiime tools view 1_17_evenness_group_significance.qzv
+   qiime tools view 1_17_faith_pd_group_significance.qzv
+
+
+
+
+

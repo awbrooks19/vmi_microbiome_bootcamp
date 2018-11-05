@@ -1,0 +1,613 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Experimental Design and Sample Preparation &#8212; VMI Bootcamp II 1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="From Sequences to Community Composition" href="3_sequences_to_composition.html" />
+    <link rel="prev" title="Microbiome Introduction" href="1_microbiome_introduction.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="3_sequences_to_composition.html" title="From Sequences to Community Composition"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="1_microbiome_introduction.html" title="Microbiome Introduction"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">VMI Bootcamp II 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="experimental-design-and-sample-preparation">
+<h1>Experimental Design and Sample Preparation<a class="headerlink" href="#experimental-design-and-sample-preparation" title="Permalink to this headline">¶</a></h1>
+<p><strong>Key Takeaways</strong></p>
+<p>There are caveats and biases in all steps of every method!</p>
+<p>Understand the biases in your methods and how they will affect outcomes before moving forward.</p>
+<p>Plan and optimize well, then stick to one protocol!</p>
+<div class="section" id="experimental-design">
+<h2>Experimental Design<a class="headerlink" href="#experimental-design" title="Permalink to this headline">¶</a></h2>
+<p><strong>How do I start a microbiome amplicon study? Plan ahead!</strong></p>
+<p>It is particularly important to consider the details of your study before you start.</p>
+<blockquote>
+<div><ul class="simple">
+<li>Cannot add samples later</li>
+<li>Cannot get more microbial DNA if overpowered by host DNA</li>
+<li>Cannot remove contamination after samples are collected</li>
+<li>Cannot add controls necessary to validate quality after sequencing</li>
+<li>Cannot remove bias if other factors very with treatment of interest</li>
+</ul>
+</div></blockquote>
+<div class="figure" id="id2">
+<a class="reference internal image-reference" href="../_images/experimental_design_flaw.jpg"><img alt="experimental_design_flaw" src="../_images/experimental_design_flaw.jpg" style="width: 540.0px; height: 405.0px;" /></a>
+<p class="caption"><span class="caption-text">Source: Aaron Bacall (www.art.com)</span></p>
+</div>
+<dl class="docutils">
+<dt><strong>Start with a question and hypothesis.</strong></dt>
+<dd><ul class="first last simple">
+<li>Consider expected effect size on microbiome composition</li>
+<li>Calculate how many samples will be needed to detect if the effect exists</li>
+<li>Consider whether differences affect total community diversity versus changes in particular taxa abundance or presence</li>
+<li><dl class="first docutils">
+<dt>Keep in mind not every sample will pass every QC step - samples will be lost</dt>
+<dd><ul class="first last">
+<li>Larger N</li>
+<li>Parallel processing replicates</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt><strong>Always step back and ask: “Will a whole community profile answer my question?”</strong></dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>To often people hypothesize that “the microbiome will change”, without considering what that actually means</dt>
+<dd><ul class="first last simple">
+<li>Amplicon sequencing doesn’t tell you community function</li>
+</ul>
+</dd>
+</dl>
+<ul class="simple">
+<li><dl class="first docutils">
+<dt>It won’t give you strain or even consistent species level resoultion</dt>
+<dd><ul class="first last">
+<li>In addition to <em>E. coli</em>, there are five other species in the genus <em>Escheria</em> and some are commensal in the human gut</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="sampling-and-controls">
+<h2>Sampling and Controls<a class="headerlink" href="#sampling-and-controls" title="Permalink to this headline">¶</a></h2>
+<p><strong>How will you collect your samples?</strong></p>
+<p><strong>Generally consider in collection:</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="first docutils">
+<dt><strong>Size of sample</strong></dt>
+<dd><ul class="first last">
+<li>Determines available DNA</li>
+<li>Can you control an equal amount from each subject - <em>absolute quantification</em></li>
+<li>Reserve sample - mix evenly so reserve is the same as utilized sample</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>Sampling vessel</strong></dt>
+<dd><ul class="first last">
+<li>Ease of collection</li>
+<li>Sterility</li>
+<li><dl class="first docutils">
+<dt>Stabilization solution</dt>
+<dd><ul class="first last">
+<li>Need DNA <em>and</em> RNA</li>
+<li>Other ‘omics - <em>i.e. mass spectrometry affected by salt concentration</em></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<div class="figure" id="id3">
+<a class="reference internal image-reference" href="../_images/genotech_tube.jpg"><img alt="genotech_tube" src="../_images/genotech_tube.jpg" style="width: 240.0px; height: 208.0px;" /></a>
+<p class="caption"><span class="caption-text">Source: www.dnagenotek.com</span></p>
+<div class="legend">
+<ul class="simple">
+<li><dl class="first docutils">
+<dt><strong>Storage</strong></dt>
+<dd><ul class="first last">
+<li>Immediate storage -80C</li>
+<li>Long term stabilization solutions can introduce bias</li>
+<li>Prevent bacterial overgrowth at room temperature</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+<p><strong>Key controls to keep in mind:</strong></p>
+<blockquote>
+<div><ul>
+<li><p class="first"><strong>Uniformity</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>Collect samples at the same time and method across treatment groups</li>
+<li>Same for processing DNA extraction and library preparation for sequencing</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Randomization</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="first docutils">
+<dt>Consider many factors that could vary across treatment groups</dt>
+<dd><ul class="first last">
+<li>Time of day, season</li>
+<li>Sampling in same location</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Mouse cage effects</dt>
+<dd><ul class="first last">
+<li>Co-housing</li>
+<li>Mixing bedding and food</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Sterility</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>Collect samples, but also sample microbes in the local environment if possible</li>
+<li><dl class="first docutils">
+<dt>Always include blank water samples</dt>
+<dd><ul class="first last">
+<li>Collection blank</li>
+<li>Extraction blank</li>
+<li>Library preparation blank</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li>Sequencing blank</li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><dl class="first docutils">
+<dt>Work in biosaftey hood whenever possible</dt>
+<dd><ul class="first last">
+<li>Particularly sensitive to contamination before PCR steps</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><dl class="first docutils">
+<dt><strong>Mock community</strong></dt>
+<dd><ul class="first last simple">
+<li>Known taxonomy and abundance</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>Generous donor</strong></dt>
+<dd><ul class="first last simple">
+<li>If sampling / extracting / sequencing in batches include one consistent sample across each</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<div class="figure" id="id4">
+<a class="reference internal image-reference" href="../_images/microbe_human_teddy.gif"><img alt="human_microbe_teddy" src="../_images/microbe_human_teddy.gif" style="width: 92.4px; height: 176.0px;" /></a>
+<p class="caption"><span class="caption-text">Source: Charis Tsevis</span></p>
+</div>
+<p><strong>If working with human subjects:</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>Consider ease of self-collection</li>
+<li><dl class="first docutils">
+<dt>IRB compliant methods</dt>
+<dd><ul class="first last">
+<li>Gloves</li>
+<li>Way to catch stool in toilet and disposal</li>
+<li>Proper instructions</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Immediate acquisition versus returning samples later</dt>
+<dd><ul class="first last">
+<li>Cannot control amount provided if self-collection</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<div class="figure" id="id5">
+<a class="reference internal image-reference" href="../_images/genotech_sampling.png"><img alt="genotech_sampling" src="../_images/genotech_sampling.png" style="width: 466.0px; height: 246.8px;" /></a>
+<p class="caption"><span class="caption-text">Source: www.dnagenotek.com</span></p>
+</div>
+</div>
+<div class="section" id="dna-extraction">
+<h2>DNA Extraction<a class="headerlink" href="#dna-extraction" title="Permalink to this headline">¶</a></h2>
+<p><strong>DNA extraction techniques vary significantly in community bias</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="first docutils">
+<dt>Every kit introduces bias, so pick one and stick with it!</dt>
+<dd><ul class="first last">
+<li>There are many options, so research which is best for your long term goals</li>
+<li>The <a class="reference external" href="http://www.earthmicrobiome.org/protocols-and-standards/dna-extraction-protocol/">Earth Microbiome Project</a> has well documented protocols.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Efficiency at lysing cells is important</dt>
+<dd><ul class="first last">
+<li>Bead beating versus chemical lysis</li>
+<li>Mechanical bead beating seems to be most thorough gram +/-</li>
+<li>Keep in mind bead beating heats the sample through friction, don’t over-do it!</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Take time to properly optimize and document</dt>
+<dd><ul class="first last">
+<li>Always note extraction batch, who performed the extraction, and the kit lot number</li>
+<li>Always include extraction blanks, all kits have contaminants - <a class="reference external" href="https://bmcbiol.biomedcentral.com/articles/10.1186/s12915-014-0087-z">kit’ome</a>.</li>
+<li>Some kits perform dual DNA and RNA extraction</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="amplification">
+<h2>Amplification<a class="headerlink" href="#amplification" title="Permalink to this headline">¶</a></h2>
+<p><strong>PCR amplification of the marker gene of interest</strong></p>
+<blockquote>
+<div><ul>
+<li><dl class="first docutils">
+<dt><strong>Use known protocols and established primers</strong></dt>
+<dd><ul class="first last simple">
+<li>Different variable regions bias the community differently, stick to what’s known!</li>
+<li>The <a class="reference external" href="http://www.earthmicrobiome.org/protocols-and-standards/16s/">Earth Microbiome Project</a> has well documented PCR protocols (<em>16S, 18S, ITS</em>)</li>
+<li>Always optimize your PCR for the expected sequence length and concentration</li>
+<li>Include PCR blank to control for processing contamination</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>Sequencing Depth</strong></dt>
+<dd><ul class="first last simple">
+<li>Generally 10k - 100k sequences per sample is adequate coverage</li>
+</ul>
+</dd>
+</dl>
+<ul>
+<li><dl class="first docutils">
+<dt>Diminishing returns at greater depths</dt>
+<dd><ul class="first last simple">
+<li>Taxonomic resolution based on sequence length not sequencing depth</li>
+</ul>
+</dd>
+</dl>
+<ul class="simple">
+<li>Many reads increase sequencing errors, qc filtered</li>
+<li><dl class="first docutils">
+<dt>Analyses are rarefied or relative abundance</dt>
+<dd><ul class="first last">
+<li>Rare organisms will still be rare, depth doesn’t change proportions</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div></blockquote>
+<p>Earth Microbiome Project V4 Primers</p>
+<p>515F FWD: GTGYCAGCMGCCGCGGTAA</p>
+<p>806R REV: GGACTACNVGGGTWTCTAAT</p>
+<p><em>The primer sequences in EMP protocols are always listed in the 5′ -&gt; 3′ orientation.  This is the orientation that should be used for ordering.</em></p>
+<dl class="docutils">
+<dt>Components of full reaction:</dt>
+<dd>5′ Illumina adapter              Golay barcode Pad        Linker  Forward primer</dd>
+</dl>
+<p>FWD:  AATGATACGGCGACCACCGAGATCTACACGCT XXXXXXXXXXXX  TATGGTAATT GT      GTGYCAGCMGCCGCGGTAA</p>
+<blockquote>
+<div><ul class="simple">
+<li>Each sample PCR reaction will be performed with it’s own unique barcode combination</li>
+<li>This allows bioinformatic demultiplexing - assigning sequences to their respective sample</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="sequencing-platforms">
+<h2>Sequencing Platforms<a class="headerlink" href="#sequencing-platforms" title="Permalink to this headline">¶</a></h2>
+<p><strong>Illumina</strong></p>
+<div class="figure" id="id6">
+<a class="reference internal image-reference" href="../_images/illumina_theory.png"><img alt="illumina_theory" src="../_images/illumina_theory.png" style="width: 585.0px; height: 706.5px;" /></a>
+<p class="caption"><span class="caption-text">Illumina sequencing molecular biology Source: Jaroslaw Grzadziel (Research Gate)</span></p>
+<div class="legend">
+<ul class="simple">
+<li><dl class="first docutils">
+<dt>By far the most widely used sequencing method</dt>
+<dd><ul class="first last">
+<li>Millions of sequences allow multiplexing many samples on one run</li>
+<li>High coverage of the community (~10k sequences per sample is ideal depending on complexity)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Short sequences 100-250bp generally cover 1-3 variable regions</dt>
+<dd><ul class="first last">
+<li>Allows high coverage, but lose resolution past genus level</li>
+<li>Paired end is better than single end</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+<div class="figure" id="id7">
+<a class="reference internal image-reference" href="../_images/paired_end_sequencing.jpg"><img alt="paired_end_sequencing" src="../_images/paired_end_sequencing.jpg" style="width: 864.0px; height: 648.0px;" /></a>
+<p class="caption"><span class="caption-text">Mechanism of paired end Illumina sequencing Source: Christine King</span></p>
+</div>
+<dl class="docutils">
+<dt><strong>Illumina Amplicon Sequencing at VANTAGE</strong></dt>
+<dd><ul class="first last simple">
+<li>250 bp sequence reads (Covers entire V4 region)</li>
+<li>Dual-index sequencing strategy - increased multiplexing</li>
+<li>Each MiSeq run produces &gt;5,000,000 reads (Great for multiplexing)</li>
+<li>Best option for 16S rRNA gene amplicon sequencing</li>
+<li><dl class="first docutils">
+<dt>VANTAGE also offers HiSeq, NextSeq, and NovaSeq Illumina sequencing platforms</dt>
+<dd><ul class="first last">
+<li>MiSeq has 250bp length, other platforms only offer shorter reads so plan ahead</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+<p><strong>PacBio and Nanopore</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="first docutils">
+<dt>Could do full 16S gene</dt>
+<dd><ul class="first last">
+<li>Very high strain level resolution</li>
+<li>But <em>much</em> lower coverage and multiplexing = higher costs</li>
+<li>Higher error rates</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="mapping-file">
+<h2>Mapping File<a class="headerlink" href="#mapping-file" title="Permalink to this headline">¶</a></h2>
+<p><strong>How do you store all of this information about samples in a useful way?</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="first docutils">
+<dt><strong>A mapping file is composed of:</strong></dt>
+<dd><ul class="first last">
+<li>Each row representing a sample</li>
+<li>Each column representing some information about each sample</li>
+<li><dl class="first docutils">
+<dt>Are TSV - tab separated values</dt>
+<dd><ul class="first last">
+<li>TSV is a .txt output format from Excel</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li>A header line starting with a # indicates the column names</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<div class="figure" id="id8">
+<a class="reference internal image-reference" href="../_images/map_exp.png"><img alt="map_exp" src="../_images/map_exp.png" style="width: 841.8px; height: 523.2px;" /></a>
+<p class="caption"><span class="caption-text">Source: Example mapping file in excel.</span></p>
+<div class="legend">
+<blockquote>
+<div><ul class="simple">
+<li><dl class="first docutils">
+<dt>Always start with <strong>#sampleid</strong> column</dt>
+<dd><ul class="first last">
+<li>A unique id for each sample - cannot be the same as any other sample</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Include columns for the unique sample <strong>barcodes</strong></dt>
+<dd><ul class="first last">
+<li>Allows demultiplexing of sequences to their respective sample</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Also include <strong>control and qc</strong> information about DNA extraction batch, person extracting, PCR batch, sequencing run, cage…</dt>
+<dd><ul class="first last">
+<li>Allows testing if these factors influenced the community composition</li>
+<li>Have columns indicating which samples are blanks, mock community, and generous donor samples</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Have columns for your <strong>treatement</strong> and any <strong>covariates</strong> of interest</dt>
+<dd><ul class="first last">
+<li>Age, sex, BMI, collection season…</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li>Last column should be <strong>description</strong> if you need backward compatibility with QIIME1</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+<p>For more detailed information check out the full <a class="reference external" href="https://docs.qiime2.org/2018.8/tutorials/metadata/">QIIME2 Metadata Guide!</a></p>
+<p><strong>Best Practices</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="first docutils">
+<dt>Rule Number 1: Don’t get fancy!</dt>
+<dd><ul class="first last">
+<li>Don’t use spaces, use _ (underscore) instead</li>
+<li>Except #sampleid, the only punctuation in this column can be dashes ‘-‘ (no underscores)</li>
+<li>Don’t include other types of punctuation, this will only cause problems later on!</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li>Leading and trailing white spaces are ignored</li>
+<li><dl class="first docutils">
+<dt>I’d stick to all lower-case (case insensitive) characters</dt>
+<dd><ul class="first last">
+<li>Not required, but may save you a <em>lot</em> of trouble with weird errors later on!</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Experimental Design and Sample Preparation</a><ul>
+<li><a class="reference internal" href="#experimental-design">Experimental Design</a></li>
+<li><a class="reference internal" href="#sampling-and-controls">Sampling and Controls</a></li>
+<li><a class="reference internal" href="#dna-extraction">DNA Extraction</a></li>
+<li><a class="reference internal" href="#amplification">Amplification</a></li>
+<li><a class="reference internal" href="#sequencing-platforms">Sequencing Platforms</a></li>
+<li><a class="reference internal" href="#mapping-file">Mapping File</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="1_microbiome_introduction.html"
+                        title="previous chapter">Microbiome Introduction</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="3_sequences_to_composition.html"
+                        title="next chapter">From Sequences to Community Composition</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/rst/2_experimental_design.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="3_sequences_to_composition.html" title="From Sequences to Community Composition"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="1_microbiome_introduction.html" title="Microbiome Introduction"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">VMI Bootcamp II 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Andrew Brooks, Matt Scholz, Seth Bordenstein.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+    </div>
+  </body>
+</html>

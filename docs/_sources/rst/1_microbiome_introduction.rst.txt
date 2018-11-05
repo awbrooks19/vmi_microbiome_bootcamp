@@ -1,7 +1,7 @@
 Microbiome Introduction
 =======================
 
-.. figure:: ./images/microbiome_human.jpg
+.. figure:: ../images/microbiome_human.jpg
    :scale: 60 %
    :alt: Human Microbiome 
 
@@ -15,7 +15,7 @@ Therefore, a **microbiome** is a complex ecosystem of microorganisms:
     - Viruses and Phages 
 
 
-.. figure:: ./images/microbial_community.jpg
+.. figure:: ../images/microbial_community.jpg
    :scale: 30 %
    :alt: Microbial Community
    
@@ -63,7 +63,7 @@ Within the research community however there is more nuance (but microbiome is st
         - Most often examined with targeted or untargeted mass spectrometry.
         - *How do their actions shape the abiotic environment?*
 
-.. figure:: ./images/nesting_dolls.gif
+.. figure:: ../images/nesting_dolls.gif
    :scale: 100 %
    :alt: Nesting Dolls
    
@@ -73,7 +73,7 @@ Within the research community however there is more nuance (but microbiome is st
 The Human Microbiome
 -------------------------------------------------------------------------------------------------
 
-.. figure:: ./images/microbe_human2.jpg
+.. figure:: ../images/microbe_human2.jpg
    :scale: 100 %
    :alt: Microbial Human 2
    
@@ -87,7 +87,7 @@ The Human Microbiome
     - Microbiome diversity of 10 million+ unique genes, outnumbering our genetic repertoire 500:1.
     - Vast majority are along digestive tract, but skin and vagina have unique communities as well.
 
-.. figure:: ./images/human_vs_microbial_cells.png
+.. figure:: ../images/human_vs_microbial_cells.png
    :scale: 30%
    :alt: Number of Cells
    
@@ -96,7 +96,7 @@ The Human Microbiome
 
 **While highly abundant, microbes are much smaller than human cells.**
    
-.. figure:: ./images/microbe_size.png
+.. figure:: ../images/microbe_size.png
    :scale: 74%
    :alt: Size of Microorganisms
    
@@ -120,7 +120,7 @@ In *amplicon sequencing*, one gene shared by all microorganisms of interest is a
 
 This is most often done for *bacterial communities* with sections of the DNA coding region of **16S Ribosomal RNA**.
 
-.. figure:: ./images/16s_structure.jpg
+.. figure:: ../images/16s_structure.jpg
    :scale: 50 %
    :alt: 16S rRNA Structure 
    
@@ -132,7 +132,7 @@ This is most often done for *bacterial communities* with sections of the DNA cod
    - The attraction of these bases forms secondary loop and hairpin structures.
    - Tertiary structure forms and combines with protein components of the ribosome to form an active unit.
 
-.. figure:: ./images/ribosome.gif
+.. figure:: ../images/ribosome.gif
    :scale: 180 %
    :alt: Ribosome Small Subunit
    
@@ -145,7 +145,7 @@ This is most often done for *bacterial communities* with sections of the DNA cod
    - For this reason it is slow evolving, particularly in some functionally important regions to the overall structure.
    - Thus it has regions that are more conserved and regions that are more variable (*evolutionary changes accrue more quickly*). 
 
-.. figure:: ./images/16s_variable_regions.jpg
+.. figure:: ../images/16s_variable_regions.jpg
    :scale: 80 %
    :alt: 16S Variable Regions 
    
@@ -220,7 +220,7 @@ Advantages and Disadvantages
     - Resolution is limited because the amplicons are short, so generally family or genera is the most that can be distinguished.
         - Really cannot confidently distinguish species or strains within a genus. 
             
-.. figure:: ./images/amplicon_alignment.png
+.. figure:: ../images/amplicon_alignment.png
     :scale: 120 %
     :alt: amplicon alignment           
 
@@ -231,7 +231,7 @@ Advantages and Disadvantages
         - The databases try to correct for this, but it's not perfect.
         - This means there is some bias in the relative abundance of members.
 
-.. figure:: ./images/rrna_copy_number.png
+.. figure:: ../images/rrna_copy_number.png
    :scale: 100 %
    :alt: rRNA copy number 
         
