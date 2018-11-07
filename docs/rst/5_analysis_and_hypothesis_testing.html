@@ -17,7 +17,9 @@
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Command Line Introduction" href="command_line_introduction.html" />
+    <link rel="prev" title="Concepts of Community Analysis" href="4_concepts_of_community_analysis.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -25,6 +27,12 @@
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="command_line_introduction.html" title="Command Line Introduction"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="4_concepts_of_community_analysis.html" title="Concepts of Community Analysis"
+             accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">VMI Bootcamp II 1.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
@@ -40,11 +48,148 @@
 <dt><strong>How do we ask the questions we are actually interested in?</strong></dt>
 <dd><ul class="first last simple">
 <li>Observations of the community are great, but don’t address a hypothesis</li>
+<li>We can both visually and statistically draw conclusions about microbiome composition</li>
 </ul>
 </dd>
 </dl>
 <div class="section" id="ordination-and-composition-analysis">
 <h2>Ordination and Composition Analysis<a class="headerlink" href="#ordination-and-composition-analysis" title="Permalink to this headline">¶</a></h2>
+<p><strong>First an example…</strong></p>
+<p>They looked at how patients responded to treatment, and how that related to survival…</p>
+<div class="figure" id="id1">
+<a class="reference internal image-reference" href="../_images/tumor_survival.png"><img alt="tumor_survival" src="../_images/tumor_survival.png" style="width: 483.3px; height: 429.3px;" /></a>
+<p class="caption"><span class="caption-text">Survival of melanoma patients with response to anti-PD-1 immunotherapy. Source: Gopalakrishnan, V. <em>et. al.</em> Science. 2017. doi: 10.1126/science.aan4236</span></p>
+</div>
+<p>They also looked at the gut microbiome as an ordination…</p>
+<div class="figure" id="id2">
+<a class="reference internal image-reference" href="../_images/tumor_ordination.png"><img alt="tumor_ordination" src="../_images/tumor_ordination.png" style="width: 641.7px; height: 455.4px;" /></a>
+<p class="caption"><span class="caption-text">Microbiome ordination highlighting response to anti-PD-1 immunotherapy. Source: Gopalakrishnan, V. <em>et. al.</em> Science. 2017. doi: 10.1126/science.aan4236</span></p>
+</div>
+<p><strong>What does this ordination show?</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="first docutils">
+<dt>Each dot represents an individual sample… a measure of their total gut community</dt>
+<dd><ul class="first last">
+<li>They colored each dot based on whether they responded to treatment or not</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>How close two dots are shows how similar their microbial communities are</dt>
+<dd><ul class="first last">
+<li>Closer = more similar</li>
+<li>Farther = less similar</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>The controids show where the middle, or average, is for responders and non-responders</dt>
+<dd><ul class="first last">
+<li>While some individuals from each group overlap, there is clear divergence in the average for each group</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Axis 1 and 2</dt>
+<dd><ul class="first last">
+<li>These are <em>components of variation</em> measuring differences across all the microbiomes</li>
+<li>The <em>percent variance explained</em> shows how much difference in microbiomes is captured along that vector</li>
+<li><dl class="first docutils">
+<dt>These are somewhat arbitrary and are a result of the variation in the data</dt>
+<dd><ul class="first last">
+<li>Specific to the samples and features going into the analysis</li>
+<li>Tip: Do not compare between ordinations, only within an ordination!</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<dl class="docutils">
+<dt><strong>Ok… but what is an ordination?</strong></dt>
+<dd><ul class="first last simple">
+<li><dl class="first docutils">
+<dt>A way of collapsing variation in complex data along vectors</dt>
+<dd><ul class="first last">
+<li>Hundreds of samples and thousands of microbes can be drawn into two dimensions</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Each dimension captures a percentage of the total variation in the data</dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>50% of variance like above means there is a lot of difference being captured</dt>
+<dd><ul class="first last">
+<li>In noisy data (Human Microbiome Project) 5-20% is a lot of variation to be captured by one dimension</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>A really useful approach to quickly see patterns in data, however…</dt>
+<dd><ul class="first last">
+<li>Treat these as qualitative exploratory analyses, and not quantitative of effect size</li>
+<li><dl class="first docutils">
+<dt>Information is lost when data is collapsed from N to two dimensions</dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>Underlying math can be biased depending on data distributions</dt>
+<dd><ul class="first last">
+<li>Don’t give quantitative stock to things like centroid distance</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Here is my favorite example using human genetic data:</strong></p>
+<div class="figure" id="id3">
+<a class="reference internal image-reference" href="../_images/genetic_pca.jpg"><img alt="genetic_pca" src="../_images/genetic_pca.jpg" style="width: 640.0px; height: 830.4px;" /></a>
+<p class="caption"><span class="caption-text">Ordination with horseshoe effect. Source: <a class="reference external" href="https://www.nature.com/articles/nature07331">https://www.nature.com/articles/nature07331</a></span></p>
+</div>
+<dl class="docutils">
+<dt><strong>Here is a great example of one way things can go wrong…</strong></dt>
+<dd><ul class="first last simple">
+<li>Let’s say there are 20 taxon in an ordination</li>
+<li>Linearly related with taxon 1 most distant from taxon 20</li>
+<li><dl class="first docutils">
+<dt>Clearly we don’t see that below</dt>
+<dd><ul class="first last">
+<li>Has to do with a unimodal effect distortion in eigenvector space… go find a statistician to translate</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+<div class="figure" id="id4">
+<a class="reference internal image-reference" href="../_images/pca_horseshoe.gif"><img alt="pca_horseshoe" src="../_images/pca_horseshoe.gif" style="width: 632.0px; height: 634.4px;" /></a>
+<p class="caption"><span class="caption-text">Ordination with horseshoe effect. Source: <a class="reference external" href="https://phylonetworks.blogspot.com/2012/12/distortions-and-artifacts-in-pca.html">https://phylonetworks.blogspot.com/2012/12/distortions-and-artifacts-in-pca.html</a></span></p>
+</div>
 </div>
 <div class="section" id="diversity-analysis">
 <h2>Diversity Analysis<a class="headerlink" href="#diversity-analysis" title="Permalink to this headline">¶</a></h2>
@@ -82,6 +227,12 @@
 </li>
 </ul>
 
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="4_concepts_of_community_analysis.html"
+                        title="previous chapter">Concepts of Community Analysis</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="command_line_introduction.html"
+                        title="next chapter">Command Line Introduction</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -111,6 +262,12 @@
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
              >index</a></li>
+        <li class="right" >
+          <a href="command_line_introduction.html" title="Command Line Introduction"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="4_concepts_of_community_analysis.html" title="Concepts of Community Analysis"
+             >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">VMI Bootcamp II 1.0 documentation</a> &#187;</li> 
       </ul>
     </div>

@@ -3,43 +3,44 @@ Experimental Design and Sample Preparation
 
 **Key Takeaways**
 
-There are caveats and biases in all steps of every method!  
+**There are caveats and biases in every method**
+   - Understand the biases in your methods
+   - Understand how that bias will affect results
 
-Understand the biases in your methods and how they will affect outcomes before moving forward.
-
-Plan and optimize well, then stick to one protocol! 
+**Plan and optimize well, then stick to one protocol!**
 
 Experimental Design
 ------------------------------------------------------------------
 
 **How do I start a microbiome amplicon study? Plan ahead!**
 
-It is particularly important to consider the details of your study before you start.
+It is particularly important to consider the details of your study before you start
    
    - Cannot add samples later
-   - Cannot get more microbial DNA if overpowered by host DNA
    - Cannot remove contamination after samples are collected
    - Cannot add controls necessary to validate quality after sequencing
    - Cannot remove bias if other factors very with treatment of interest
+   - Cannot get more microbial DNA if host DNA dominates
+
 
 .. figure:: ../images/experimental_design_flaw.jpg
    :scale: 60 %
    :alt: experimental_design_flaw 
    
-   Source: Aaron Bacall (www.art.com)
+   Source: Aaron Bacall Source: www.art.com
    
 
 **Start with a question and hypothesis.**
    - Consider expected effect size on microbiome composition
    - Calculate how many samples will be needed to detect if the effect exists
-   - Consider whether differences affect total community diversity versus changes in particular taxa abundance or presence
+   - Consider changes community wide and detecting changes in taxon abundance and presence
    - Keep in mind not every sample will pass every QC step - samples will be lost
       - Larger N
       - Parallel processing replicates
      
 **Always step back and ask: "Will a whole community profile answer my question?"**
-   - To often people hypothesize that "the microbiome will change", without considering what that actually means
-      - Amplicon sequencing doesn't tell you community function
+   - Often people hypothesize that "the microbiome will change", without considering what that actually means
+     - Amplicon sequencing doesn't tell you community function
      - It won't give you strain or even consistent species level resoultion
         - In addition to *E. coli*, there are five other species in the genus *Escheria* and some are commensal in the human gut
 

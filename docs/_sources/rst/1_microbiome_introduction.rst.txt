@@ -2,8 +2,10 @@ Microbiome Introduction
 =======================
 
 .. figure:: ../images/microbiome_human.jpg
-   :scale: 60 %
+   :scale: 80 %
    :alt: Human Microbiome 
+   
+   Source: http://microbeminded.com/
 
 A **biome** is a complex ecosystem of biological organisms, often defined and shaped by a shared ecosystem.
 
@@ -16,25 +18,25 @@ Therefore, a **microbiome** is a complex ecosystem of microorganisms:
 
 
 .. figure:: ../images/microbial_community.jpg
-   :scale: 30 %
+   :scale: 60 %
    :alt: Microbial Community
    
-   Scanning electron image of a complex microbial community. *Colors are artificial.*
+   Scanning electron image of a complex microbial community. *Colors are artificial.* Source: https://www.newscientist.com
    
-**There are very few places on earth where microbiomes do not exist!**
+**There are very few places on earth where microbiomes do not exist**
    
    - Deep sea vents
    - A mile underground
    - High Atmosphere
    - Middle of the ocean
-   - *On* and *inside* pretty much every animal (*outside of the lab*)
+   - *On* and *inside* pretty much every animal and plant (*outside of the lab*)
        
-**Since animals arose they have been ubiquitously interacting with and evolving alongside microbial communities.**
+Since animals and eventually humans arose they have been ubiquitously interacting with and evolving alongside microbial communities
 
 Definitions 
 -------------------------------------------------------------------------------------------------
 
-In popular science and among the public the term microbiome is often thrown around as above: "a community of microorganisms." 
+In popular science and among the public the term microbiome is thrown around as a **community of microorganisms**. 
 
 Within the research community however there is more nuance (but microbiome is still used loosely), so let's clearly define some important terms:
  
@@ -67,7 +69,7 @@ Within the research community however there is more nuance (but microbiome is st
    :scale: 100 %
    :alt: Nesting Dolls
    
-   Like a nesting doll family, there are many layers that can each tell their own part of the story.
+   Like a nesting doll family, there are many layers that can each tell their own part of the story. Source: Giphy.communities
 
 
 The Human Microbiome
@@ -77,7 +79,7 @@ The Human Microbiome
    :scale: 100 %
    :alt: Microbial Human 2
    
-   What are the biomes of microbes on and inside the human body?
+   What are the biomes of microbes on and inside the human body? Source: http://microbeminded.com/
 
 
 **It is estimated that there are roughly the same number of human and microbial cells in your body!**
@@ -100,7 +102,7 @@ The Human Microbiome
    :scale: 74%
    :alt: Size of Microorganisms
    
-   Most microbes are 10-100x smaller than human cells (*same size as mitochondria*). 
+   Most microbes are 10-100x smaller than human cells (*same size as mitochondria*). Source: https://courses.candelalearning.com
 
 16S Ribosomal DNA and Phylogenetic Markers
 ------------------------------------------
@@ -124,7 +126,7 @@ This is most often done for *bacterial communities* with sections of the DNA cod
    :scale: 50 %
    :alt: 16S rRNA Structure 
    
-   Secondary hairpin structure of 16S rRNA.
+   Secondary hairpin structure of 16S rRNA. Source: rna.ucsc.edu
 
 **16S rRNA Structure**
    
@@ -136,20 +138,22 @@ This is most often done for *bacterial communities* with sections of the DNA cod
    :scale: 180 %
    :alt: Ribosome Small Subunit
    
-   30S ribosome small subunit with *16S rRNA in orange* and a number of *purple proteins*.
+   30S ribosome small subunit with *16S rRNA in orange* and a number of *purple proteins*. Source: wikipedia.com
 
 **This is a useful gene because:**
    
-   - It is shared by all bacteria.
-   - The ribosome is crucial to life, and RNA sequence is critical for tertiary structure leading to stabilizing selection.
-   - For this reason it is slow evolving, particularly in some functionally important regions to the overall structure.
+   - It is shared by almost all bacteria and archaea.
+   - The ribosome is crucial to life
+      - RNA sequence is critical for tertiary structure backbone
+	  - Leads to stabilizing selection
+   - For this reason it is slow evolving, particularly in regions important to the overall structure.
    - Thus it has regions that are more conserved and regions that are more variable (*evolutionary changes accrue more quickly*). 
 
 .. figure:: ../images/16s_variable_regions.jpg
    :scale: 80 %
-   :alt: 16S Variable Regions 
+   :alt: 16S Variable Regions
    
-   Nine variable regions are each separated by highly conserved regions.
+   Nine variable regions are each separated by highly conserved regions. Source: biology.stackexchange.com
 
 **16S rDNA is not the only marker gene used for amplicon sequencing, just the most common.**
     
@@ -157,8 +161,8 @@ This is most often done for *bacterial communities* with sections of the DNA cod
         - Region between the 18S and 5.8S rRNA genes in Eukaryotes. 
 
     - Archaea are generally targeted with different 16S primers.
-        - They do not have enough homology with bacteria (slightly captured with bacterial amplicons, but very biased).
-        - Also bacteria usually vastly outnumber so it brings out only archaeal diversity.
+        - They do not have enough homology with bacteria (captured with bacterial amplicons, but very biased).
+        - Bacteria usually vastly outnumber archaea, dominating sequencing power.
         
     - I've heard of 18S and 28S being used for protists and fungi, but could really use many genes. Except...
 
@@ -169,10 +173,10 @@ This is most often done for *bacterial communities* with sections of the DNA cod
         - Harder to target because of lack of conserved regions.
         
     - PCR amplicons to a new gene or region require extensive validation.
-        - May not amplify different homologs equally, thus biasing abundance.
+        - May not amplify different orthologs equally, thus biasing abundance.
             - Could use mock community with known abundance as a control.
 
-**Therefore, don't try to design your own primers unless you have a really good reason... and lot of time to validate.**
+**Therefore, don't try to design your own primers unless you have a really good reason... and lots of time to validate.**
     
     - The main application would be interest in a smaller subset of taxa (i.e. betaproteobacteria class).
         - Could provide better strain resolution, but I wouldn't trust abundance.
@@ -202,7 +206,7 @@ Advantages and Disadvantages
         - Much more computationally approachable.
             - Search against database of one gene vs all full genomes (including eukaryotic, host, viral...).
             
-        - Less likely to get any relevant amount of human DNA.
+        - Less likely to sequence any relevant amount of human DNA.
             - Could make IRB approval easier.
             - Don't need to remove human DNA before publicly sharing, or having to restrict access to approved parties i.e. dbGAP.
                 - However, if there is very little microbial DNA I have seen mostly off target sequences from human mitochondria.
@@ -224,7 +228,7 @@ Advantages and Disadvantages
     :scale: 120 %
     :alt: amplicon alignment           
 
-    Aligning short reads means there may be very few differences to distinguish related taxa.
+    Aligning short reads means there may be very few differences to distinguish related taxa. Source: nature.com
 
 
     - 16S rRNA gene copy number can vary by an order of magnitude between bacterial species.
@@ -235,7 +239,7 @@ Advantages and Disadvantages
    :scale: 100 %
    :alt: rRNA copy number 
         
-   Most bacteria have two or more copies of rDNA in their genomes, which must be corrected for when counting totals.
+   Most bacteria have two or more copies of rDNA in their genomes, which must be corrected for when counting totals. Source: researchgate.net
 
 
     - Seeing DNA in a sample does not confirm that there are live microbes, just that their DNA was present.

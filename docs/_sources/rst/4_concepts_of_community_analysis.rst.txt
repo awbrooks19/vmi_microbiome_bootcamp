@@ -286,6 +286,7 @@ Metrics are assigned with the *-p-metric* argument:
  
 .. code-block:: bash
 
+
    ###############################################################################
    ##### SETUP DIVERSITY ANALYSES #####
    # !!! SET RAREFACTION DEPTH BASED ON SAMPLE COUNTS !!! #

@@ -3,10 +3,89 @@ Microbiome Analysis and Hypothesis Testing
 
 **How do we ask the questions we are actually interested in?**
    - Observations of the community are great, but don't address a hypothesis
+   - We can both visually and statistically draw conclusions about microbiome composition
    
 
 Ordination and Composition Analysis
 ------------------------------------------------------------------
+
+**First an example...**
+
+They looked at how patients responded to treatment, and how that related to survival...
+
+.. figure:: ../images/tumor_survival.png
+   :scale: 90 %
+   :alt: tumor_survival 
+   
+   Survival of melanoma patients with response to anti-PD-1 immunotherapy. Source: Gopalakrishnan, V. *et. al.* Science. 2017. doi: 10.1126/science.aan4236
+
+
+They also looked at the gut microbiome as an ordination...
+
+
+.. figure:: ../images/tumor_ordination.png
+   :scale: 90 %
+   :alt: tumor_ordination 
+   
+   Microbiome ordination highlighting response to anti-PD-1 immunotherapy. Source: Gopalakrishnan, V. *et. al.* Science. 2017. doi: 10.1126/science.aan4236
+
+**What does this ordination show?**
+
+   - Each dot represents an individual sample... a measure of their total gut community
+      - They colored each dot based on whether they responded to treatment or not
+      
+   - How close two dots are shows how similar their microbial communities are
+      - Closer = more similar
+      - Farther = less similar
+      
+   - The controids show where the middle, or average, is for responders and non-responders
+      - While some individuals from each group overlap, there is clear divergence in the average for each group
+      
+   - Axis 1 and 2
+      - These are *components of variation* measuring differences across all the microbiomes
+      - The *percent variance explained* shows how much difference in microbiomes is captured along that vector
+      - These are somewhat arbitrary and are a result of the variation in the data
+         - Specific to the samples and features going into the analysis
+         - Tip: Do not compare between ordinations, only within an ordination!
+		 
+   
+**Ok... but what is an ordination?**
+   - A way of collapsing variation in complex data along vectors
+      - Hundreds of samples and thousands of microbes can be drawn into two dimensions
+	  
+   - Each dimension captures a percentage of the total variation in the data
+      - 50% of variance like above means there is a lot of difference being captured
+	  - In noisy data (Human Microbiome Project) 5-20% is a lot of variation to be captured by one dimension
+	  
+   - A really useful approach to quickly see patterns in data, however...
+      - Treat these as qualitative exploratory analyses, and not quantitative of effect size
+      - Information is lost when data is collapsed from N to two dimensions
+	  - Underlying math can be biased depending on data distributions
+	     - Don't give quantitative stock to things like centroid distance
+
+**Here is my favorite example using human genetic data:**
+
+.. figure:: ../images/genetic_pca.jpg
+   :scale: 80 %
+   :alt: genetic_pca 
+   
+   Ordination with horseshoe effect. Source: https://www.nature.com/articles/nature07331
+
+**Here is a great example of one way things can go wrong...**
+   - Let's say there are 20 taxon in an ordination
+   - Linearly related with taxon 1 most distant from taxon 20
+   - Clearly we don't see that below
+      - Has to do with a unimodal effect distortion in eigenvector space... go find a statistician to translate
+   
+
+.. figure:: ../images/pca_horseshoe.gif
+   :scale: 40 %
+   :alt: pca_horseshoe 
+   
+   Ordination with horseshoe effect. Source: https://phylonetworks.blogspot.com/2012/12/distortions-and-artifacts-in-pca.html
+
+
+         
 
 Diversity Analysis
 -----------------------------------------------

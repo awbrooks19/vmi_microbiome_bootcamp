@@ -7,29 +7,26 @@ Welcome to the Second VMI Bootcamp!
 ===========================================
 
 
-.. figure:: ./images/vmi_logo_stacked.png
-   :scale: 30 %
-   :alt: VMI Logo Stacked
+.. figure:: ./images/vmi_logo.jpeg
+   :scale: 60 %
+   :alt: vmi_logo
 
 
-This bootcamp is an introduction to microbiota community composition analysis.
+This bootcamp is an introduction to microbiota community analysis.
 
 Goals:
 
    1. Understand the importance of good experimental design 
 
-   2. Explore the critical steps in a typical microbiome analysis
+   2. Explore the critical steps in a typical microbiome amplicon sequencing analysis
 
    3. Utilize the QIIME2 pipeline to process microbiome datasets
    
-About the `Vanderbilt Microbiome Initiative <https://my.vanderbilt.edu/microbiome/>`_.
-
-   - Organized by the Vanderbilt Microbiome Initiative (VMI) and funded by Vanderbilt University Trans-Institutional Programs (TIPs).
-   - Founded by members of the Dept. Biological Sciences, Peabody college, School of Engineering and the Medical center
+   - Organized by the `Vanderbilt Microbiome Initiative (VMI) <https://my.vanderbilt.edu/microbiome/>`_ and funded by `Vanderbilt University Trans-Institutional Programs (TIPs) <https://www.vanderbilt.edu/strategicplan/trans-institutional-programs/tipshome.php>`_
+   - Founded By - Members of the Dept. Biological Sciences, Peabody college, School of Engineering, and the Medical Center
    - Research – 120 Vanderbilt scholars committed to fundamental and translational microbiome research
-   - Members include undergraduates, graduate, postdocs, and faculty
-   - Multidisciplinary community - Biological Sciences, Biostatistics, Cell and Developmental Biology, Chemistry, Medicine, Epidemiology, PMI, GHN, Vantage
-   - Education and training – Campus-wide programs to deploy state-of-the-art tools to propel microbiome research
+   - Multidisciplinary Community - Biological Sciences, Biostatistics, Cell and Developmental Biology, Chemistry, Medicine, Epidemiology, PMI, GHN, Vantage
+   - Education and Training – Campus-wide programs to deploy state-of-the-art tools to propel microbiome research
    - Ongoing Clinical Trial - Multi'omic, dietary intervention, temporal sampling, multi-ethnic
 
 
@@ -60,6 +57,13 @@ Concepts of Community Analysis
    :maxdepth: 2
    
    ./rst/4_concepts_of_community_analysis
+
+Analyzing Microbial Communities and Hypothesis Testing
+----------------------------------------------------------------------------------------------------------------------
+.. toctree::
+   :maxdepth: 2
+
+   ./rst/5_analysis_and_hypothesis_testing
 
 
 Command Line Tutorial
