@@ -178,16 +178,23 @@
 </ul>
 </dd>
 </dl>
-<p>sample-id,absolute-filepath,direction #header line
-sample-1,$PWD/some/filepath/sample1_R1.fastq,forward
-sample-1,$PWD/some/filepath/sample1_R2.fastq,reverse</p>
+<p>sample-id,absolute-filepath,direction #header line</p>
+<p>sample-1,$PWD/some/filepath/sample1_R1.fastq,forward</p>
+<p>sample-1,$PWD/some/filepath/sample1_R2.fastq,reverse</p>
 <dl class="docutils">
 <dt><strong>Phred 33 vs 64</strong></dt>
 <dd><ul class="first last simple">
 <li>Phred scores are sometimes offset by 31, depends on sequencer software</li>
 <li>This is important because they are always converted to 33 - Ask sequencing center!</li>
+<li>If you can ask for 33, as the 64 can be slow to convert for large files</li>
 </ul>
 </dd>
+</dl>
+<div class="figure" id="id8">
+<a class="reference internal image-reference" href="../_images/phred_scores.gif"><img alt="phred_scores" src="../_images/phred_scores.gif" style="width: 703.0px; height: 441.0px;" /></a>
+<p class="caption"><span class="caption-text">Phred score encoding for 64 and 33. Source: <a class="reference external" href="https://www.drive5.com/usearch/manual/quality_score.html">https://www.drive5.com/usearch/manual/quality_score.html</a></span></p>
+</div>
+<dl class="docutils">
 <dt><strong>Command options:</strong></dt>
 <dd><table class="first last docutils option-list" frame="void" rules="none">
 <col class="option" />
@@ -212,7 +219,7 @@ sample-1,$PWD/some/filepath/sample1_R2.fastq,reverse</p>
 <tr><td class="option-group">
 <kbd><span class="option">-i<var>nput-path</var></span></kbd></td>
 <td><ul class="first last simple">
-<li>Path to your manifest file</li>
+<li>Path to your manifest file or folder of files</li>
 </ul>
 </td></tr>
 <tr><td class="option-group">
@@ -280,15 +287,50 @@ qiime tools import <span class="se">\</span>
 <div class="section" id="importing-demultiplexing-and-sequence-quality-control">
 <h2>Importing, Demultiplexing, and Sequence Quality Control<a class="headerlink" href="#importing-demultiplexing-and-sequence-quality-control" title="Permalink to this headline">¶</a></h2>
 <p><strong>Let’s try it out with some example data!</strong></p>
+<div class="figure" id="id9">
+<a class="reference internal image-reference" href="../_images/you_can.gif"><img alt="you_can" src="../_images/you_can.gif" style="width: 600.0px; height: 375.6px;" /></a>
+<p class="caption"><span class="caption-text">Source: giphy.com</span></p>
+</div>
 <p>First lets take a look at the mapping file to understand how QIIME2 creates visuals</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>qiime metadata tabulate <span class="se">\</span>
   --m-input-file paired_end/metadata.tsv <span class="se">\</span>
   --o-visualization paired_end/1_0_metadata_stats
-
-qiime tools view paired_end/1_0_metadata_stats.qzv
 </pre></div>
 </div>
-<p><strong>To import sequences and demultiplex we will…</strong></p>
+<dl class="docutils">
+<dt>This will output a file 1_0_metadata_stats.qzv</dt>
+<dd><ul class="first last simple">
+<li><dl class="first docutils">
+<dt>.qzv files are QIIME2’s visualization files</dt>
+<dd><ul class="first last">
+<li>They can be opened with ‘qiime tools view …’</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>.qza files are QIIME2’s data files</dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>These cannot be viewed, and are often compressed</dt>
+<dd><ul class="first last">
+<li>Other scripts can often create visual .qzv files from .qza</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+<p><strong>Let’s see what we made</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>qiime tools view paired_end/1_0_metadata_stats.qzv
+</pre></div>
+</div>
+<p><strong>To import sequences and demultiplex…</strong></p>
 <ol class="arabic simple">
 <li>You should navigate to the folder called data/</li>
 <li>We will use the folder paired_end
@@ -342,7 +384,7 @@ qiime tools view paired_end/1_2_demultiplexed_seqs_summary.qzv
 </ul>
 </dd>
 </dl>
-<div class="figure" id="id8">
+<div class="figure" id="id10">
 <a class="reference internal image-reference" href="../_images/pe_quality.png"><img alt="pe_quality" src="../_images/pe_quality.png" style="width: 765.0px; height: 450.9px;" /></a>
 <p class="caption"><span class="caption-text">Paired end quality scores across sequence. Source: Kwon, S. Lee, B. Yoon, S. doi: 10.1186/1471-2105-15-S9-S10</span></p>
 </div>
@@ -455,7 +497,7 @@ The resulting quality-filtered sequences.
 </div>
 <div class="section" id="deblur-the-new-otu">
 <h2>Deblur - The New OTU<a class="headerlink" href="#deblur-the-new-otu" title="Permalink to this headline">¶</a></h2>
-<div class="figure" id="id9">
+<div class="figure" id="id11">
 <a class="reference internal image-reference" href="../_images/otu_traditional.png"><img alt="otu_traditional" src="../_images/otu_traditional.png" style="width: 646.2px; height: 446.4px;" /></a>
 <p class="caption"><span class="caption-text">Traditional Operational Taxonomic Unit (OTU) clustering</span></p>
 </div>
@@ -588,7 +630,7 @@ qiime tools view paired_end/2_5_deblur_representative_seqs_summary.qzv
 </div>
 <div class="section" id="alignment-into-amplicon-phylogeny">
 <h2>Alignment into Amplicon Phylogeny<a class="headerlink" href="#alignment-into-amplicon-phylogeny" title="Permalink to this headline">¶</a></h2>
-<div class="figure" id="id10">
+<div class="figure" id="id12">
 <a class="reference internal image-reference" href="../_images/16s_phylogeny.png"><img alt="16s_phylogeny" src="../_images/16s_phylogeny.png" style="width: 680.0px; height: 912.0px;" /></a>
 <p class="caption"><span class="caption-text">Example phylogeny. Source: Rob Onyenwoke <em>et. al.</em> doi: 10.1007/s00203-004-0696-y</span></p>
 </div>

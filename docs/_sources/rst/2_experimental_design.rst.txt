@@ -110,24 +110,26 @@ Sampling and Controls
      
    - **Generous donor**
       - If sampling / extracting / sequencing in batches include one consistent sample across each
-   
 
+**If working with human subjects:**
 
 .. figure:: ../images/microbe_human_teddy.gif
-   :scale: 40 %
+   :scale: 100 %
    :alt: human_microbe_teddy
    
    Source: Charis Tsevis
 
-**If working with human subjects:**
-   
    - Consider ease of self-collection
+   - Different body sites have very different communities
+      - Even location on a stool sample (inside versus outside)
+   - Biopsies are loaded with human DNA
    - IRB compliant methods 
       - Gloves
       - Way to catch stool in toilet and disposal
       - Proper instructions
    - Immediate acquisition versus returning samples later 
       - Cannot control amount provided if self-collection
+	  - Must stablize to prevent bacterial overgrowth, or 'blooms'
 
 .. figure:: ../images/genotech_sampling.png
    :scale: 40 %
@@ -182,7 +184,9 @@ Earth Microbiome Project V4 Primers
 *The primer sequences in EMP protocols are always listed in the 5′ -> 3′ orientation.  This is the orientation that should be used for ordering.*
 
 Components of full reaction:
-      5′ Illumina adapter              Golay barcode Pad        Linker  Forward primer
+
+_____5′ Illumina adapter_________________________Golay barcode_____Pad________Linker___Forward primer
+
 FWD:  AATGATACGGCGACCACCGAGATCTACACGCT XXXXXXXXXXXX  TATGGTAATT GT      GTGYCAGCMGCCGCGGTAA
 
    - Each sample PCR reaction will be performed with it's own unique barcode combination

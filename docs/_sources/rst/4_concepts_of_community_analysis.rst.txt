@@ -3,66 +3,75 @@ Concepts of Community Analysis
 
 **How can we examine microbial communities?**
 
-Community Examination and Quality Control
-------------------------------------------------------------------
+**Let's switch datasets and look at:** `The American Gut Project (AGP) <http://humanfoodproject.com/americangut/>`_
 
-**How is our community taxonomically distributed?**
-   - Let's examine barplots of the taxonomic distribution for each sample
-   - These plots are based on relative abundance within a total sample
-   - Do not provide information about absolute microbial load
+.. figure:: ../images/agp.jpg
+   :scale: 40 %
+   :alt: agp 
+   
+   American Gut Project (AGP) logo. Source: http://humanfoodproject.com/americangut/
+
+**Why?**
+
+   - Clustering features, creating a phylogeny, and assigning taxonomy are the most computationally intensive
+      - We used very small and sparse data
+      - This subset of the AGP has 1,375 individuals
+      - There are 5,590 features (bacteria) and ~200 metadata measurements
+   
+   - You may get processed data already as a table, phylogeny...
+      - Need to know how to import at any stage of the project
+     
+**Importing the AGP**
+   1. Look at the files in the american_gut folder
+   2. Import the biom table
+   3. Import the bacterial phylogeny
+   4. Look at the available metadata
 
 .. code-block:: bash
 
-   ### MAKE TAXONOMY BARPLOT ###
-   qiime taxa barplot \
-      --i-table 1_7_deblur_table.qza \
-      --i-taxonomy 1_16_assigned_greengenes_13_5_99_taxonomy.qza \
-      --m-metadata-file "$map_path" \
-      --o-visualization 1_18_taxonomy_barplot.qzv 
+   # See the files we will work with
+   ls -lsh american_gut
 
-   qiime tools view 1_18_taxonomy_barplot.qzv
+   # Import the biom count table of features by samples
+   qiime tools import \
+     --input-path  american_gut/1_0_biom.biom \
+     --type 'FeatureTable[Frequency]' \
+     --source-format BIOMV100Format \
+     --output-path american_gut/1_1_biom.qza
+
+   # Import the bacterial 16S phylogeny
+   qiime tools import \
+     --input-path american_gut/1_0_tree.tre \
+     --output-path american_gut/1_1_tree.qza \
+     --type 'Phylogeny[Rooted]'
+
+   # Create a visual of the metadata (map.txt)
+   qiime metadata tabulate \
+     --m-input-file american_gut/1_0_map.txt \
+     --o-visualization american_gut/1_1_metadata.qzv
+
+   # Look at metadata available
+   qiime tools view american_gut/1_1_metadata.qzv
+
+.. figure:: ../images/agp_metadata.png
+   :scale: 60 %
+   :alt: agp_metadata 
+   
+   AGP metadata. 
+
+
+
+
+Quality Control
+------------------------------------------------------------------
 
 **What should we do to improve the resolution and remove noise?**
 
-**1. We can remove particular microbial taxon:**
-
-.. code-block:: bash
-
-   ### OPTIONAL: FILTER SPECIFIC TAXON ###
-   qiime taxa filter-table \
-      --i-table 1_7_deblur_table.qza \
-      --i-taxonomy 1_16_assigned_greengenes_13_5_99_taxonomy.qza \
-      --p-exclude Wolbachia \
-      --o-filtered-table 1_19_table_no_Wolbachia.qza
-
-**2. We could go back and remove sequences:**
-
-This is useful to exclude known contaminant amplicons, or remove those found in blank samples...
-
-.. code-block:: bash
-
-   qiime quality-control exclude-seqs \
-      --i-query-sequences query-seqs.qza \
-      --i-reference-sequences reference-seqs.qza \
-      --p-method blast \
-      --p-perc-identity 0.97 \
-      --p-perc-query-aligned 0.97 \
-      --o-sequence-hits hits.qza \
-      --o-sequence-misses misses.qza
-
-**3. Filter from the actual observation table by:**
+**1. Filter features from the observation table by:**
    - Minimum or maximum frequency (counts across samples)
    - Minimum or maximum ubiquity (proportion of samples)
-   - Where metadata is equal to acertain value
+   - Where metadata is equal to a certain value
    - Removing specific samples by the unqiue id
-
-.. code-block:: bash
-
-   qiime feature-table filter-features \
-      --i-table query-table.qza \
-      --m-metadata-file hits.qza \
-      --o-filtered-table no-hits-filtered-table.qza \
-      --p-exclude-ids
 
 **Options for specifically filtering features:**
 
@@ -104,44 +113,104 @@ This is useful to exclude known contaminant amplicons, or remove those found in 
   --o-filtered-table ARTIFACT_PATH   FeatureTable[Frequency] The resulting feature table filtered by feature.  [required if not passing --output-dir]
   --output-dir DIRECTORY          Output unspecified results to a directory
 
-**To filter a list of samples:**
+
+**Let's remove really rare features, to cut down on sequencing artefacts**
+
+**Let's also remove features not in at least 20% of samples**
 
 .. code-block:: bash
 
-   echo SampleID > samples-to-keep.tsv
-   echo L1S8 >> samples-to-keep.tsv
-   echo L1S105 >> samples-to-keep.tsv
+   qiime feature-table filter-features \
+      --i-table american_gut/1_1_biom.qza \
+      --o-filtered-table american_gut/1_2_biom_min_50.qza \
+      --p-min-frequency 50
+   
+   qiime feature-table filter-features \
+      --i-table american_gut/1_2_biom_min_50.qza \
+      --o-filtered-table american_gut/1_2_biom_min_50_ubiq_20.qza \
+      --p-min-samples 275  
+   
+   qiime feature-table summarize \
+      --i-table american_gut/1_2_biom_min_50_ubiq_20.qza \
+      --o-visualization american_gut/1_2_biom_summary.qzv
+
+   qiime tools view american_gut/1_2_biom_summary.qzv
+
+**Let's see how we did:**
+
+Looks like we cut down our features from 5,590 to 664, not bad...
+
+.. figure:: ../images/agp_filtered.png
+   :scale: 70 %
+   :alt: agp_filtered 
+
+A couple features dominate the counts...
+
+.. figure:: ../images/agp_feature_counts.png
+   :scale: 80 %
+   :alt: agp_feature_counts 
+
+Keep in mind that microbiome counts are *not* normally distributed
+   - More often follow a Poisson / Negative Binomial distribution
+
+.. figure:: ../images/poisson.png
+   :scale: 90 %
+   :alt: poisson
+   
+   Different Poisson distributions can be modeled, microbiome counts will look like the yellow most often. Source: Wikipedia 
+
+We also want to remove samples with low counts, and there is a nice tool to choose that cutoff...
+
+.. figure:: ../images/agp_sample_cutoff.png
+   :scale: 90 %
+   :alt: agp_sample_cutoff 
+   
+**Keep in mind you could also:**
+   - Remove particular microbial taxon: --p-exclude Wolbachia
+   - Remove specific samples: --p-exclude-ids samples-to-remove.tsv
+   - Remove samples based on metadata: --p-where "sex IN ('male', 'female')"
+
+**2. We can remove samples with the filter-samples tool**
+   
+Let's remove samples with less than 50,000 counts
+   - This is a high cutoff, and will cut us down to only 53 samples
+   - This will make the tutorial easier, but 1,000 or 10,000 is often more than adequate
+
+.. code-block:: bash
 
    qiime feature-table filter-samples \
-      --i-table table.qza \
-      --m-metadata-file samples-to-keep.tsv \
-      --o-filtered-table id-filtered-table.qza
+      --i-table american_gut/1_2_biom_min_50_ubiq_20.qza \
+      --o-filtered-table american_gut/1_3_biom_samplemin_50k.qza \
+      --p-min-frequency 50000
 
-**To filter by metadata categories:**
+   qiime feature-table summarize \
+      --i-table american_gut/1_3_biom_samplemin_50k.qza \
+      --o-visualization american_gut/1_3_biom_summary.qzv
+
+   qiime tools view american_gut/1_3_biom_summary.qzv
+   
+This is nice for our purposes today, but note that some samples still have much higher counts than others...
+
+.. figure:: ../images/agp_sam_filter.png
+   :scale: 100 %
+   :alt: agp_sam_filter 
+   
+
+**Let's work with this cleaner data, while keeping in mind there are tons of other ways to filter!**
+   - Remove sequences before Deblur feature analysis: qiime quality-control exclude-seqs
+   - Remove samples and features based on the mock community: qiime quality-control evaluate-composition
+   - `More extensive filtering documentation <https://docs.qiime2.org/2018.8/tutorials/filtering/>`_.
+
+
+Community Transformation and Examination
+----------------------------------------------------------------------------
+
+**Let's look at the data beyond just a table summary!**
+
+**The feature-table tool has a lot of options:**
 
 .. code-block:: bash
-
-   qiime feature-table filter-samples \
-      --i-table table.qza \
-      --m-metadata-file sample-metadata.tsv \
-      --p-where "BodySite IN ('left palm', 'right palm')" \
-      --o-filtered-table skin-filtered-table.qza
-
-**4. Evaluating how well the mock community matches the expected distribution:**
-
-.. code-block:: bash
-
-   qiime quality-control evaluate-composition \
-      --i-expected-features qc-mock-3-expected.qza \
-      --i-observed-features qc-mock-3-observed.qza \
-      --o-visualization qc-mock-3-comparison.qzv
-
-**5. There are many other ways to transform or filter the table, look at the documentation:**
-
-`More extensive filtering documentation <https://docs.qiime2.org/2018.8/tutorials/filtering/>`_.
-
-.. code-block:: bash
-
+   
    qiime feature-table --help
 
 
@@ -161,6 +230,49 @@ Commands:
   -subsample           Subsample table
   -summarize           Summarize table
   -tabulate-seqs       View sequence associated with each feature
+
+
+I'm going to create a shortcut variable for the path to our table, since we will always come back to it
+
+.. code-block:: bash
+
+   table=american_gut/1_3_biom_samplemin_50k.qza
+
+At this point in a real analysis I would also back up the raw and filtered tables elsewhere
+
+Note how I use the shortcut to our table instead of writing it out...
+
+
+.. code-block:: bash
+
+   qiime feature-table heatmap \
+      --i-table "$table" \
+      --o-visualization american_gut/2_0_table_heatmap.qzv
+   
+   qiime tools view american_gut/2_0_table_heatmap.qzv
+
+
+
+
+
+
+
+**How is our community taxonomically distributed?**
+   - Let's examine barplots of the taxonomic distribution for each sample
+   - These plots are based on relative abundance within a total sample
+   - Do not provide information about absolute microbial load
+
+
+.. code-block:: bash
+
+   ### MAKE TAXONOMY BARPLOT ###
+   qiime taxa barplot \
+      --i-table "$table" \
+      --i-taxonomy american_gut/1_1_biom.qza \
+      --m-metadata-file american_gut/1_0_map.txt \
+      --o-visualization 1_2_taxonomy_barplot.qzv 
+
+   qiime tools view 1_18_taxonomy_barplot.qzv
 
 
 Rarefaction and Normalization

@@ -1,0 +1,15 @@
+Bootcamp Location
+=================================================================
+
+**Location: Wyatt 130**
+
+We will post signs, however here are detailed directions.
+   - Wyatt is the large building with the white dome on top. 
+   - It is on the Peabody campus on the south end of the large lawn (see map below).
+   - If coming down the lawn from the north do not enter the main doorway, go around to the right through the brick archway and enter the white door on your left (arrow inside circle on map).
+   - Once inside that doorway go straight down the hallway and take a right at the sign that says "Computer Labs".
+   - Once you make that turn toward the computer labs it is the first door on your right.
+
+.. figure:: ../images/peabody_loc.png
+   :scale: 50 %
+   :alt: peabody_loc

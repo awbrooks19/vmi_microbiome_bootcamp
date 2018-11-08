@@ -110,13 +110,22 @@ This is the most flexible approach if the sequencing center demultiplexed your s
    - Save as CSV file
 
 sample-id,absolute-filepath,direction #header line
+
 sample-1,$PWD/some/filepath/sample1_R1.fastq,forward
+
 sample-1,$PWD/some/filepath/sample1_R2.fastq,reverse
 
 **Phred 33 vs 64**
    - Phred scores are sometimes offset by 31, depends on sequencer software
    - This is important because they are always converted to 33 - Ask sequencing center!
+   - If you can ask for 33, as the 64 can be slow to convert for large files
+
+.. figure:: ../images/phred_scores.gif
+   :scale: 100 %
+   :alt: phred_scores 
    
+   Phred score encoding for 64 and 33. Source: https://www.drive5.com/usearch/manual/quality_score.html
+
 **Command options:**
    -input-format
       - SingleEndFastqManifestPhred33
@@ -129,7 +138,7 @@ sample-1,$PWD/some/filepath/sample1_R2.fastq,reverse
       - 'SampleData[PairedEndSequencesWithQuality]'
      
    -input-path
-      - Path to your manifest file
+      - Path to your manifest file or folder of files
      
    -output-path
       - Where QIIME2 will save the processed sequences in .qza format
@@ -185,6 +194,13 @@ Importing, Demultiplexing, and Sequence Quality Control
 
 **Let's try it out with some example data!**
 
+
+.. figure:: ../images/you_can.gif
+   :scale: 120 %
+   :alt: you_can 
+   
+   Source: giphy.com
+
 First lets take a look at the mapping file to understand how QIIME2 creates visuals
 
 .. code-block:: bash
@@ -192,10 +208,21 @@ First lets take a look at the mapping file to understand how QIIME2 creates visu
    qiime metadata tabulate \
      --m-input-file paired_end/metadata.tsv \
      --o-visualization paired_end/1_0_metadata_stats
-   
+
+This will output a file 1_0_metadata_stats.qzv
+   - .qzv files are QIIME2's visualization files
+      - They can be opened with 'qiime tools view ...'
+   - .qza files are QIIME2's data files
+      - These cannot be viewed, and are often compressed
+	  - Other scripts can often create visual .qzv files from .qza
+	  
+**Let's see what we made** 
+
+.. code-block:: bash
+
    qiime tools view paired_end/1_0_metadata_stats.qzv
 
-**To import sequences and demultiplex we will...**
+**To import sequences and demultiplex...**
 
 1. You should navigate to the folder called data/
 2. We will use the folder paired_end

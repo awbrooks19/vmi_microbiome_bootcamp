@@ -45,66 +45,86 @@
   <div class="section" id="concepts-of-community-analysis">
 <h1>Concepts of Community Analysis<a class="headerlink" href="#concepts-of-community-analysis" title="Permalink to this headline">¶</a></h1>
 <p><strong>How can we examine microbial communities?</strong></p>
-<div class="section" id="community-examination-and-quality-control">
-<h2>Community Examination and Quality Control<a class="headerlink" href="#community-examination-and-quality-control" title="Permalink to this headline">¶</a></h2>
-<dl class="docutils">
-<dt><strong>How is our community taxonomically distributed?</strong></dt>
-<dd><ul class="first last simple">
-<li>Let’s examine barplots of the taxonomic distribution for each sample</li>
-<li>These plots are based on relative abundance within a total sample</li>
-<li>Do not provide information about absolute microbial load</li>
+<p><strong>Let’s switch datasets and look at:</strong> <a class="reference external" href="http://humanfoodproject.com/americangut/">The American Gut Project (AGP)</a></p>
+<div class="figure" id="id1">
+<a class="reference internal image-reference" href="../_images/agp.jpg"><img alt="agp" src="../_images/agp.jpg" style="width: 86.0px; height: 42.8px;" /></a>
+<p class="caption"><span class="caption-text">American Gut Project (AGP) logo. Source: <a class="reference external" href="http://humanfoodproject.com/americangut/">http://humanfoodproject.com/americangut/</a></span></p>
+</div>
+<p><strong>Why?</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="first docutils">
+<dt>Clustering features, creating a phylogeny, and assigning taxonomy are the most computationally intensive</dt>
+<dd><ul class="first last">
+<li>We used very small and sparse data</li>
+<li>This subset of the AGP has 1,375 individuals</li>
+<li>There are 5,590 features (bacteria) and ~200 metadata measurements</li>
 </ul>
 </dd>
 </dl>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">### MAKE TAXONOMY BARPLOT ###</span>
-qiime taxa barplot <span class="se">\</span>
-   --i-table 1_7_deblur_table.qza <span class="se">\</span>
-   --i-taxonomy 1_16_assigned_greengenes_13_5_99_taxonomy.qza <span class="se">\</span>
-   --m-metadata-file <span class="s2">&quot;</span><span class="nv">$map_path</span><span class="s2">&quot;</span> <span class="se">\</span>
-   --o-visualization 1_18_taxonomy_barplot.qzv
-
-qiime tools view 1_18_taxonomy_barplot.qzv
-</pre></div>
-</div>
-<p><strong>What should we do to improve the resolution and remove noise?</strong></p>
-<p><strong>1. We can remove particular microbial taxon:</strong></p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">### OPTIONAL: FILTER SPECIFIC TAXON ###</span>
-qiime taxa filter-table <span class="se">\</span>
-   --i-table 1_7_deblur_table.qza <span class="se">\</span>
-   --i-taxonomy 1_16_assigned_greengenes_13_5_99_taxonomy.qza <span class="se">\</span>
-   --p-exclude Wolbachia <span class="se">\</span>
-   --o-filtered-table 1_19_table_no_Wolbachia.qza
-</pre></div>
-</div>
-<p><strong>2. We could go back and remove sequences:</strong></p>
-<p>This is useful to exclude known contaminant amplicons, or remove those found in blank samples…</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>qiime quality-control exclude-seqs <span class="se">\</span>
-   --i-query-sequences query-seqs.qza <span class="se">\</span>
-   --i-reference-sequences reference-seqs.qza <span class="se">\</span>
-   --p-method blast <span class="se">\</span>
-   --p-perc-identity <span class="m">0</span>.97 <span class="se">\</span>
-   --p-perc-query-aligned <span class="m">0</span>.97 <span class="se">\</span>
-   --o-sequence-hits hits.qza <span class="se">\</span>
-   --o-sequence-misses misses.qza
-</pre></div>
-</div>
+</li>
+<li><dl class="first docutils">
+<dt>You may get processed data already as a table, phylogeny…</dt>
+<dd><ul class="first last">
+<li>Need to know how to import at any stage of the project</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
 <dl class="docutils">
-<dt><strong>3. Filter from the actual observation table by:</strong></dt>
+<dt><strong>Importing the AGP</strong></dt>
+<dd><ol class="first last arabic simple">
+<li>Look at the files in the american_gut folder</li>
+<li>Import the biom table</li>
+<li>Import the bacterial phylogeny</li>
+<li>Look at the available metadata</li>
+</ol>
+</dd>
+</dl>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># See the files we will work with</span>
+ls -lsh american_gut
+
+<span class="c1"># Import the biom count table of features by samples</span>
+qiime tools import <span class="se">\</span>
+  --input-path  american_gut/1_0_biom.biom <span class="se">\</span>
+  --type <span class="s1">&#39;FeatureTable[Frequency]&#39;</span> <span class="se">\</span>
+  --source-format BIOMV100Format <span class="se">\</span>
+  --output-path american_gut/1_1_biom.qza
+
+<span class="c1"># Import the bacterial 16S phylogeny</span>
+qiime tools import <span class="se">\</span>
+  --input-path american_gut/1_0_tree.tre <span class="se">\</span>
+  --output-path american_gut/1_1_tree.qza <span class="se">\</span>
+  --type <span class="s1">&#39;Phylogeny[Rooted]&#39;</span>
+
+<span class="c1"># Create a visual of the metadata (map.txt)</span>
+qiime metadata tabulate <span class="se">\</span>
+  --m-input-file american_gut/1_0_map.txt <span class="se">\</span>
+  --o-visualization american_gut/1_1_metadata.qzv
+
+<span class="c1"># Look at metadata available</span>
+qiime tools view american_gut/1_1_metadata.qzv
+</pre></div>
+</div>
+<div class="figure" id="id2">
+<a class="reference internal image-reference" href="../_images/agp_metadata.png"><img alt="agp_metadata" src="../_images/agp_metadata.png" style="width: 1535.4px; height: 651.0px;" /></a>
+<p class="caption"><span class="caption-text">AGP metadata.</span></p>
+</div>
+<div class="section" id="quality-control">
+<h2>Quality Control<a class="headerlink" href="#quality-control" title="Permalink to this headline">¶</a></h2>
+<p><strong>What should we do to improve the resolution and remove noise?</strong></p>
+<dl class="docutils">
+<dt><strong>1. Filter features from the observation table by:</strong></dt>
 <dd><ul class="first last simple">
 <li>Minimum or maximum frequency (counts across samples)</li>
 <li>Minimum or maximum ubiquity (proportion of samples)</li>
-<li>Where metadata is equal to acertain value</li>
+<li>Where metadata is equal to a certain value</li>
 <li>Removing specific samples by the unqiue id</li>
 </ul>
 </dd>
 </dl>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>qiime feature-table filter-features <span class="se">\</span>
-   --i-table query-table.qza <span class="se">\</span>
-   --m-metadata-file hits.qza <span class="se">\</span>
-   --o-filtered-table no-hits-filtered-table.qza <span class="se">\</span>
-   --p-exclude-ids
-</pre></div>
-</div>
 <p><strong>Options for specifically filtering features:</strong></p>
 <blockquote>
 <div><table class="docutils option-list" frame="void" rules="none">
@@ -183,34 +203,97 @@ retained.  [default: False]</td></tr>
 </tbody>
 </table>
 </div></blockquote>
-<p><strong>To filter a list of samples:</strong></p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> SampleID &gt; samples-to-keep.tsv
-<span class="nb">echo</span> L1S8 &gt;&gt; samples-to-keep.tsv
-<span class="nb">echo</span> L1S105 &gt;&gt; samples-to-keep.tsv
+<p><strong>Let’s remove really rare features, to cut down on sequencing artefacts</strong></p>
+<p><strong>Let’s also remove features not in at least 20% of samples</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>qiime feature-table filter-features <span class="se">\</span>
+   --i-table american_gut/1_1_biom.qza <span class="se">\</span>
+   --o-filtered-table american_gut/1_2_biom_min_50.qza <span class="se">\</span>
+   --p-min-frequency <span class="m">50</span>
 
-qiime feature-table filter-samples <span class="se">\</span>
-   --i-table table.qza <span class="se">\</span>
-   --m-metadata-file samples-to-keep.tsv <span class="se">\</span>
-   --o-filtered-table id-filtered-table.qza
+qiime feature-table filter-features <span class="se">\</span>
+   --i-table american_gut/1_2_biom_min_50.qza <span class="se">\</span>
+   --o-filtered-table american_gut/1_2_biom_min_50_ubiq_20.qza <span class="se">\</span>
+   --p-min-samples <span class="m">275</span>
+
+qiime feature-table summarize <span class="se">\</span>
+   --i-table american_gut/1_2_biom_min_50_ubiq_20.qza <span class="se">\</span>
+   --o-visualization american_gut/1_2_biom_summary.qzv
+
+qiime tools view american_gut/1_2_biom_summary.qzv
 </pre></div>
 </div>
-<p><strong>To filter by metadata categories:</strong></p>
+<p><strong>Let’s see how we did:</strong></p>
+<p>Looks like we cut down our features from 5,590 to 664, not bad…</p>
+<div class="figure">
+<a class="reference internal image-reference" href="../_images/agp_filtered.png"><img alt="agp_filtered" src="../_images/agp_filtered.png" style="width: 1560.3px; height: 562.1px;" /></a>
+</div>
+<p>A couple features dominate the counts…</p>
+<div class="figure">
+<a class="reference internal image-reference" href="../_images/agp_feature_counts.png"><img alt="agp_feature_counts" src="../_images/agp_feature_counts.png" style="width: 1100.8px; height: 347.2px;" /></a>
+</div>
+<dl class="docutils">
+<dt>Keep in mind that microbiome counts are <em>not</em> normally distributed</dt>
+<dd><ul class="first last simple">
+<li>More often follow a Poisson / Negative Binomial distribution</li>
+</ul>
+</dd>
+</dl>
+<div class="figure" id="id3">
+<a class="reference internal image-reference" href="../_images/poisson.png"><img alt="poisson" src="../_images/poisson.png" style="width: 292.5px; height: 234.0px;" /></a>
+<p class="caption"><span class="caption-text">Different Poisson distributions can be modeled, microbiome counts will look like the yellow most often. Source: Wikipedia</span></p>
+</div>
+<p>We also want to remove samples with low counts, and there is a nice tool to choose that cutoff…</p>
+<div class="figure">
+<a class="reference internal image-reference" href="../_images/agp_sample_cutoff.png"><img alt="agp_sample_cutoff" src="../_images/agp_sample_cutoff.png" style="width: 402.3px; height: 307.8px;" /></a>
+</div>
+<dl class="docutils">
+<dt><strong>Keep in mind you could also:</strong></dt>
+<dd><ul class="first last simple">
+<li>Remove particular microbial taxon: –p-exclude Wolbachia</li>
+<li>Remove specific samples: –p-exclude-ids samples-to-remove.tsv</li>
+<li>Remove samples based on metadata: –p-where “sex IN (‘male’, ‘female’)”</li>
+</ul>
+</dd>
+</dl>
+<p><strong>2. We can remove samples with the filter-samples tool</strong></p>
+<dl class="docutils">
+<dt>Let’s remove samples with less than 50,000 counts</dt>
+<dd><ul class="first last simple">
+<li>This is a high cutoff, and will cut us down to only 53 samples</li>
+<li>This will make the tutorial easier, but 1,000 or 10,000 is often more than adequate</li>
+</ul>
+</dd>
+</dl>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>qiime feature-table filter-samples <span class="se">\</span>
-   --i-table table.qza <span class="se">\</span>
-   --m-metadata-file sample-metadata.tsv <span class="se">\</span>
-   --p-where <span class="s2">&quot;BodySite IN (&#39;left palm&#39;, &#39;right palm&#39;)&quot;</span> <span class="se">\</span>
-   --o-filtered-table skin-filtered-table.qza
+   --i-table american_gut/1_2_biom_min_50_ubiq_20.qza <span class="se">\</span>
+   --o-filtered-table american_gut/1_3_biom_samplemin_50k.qza <span class="se">\</span>
+   --p-min-frequency <span class="m">50000</span>
+
+qiime feature-table summarize <span class="se">\</span>
+   --i-table american_gut/1_3_biom_samplemin_50k.qza <span class="se">\</span>
+   --o-visualization american_gut/1_3_biom_summary.qzv
+
+qiime tools view american_gut/1_3_biom_summary.qzv
 </pre></div>
 </div>
-<p><strong>4. Evaluating how well the mock community matches the expected distribution:</strong></p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>qiime quality-control evaluate-composition <span class="se">\</span>
-   --i-expected-features qc-mock-3-expected.qza <span class="se">\</span>
-   --i-observed-features qc-mock-3-observed.qza <span class="se">\</span>
-   --o-visualization qc-mock-3-comparison.qzv
-</pre></div>
+<p>This is nice for our purposes today, but note that some samples still have much higher counts than others…</p>
+<div class="figure">
+<a class="reference internal image-reference" href="../_images/agp_sam_filter.png"><img alt="agp_sam_filter" src="../_images/agp_sam_filter.png" style="width: 662.0px; height: 458.0px;" /></a>
 </div>
-<p><strong>5. There are many other ways to transform or filter the table, look at the documentation:</strong></p>
-<p><a class="reference external" href="https://docs.qiime2.org/2018.8/tutorials/filtering/">More extensive filtering documentation</a>.</p>
+<dl class="docutils">
+<dt><strong>Let’s work with this cleaner data, while keeping in mind there are tons of other ways to filter!</strong></dt>
+<dd><ul class="first last simple">
+<li>Remove sequences before Deblur feature analysis: qiime quality-control exclude-seqs</li>
+<li>Remove samples and features based on the mock community: qiime quality-control evaluate-composition</li>
+<li><a class="reference external" href="https://docs.qiime2.org/2018.8/tutorials/filtering/">More extensive filtering documentation</a>.</li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="community-transformation-and-examination">
+<h2>Community Transformation and Examination<a class="headerlink" href="#community-transformation-and-examination" title="Permalink to this headline">¶</a></h2>
+<p><strong>Let’s look at the data beyond just a table summary!</strong></p>
+<p><strong>The feature-table tool has a lot of options:</strong></p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>qiime feature-table --help
 </pre></div>
 </div>
@@ -273,6 +356,38 @@ qiime feature-table filter-samples <span class="se">\</span>
 </table>
 </dd>
 </dl>
+<p>I’m going to create a shortcut variable for the path to our table, since we will always come back to it</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">table</span><span class="o">=</span>american_gut/1_3_biom_samplemin_50k.qza
+</pre></div>
+</div>
+<p>At this point in a real analysis I would also back up the raw and filtered tables elsewhere</p>
+<p>Note how I use the shortcut to our table instead of writing it out…</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>qiime feature-table heatmap <span class="se">\</span>
+   --i-table <span class="s2">&quot;</span><span class="nv">$table</span><span class="s2">&quot;</span> <span class="se">\</span>
+   --o-visualization american_gut/2_0_table_heatmap.qzv
+
+qiime tools view american_gut/2_0_table_heatmap.qzv
+</pre></div>
+</div>
+<dl class="docutils">
+<dt><strong>How is our community taxonomically distributed?</strong></dt>
+<dd><ul class="first last simple">
+<li>Let’s examine barplots of the taxonomic distribution for each sample</li>
+<li>These plots are based on relative abundance within a total sample</li>
+<li>Do not provide information about absolute microbial load</li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">### MAKE TAXONOMY BARPLOT ###</span>
+qiime taxa barplot <span class="se">\</span>
+   --i-table <span class="s2">&quot;</span><span class="nv">$table</span><span class="s2">&quot;</span> <span class="se">\</span>
+   --i-taxonomy american_gut/1_1_biom.qza <span class="se">\</span>
+   --m-metadata-file american_gut/1_0_map.txt <span class="se">\</span>
+   --o-visualization 1_2_taxonomy_barplot.qzv
+
+qiime tools view 1_18_taxonomy_barplot.qzv
+</pre></div>
+</div>
 </div>
 <div class="section" id="rarefaction-and-normalization">
 <h2>Rarefaction and Normalization<a class="headerlink" href="#rarefaction-and-normalization" title="Permalink to this headline">¶</a></h2>
@@ -514,7 +629,8 @@ qiime tools view 1_17_faith_pd_group_significance.qzv
   <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Concepts of Community Analysis</a><ul>
-<li><a class="reference internal" href="#community-examination-and-quality-control">Community Examination and Quality Control</a></li>
+<li><a class="reference internal" href="#quality-control">Quality Control</a></li>
+<li><a class="reference internal" href="#community-transformation-and-examination">Community Transformation and Examination</a></li>
 <li><a class="reference internal" href="#rarefaction-and-normalization">Rarefaction and Normalization</a></li>
 <li><a class="reference internal" href="#alpha-and-beta-diversity">Alpha and Beta Diversity</a></li>
 </ul>
