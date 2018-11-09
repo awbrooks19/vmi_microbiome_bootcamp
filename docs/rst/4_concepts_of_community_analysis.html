@@ -47,7 +47,7 @@
 <p><strong>How can we examine microbial communities?</strong></p>
 <p><strong>Let’s switch datasets and look at:</strong> <a class="reference external" href="http://humanfoodproject.com/americangut/">The American Gut Project (AGP)</a></p>
 <div class="figure" id="id1">
-<a class="reference internal image-reference" href="../_images/agp.jpg"><img alt="agp" src="../_images/agp.jpg" style="width: 86.0px; height: 42.8px;" /></a>
+<a class="reference internal image-reference" href="../_images/agp.jpg"><img alt="agp" src="../_images/agp.jpg" style="width: 301.0px; height: 149.8px;" /></a>
 <p class="caption"><span class="caption-text">American Gut Project (AGP) logo. Source: <a class="reference external" href="http://humanfoodproject.com/americangut/">http://humanfoodproject.com/americangut/</a></span></p>
 </div>
 <p><strong>Why?</strong></p>
@@ -64,9 +64,20 @@
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt>You may get processed data already as a table, phylogeny…</dt>
+<dt>You may get processed data from a colaborator / website already as a table, phylogeny…</dt>
 <dd><ul class="first last">
 <li>Need to know how to import at any stage of the project</li>
+<li><a class="reference external" href="https://docs.qiime2.org/2018.8/tutorials/importing/">QIIME2 Importing Tutorial</a></li>
+<li><dl class="first docutils">
+<dt>There are far more options than even they show</dt>
+<dd><ul class="first last">
+<li>Check the docs: qiime tools import –help</li>
+<li>There are many types of data: qiime tools import –show-importable-types</li>
+<li>For each type there are many subformats: qiime tools import –show-importable-formats</li>
+</ul>
+</dd>
+</dl>
+</li>
 </ul>
 </dd>
 </dl>
@@ -99,6 +110,13 @@ qiime tools import <span class="se">\</span>
   --output-path american_gut/1_1_tree.qza <span class="se">\</span>
   --type <span class="s1">&#39;Phylogeny[Rooted]&#39;</span>
 
+<span class="c1"># Import the bacterial taxonomy</span>
+qiime tools import <span class="se">\</span>
+   --input-path american_gut/1_0_tax.tsv <span class="se">\</span>
+   --output-path american_gut/1_1_tax.qza <span class="se">\</span>
+   --type FeatureData<span class="o">[</span>Taxonomy<span class="o">]</span> <span class="se">\</span>
+   --source-format HeaderlessTSVTaxonomyFormat
+
 <span class="c1"># Create a visual of the metadata (map.txt)</span>
 qiime metadata tabulate <span class="se">\</span>
   --m-input-file american_gut/1_0_map.txt <span class="se">\</span>
@@ -106,11 +124,28 @@ qiime metadata tabulate <span class="se">\</span>
 
 <span class="c1"># Look at metadata available</span>
 qiime tools view american_gut/1_1_metadata.qzv
+
+<span class="c1"># See the new files we generated</span>
+ls -lsh american_gut
 </pre></div>
 </div>
 <div class="figure" id="id2">
-<a class="reference internal image-reference" href="../_images/agp_metadata.png"><img alt="agp_metadata" src="../_images/agp_metadata.png" style="width: 1535.4px; height: 651.0px;" /></a>
-<p class="caption"><span class="caption-text">AGP metadata.</span></p>
+<a class="reference internal image-reference" href="../_images/agp_metadata.png"><img alt="agp_metadata" src="../_images/agp_metadata.png" style="width: 1041.6px; height: 776.8px;" /></a>
+<p class="caption"><span class="caption-text">AGP metadata is quite extensive, giving us a lot of options.</span></p>
+</div>
+<p><strong>We should also look at the table to see what we’re working with…</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Summarize the table</span>
+qiime feature-table summarize <span class="se">\</span>
+   --i-table american_gut/1_1_biom.qza <span class="se">\</span>
+   --o-visualization american_gut/1_1_biom_sumamry.qzv
+
+<span class="c1"># View the table summary</span>
+qiime tools view american_gut/1_1_biom_sumamry.qzv
+</pre></div>
+</div>
+<div class="figure" id="id3">
+<a class="reference internal image-reference" href="../_images/agp_table_raw.png"><img alt="agp_table_raw" src="../_images/agp_table_raw.png" style="width: 1450.4px; height: 801.6px;" /></a>
+<p class="caption"><span class="caption-text">Over 29 million sequences passed QC and were assigned to samples.</span></p>
 </div>
 <div class="section" id="quality-control">
 <h2>Quality Control<a class="headerlink" href="#quality-control" title="Permalink to this headline">¶</a></h2>
@@ -124,10 +159,13 @@ qiime tools view american_gut/1_1_metadata.qzv
 <li>Removing specific samples by the unqiue id</li>
 </ul>
 </dd>
-</dl>
-<p><strong>Options for specifically filtering features:</strong></p>
-<blockquote>
-<div><table class="docutils option-list" frame="void" rules="none">
+<dt><strong>Options for specifically filtering features:</strong></dt>
+<dd><blockquote class="first">
+<div><ul class="simple">
+<li>Lots of options: qiime feature-table filter-features –help</li>
+</ul>
+</div></blockquote>
+<table class="last docutils option-list" frame="void" rules="none">
 <col class="option" />
 <col class="description" />
 <tbody valign="top">
@@ -202,49 +240,64 @@ retained.  [default: False]</td></tr>
 <tr><td>&#160;</td><td>Output unspecified results to a directory</td></tr>
 </tbody>
 </table>
-</div></blockquote>
-<p><strong>Let’s remove really rare features, to cut down on sequencing artefacts</strong></p>
-<p><strong>Let’s also remove features not in at least 20% of samples</strong></p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>qiime feature-table filter-features <span class="se">\</span>
+</dd>
+<dt><strong>Let’s remove really rare features, to cut down on sequencing artefacts</strong></dt>
+<dd><ul class="first last simple">
+<li>This is filtering by total <strong>abundance</strong></li>
+</ul>
+</dd>
+<dt><strong>Let’s also remove features not in at least 20% of samples</strong></dt>
+<dd><ul class="first last simple">
+<li>The percentage or proportion of individuals a feature appears in is known as the <strong>ubiquity</strong></li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Filter features with less than 50 total counts across all samples</span>
+qiime feature-table filter-features <span class="se">\</span>
    --i-table american_gut/1_1_biom.qza <span class="se">\</span>
    --o-filtered-table american_gut/1_2_biom_min_50.qza <span class="se">\</span>
    --p-min-frequency <span class="m">50</span>
 
+<span class="c1"># Filter features in less than 20 percent of samples</span>
+<span class="c1"># Note: I know N = 1,375 / 5 = 275</span>
 qiime feature-table filter-features <span class="se">\</span>
    --i-table american_gut/1_2_biom_min_50.qza <span class="se">\</span>
    --o-filtered-table american_gut/1_2_biom_min_50_ubiq_20.qza <span class="se">\</span>
    --p-min-samples <span class="m">275</span>
 
+<span class="c1"># Summarize the table</span>
 qiime feature-table summarize <span class="se">\</span>
    --i-table american_gut/1_2_biom_min_50_ubiq_20.qza <span class="se">\</span>
    --o-visualization american_gut/1_2_biom_summary.qzv
 
+<span class="c1"># View the table summary</span>
 qiime tools view american_gut/1_2_biom_summary.qzv
 </pre></div>
 </div>
 <p><strong>Let’s see how we did:</strong></p>
-<p>Looks like we cut down our features from 5,590 to 664, not bad…</p>
-<div class="figure">
+<div class="figure" id="id4">
 <a class="reference internal image-reference" href="../_images/agp_filtered.png"><img alt="agp_filtered" src="../_images/agp_filtered.png" style="width: 1560.3px; height: 562.1px;" /></a>
+<p class="caption"><span class="caption-text">Looks like we cut down our features from 5,590 to 664, not bad…</span></p>
 </div>
-<p>A couple features dominate the counts…</p>
-<div class="figure">
+<div class="figure" id="id5">
 <a class="reference internal image-reference" href="../_images/agp_feature_counts.png"><img alt="agp_feature_counts" src="../_images/agp_feature_counts.png" style="width: 1100.8px; height: 347.2px;" /></a>
+<p class="caption"><span class="caption-text">A few features dominate the counts…</span></p>
 </div>
 <dl class="docutils">
-<dt>Keep in mind that microbiome counts are <em>not</em> normally distributed</dt>
+<dt><strong>Keep in mind that microbiome counts are not normally distributed</strong></dt>
 <dd><ul class="first last simple">
 <li>More often follow a Poisson / Negative Binomial distribution</li>
+<li>This roughly means there are often many low / rare values and some very high outliers</li>
 </ul>
 </dd>
 </dl>
-<div class="figure" id="id3">
-<a class="reference internal image-reference" href="../_images/poisson.png"><img alt="poisson" src="../_images/poisson.png" style="width: 292.5px; height: 234.0px;" /></a>
+<div class="figure" id="id6">
+<a class="reference internal image-reference" href="../_images/poisson.png"><img alt="poisson" src="../_images/poisson.png" style="width: 487.5px; height: 390.0px;" /></a>
 <p class="caption"><span class="caption-text">Different Poisson distributions can be modeled, microbiome counts will look like the yellow most often. Source: Wikipedia</span></p>
 </div>
 <p>We also want to remove samples with low counts, and there is a nice tool to choose that cutoff…</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/agp_sample_cutoff.png"><img alt="agp_sample_cutoff" src="../_images/agp_sample_cutoff.png" style="width: 402.3px; height: 307.8px;" /></a>
+<a class="reference internal image-reference" href="../_images/agp_sample_cutoff.png"><img alt="agp_sample_cutoff" src="../_images/agp_sample_cutoff.png" style="width: 536.4px; height: 410.4px;" /></a>
 </div>
 <dl class="docutils">
 <dt><strong>Keep in mind you could also:</strong></dt>
@@ -286,6 +339,11 @@ qiime tools view american_gut/1_3_biom_summary.qzv
 <li>Remove sequences before Deblur feature analysis: qiime quality-control exclude-seqs</li>
 <li>Remove samples and features based on the mock community: qiime quality-control evaluate-composition</li>
 <li><a class="reference external" href="https://docs.qiime2.org/2018.8/tutorials/filtering/">More extensive filtering documentation</a>.</li>
+</ul>
+</dd>
+<dt><strong>Keep in mind:</strong></dt>
+<dd><ul class="first last simple">
+<li>At this point in a real analysis I would back up the filtered files</li>
 </ul>
 </dd>
 </dl>
@@ -355,39 +413,97 @@ qiime tools view american_gut/1_3_biom_summary.qzv
 </tbody>
 </table>
 </dd>
-</dl>
-<p>I’m going to create a shortcut variable for the path to our table, since we will always come back to it</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">table</span><span class="o">=</span>american_gut/1_3_biom_samplemin_50k.qza
-</pre></div>
-</div>
-<p>At this point in a real analysis I would also back up the raw and filtered tables elsewhere</p>
-<p>Note how I use the shortcut to our table instead of writing it out…</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>qiime feature-table heatmap <span class="se">\</span>
-   --i-table <span class="s2">&quot;</span><span class="nv">$table</span><span class="s2">&quot;</span> <span class="se">\</span>
-   --o-visualization american_gut/2_0_table_heatmap.qzv
-
-qiime tools view american_gut/2_0_table_heatmap.qzv
-</pre></div>
-</div>
-<dl class="docutils">
-<dt><strong>How is our community taxonomically distributed?</strong></dt>
+<dt><strong>Options include:</strong></dt>
 <dd><ul class="first last simple">
-<li>Let’s examine barplots of the taxonomic distribution for each sample</li>
-<li>These plots are based on relative abundance within a total sample</li>
-<li>Do not provide information about absolute microbial load</li>
+<li>filtering</li>
+<li>grouping / collapsing</li>
+<li>transforming - rarefy, relative abundance, presence / absence</li>
+<li>creating summaries and figures</li>
+</ul>
+</dd>
+<dt><strong>I’d suggest creating shortcut variables for the data we imported:</strong></dt>
+<dd><ul class="first last simple">
+<li>It’s easier than typing the full path everytime, and easier to remember</li>
+<li>Their names can be arbitrary, I like to go with something logical though</li>
+<li><dl class="first docutils">
+<dt>For best practices they should be called with quotes and a number sign</dt>
+<dd><ul class="first last">
+<li>“$XXXXX”</li>
+<li>Without the number sign it will be treated as a word and not a variable holding something else</li>
+<li>The quotes are optional today, but in more complex work they will save you a lot of weird errors</li>
 </ul>
 </dd>
 </dl>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">### MAKE TAXONOMY BARPLOT ###</span>
-qiime taxa barplot <span class="se">\</span>
-   --i-table <span class="s2">&quot;</span><span class="nv">$table</span><span class="s2">&quot;</span> <span class="se">\</span>
-   --i-taxonomy american_gut/1_1_biom.qza <span class="se">\</span>
-   --m-metadata-file american_gut/1_0_map.txt <span class="se">\</span>
-   --o-visualization 1_2_taxonomy_barplot.qzv
+</li>
+<li>If you wanted to analyze different data you only have to switch paths in one place, not in every function call</li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># The Feature table can now be called as: &quot;$table&quot;</span>
+<span class="nv">table</span><span class="o">=</span>american_gut/1_3_biom_samplemin_50k.qza
+<span class="nb">echo</span> <span class="s2">&quot;</span><span class="nv">$table</span><span class="s2">&quot;</span>
+<span class="nb">echo</span> <span class="nv">$table</span>
+<span class="nb">echo</span> table
 
-qiime tools view 1_18_taxonomy_barplot.qzv
+<span class="c1"># The taxononomy table can now be called as: &quot;$tax&quot;</span>
+<span class="nv">tax</span><span class="o">=</span>american_gut/1_1_tax.qza
+<span class="nb">echo</span> <span class="s2">&quot;</span><span class="nv">$tax</span><span class="s2">&quot;</span>
+
+<span class="c1"># The phylogeny can now be called as: &quot;$tre&quot;</span>
+<span class="nv">tre</span><span class="o">=</span>american_gut/1_1_tree.qza
+<span class="nb">echo</span> <span class="s2">&quot;</span><span class="nv">$tre</span><span class="s2">&quot;</span>
+
+<span class="c1"># The metadata can now be called as: &quot;$map&quot;</span>
+<span class="nv">map</span><span class="o">=</span>american_gut/1_0_map.txt
+<span class="nb">echo</span> <span class="s2">&quot;</span><span class="nv">$map</span><span class="s2">&quot;</span>
 </pre></div>
 </div>
+<dl class="docutils">
+<dt><strong>So let’s exmaine how our community is taxonomically distributed!</strong></dt>
+<dd><ul class="first last simple">
+<li>Barplots of the taxonomic distribution of features for each sample</li>
+<li>These plots are based on relative abundance within a total sample</li>
+<li>Do not provide information about absolute microbial load</li>
+<li><dl class="first docutils">
+<dt>Note below how I use the shortcuts instead of writing out full paths…</dt>
+<dd><ul class="first last">
+<li>It just looks so much cleaner too!</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make and view a taxonomy barplot</span>
+qiime taxa barplot <span class="se">\</span>
+   --i-table <span class="s2">&quot;</span><span class="nv">$table</span><span class="s2">&quot;</span> <span class="se">\</span>
+   --i-taxonomy <span class="s2">&quot;</span><span class="nv">$tax</span><span class="s2">&quot;</span> <span class="se">\</span>
+   --m-metadata-file <span class="s2">&quot;</span><span class="nv">$map</span><span class="s2">&quot;</span> <span class="se">\</span>
+   --o-visualization american_gut/2_0_taxonomy_barplot.qzv
+
+qiime tools view american_gut/2_0_taxonomy_barplot.qzv
+</pre></div>
+</div>
+<div class="figure">
+<a class="reference internal image-reference" href="../_images/agp_taxa_barplot.png"><img alt="agp_taxa_barplot" src="../_images/agp_taxa_barplot.png" style="width: 1276.8px; height: 926.8px;" /></a>
+</div>
+<dl class="docutils">
+<dt><strong>This is a really useful tool for examining our microbial communities</strong></dt>
+<dd><ul class="first last simple">
+<li><dl class="first docutils">
+<dt>Just remember how the relative abundance works…</dt>
+<dd><ul class="first last">
+<li>Everything is relative to everything else!</li>
+<li>One abundant microbe <em>decreasing</em> makes rarer microbes look <em>more</em> abundant</li>
+<li>One abundant microbe <em>increasing</em> makes rarer microbes look <em>less</em> abundant</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="rarefaction-and-normalization">
 <h2>Rarefaction and Normalization<a class="headerlink" href="#rarefaction-and-normalization" title="Permalink to this headline">¶</a></h2>
@@ -396,7 +512,7 @@ qiime tools view 1_18_taxonomy_barplot.qzv
 <dd><ul class="first last simple">
 <li>Samples have different numbers of sequence counts</li>
 <li>Not indicative of absolute bacterial abundance</li>
-<li>Artefact of extraction, library preparation and pooling, and sequencing efficiency</li>
+<li>Artifact of extraction, library preparation and pooling, and sequencing efficiency</li>
 </ul>
 </dd>
 </dl>
@@ -425,9 +541,9 @@ qiime feature-table rarefy <span class="se">\ </span>...
 qiime feature-table relative-frequency <span class="se">\ </span>...
 </pre></div>
 </div>
-<p><strong>Presence / Absence</strong>: value of 1 if taxon is present in sample, 0 otherwise
-<strong>Rarefy</strong>: subsample the same number of sequence from each sample
-<strong>Relative Frequency</strong>: propotion of each feature out of the total feature counts for each sample</p>
+<p><strong>Presence / Absence</strong>: value of 1 if taxon is present in sample, 0 otherwise</p>
+<p><strong>Rarefy</strong>: subsample the same number of sequence from each sample</p>
+<p><strong>Relative Frequency</strong>: propotion of each feature out of the total feature counts for each sample</p>
 <dl class="docutils">
 <dt><strong>There are other normalization methods, often based on RNA sequencing methods.</strong></dt>
 <dd><ul class="first last simple">
@@ -436,41 +552,87 @@ qiime feature-table relative-frequency <span class="se">\ </span>...
 </ul>
 </dd>
 </dl>
-<p>I’d suggest sticking to relative abundance and rarefied communities!</p>
+<div class="figure" id="id7">
+<a class="reference internal image-reference" href="../_images/norm_rare_rel.gif"><img alt="norm_rare_rel" src="../_images/norm_rare_rel.gif" style="width: 1168.5px; height: 552.0px;" /></a>
+<p class="caption"><span class="caption-text">Comparison of different methods to control for different sequence counts. Purple and Orange are what we care about! Source: Weiss, S. <em>et. al.</em> Microbiome. 2017</span></p>
+</div>
+<table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">-N<var>one</var></span></kbd></td>
+<td>No correction for unequal library sizes is applied</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-P<var>roportion</var></span></kbd></td>
+<td>Counts in each column are scaled by the column’s sum</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-R<var>arefy</var></span></kbd></td>
+<td>Each column is subsampled to even depth without replacement (hypergeometric model)</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-l<var>ogUQ</var></span></kbd></td>
+<td>Log upper quartile—Each sample is scaled by the 75th percentile of its count distribution; then, the counts are log transformed</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-C<var>SS</var></span></kbd></td>
+<td>Cumulative sum scaling—This method is similar to logUQ, except that CSS enables a flexible sample distribution-dependent threshold for determining each sample’s quantile divisor. Only the segment of each sample’s count distribution that is relatively invariant across samples is scaled by CSS. This attempts to mitigate the influence of larger count values in the same matrix column</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-D<var>ESeqVS</var></span></kbd></td>
+<td>Variance stabilization (VS)—For each column, a scaling factor for each OTU is calculated as that OTU’s value divided by its geometric mean across all samples. All of the reads for each column are then divided by the median of the scaling factors for that column. The median is chosen to prevent OTUs with large count values from having undue influence on the values of other OTUs. Then, using the scaled counts for all the OTUs and assuming a Negative Binomial (NB) distribution, a mean-variance relation is fit. This adjusts the matrix counts using a log-like transformation in the NB generalized linear model (GLM) such that the variance in an OTU’s counts across samples is approximately independent of its mean</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">-e<var>dgeR-TMM</var></span></kbd></td>
+<td>Trimmed Mean by M-Values (TMM)—The TMM scaling factor is calculated as the weighted mean of log-ratios between each pair of samples, after excluding the highest count OTUs and OTUs with the largest log-fold change. This minimizes the log-fold change between samples for most OTUs. The TMM scaling factors are usually around 1, since TMM normalization, like DESeqVS, assumes that the majority of OTUs are not differentially abundant. The normalization factors for each sample are the product of the TMM scaling factor and the original library size</td></tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt><strong>Summary: I’d suggest sticking to relative abundance and rarefied communities!</strong></dt>
+<dd><ul class="first last simple">
+<li>Remember how many things can bias microbiome data</li>
+<li>The Poisson / Negative Binomial fit in more advanced models doesn’t seem to adapt well</li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="alpha-and-beta-diversity">
 <h2>Alpha and Beta Diversity<a class="headerlink" href="#alpha-and-beta-diversity" title="Permalink to this headline">¶</a></h2>
 <p><strong>We can use ecological metrics to understand community composition and inter-sample microbiome similarity!</strong></p>
 <p><strong>Alpha Diversity</strong>: Measure of diversity within a sample</p>
+<div class="figure" id="id8">
+<a class="reference internal image-reference" href="../_images/alpha_div_theory.jpg"><img alt="alpha_div_theory" src="../_images/alpha_div_theory.jpg" style="width: 950.4px; height: 488.0px;" /></a>
+<p class="caption"><span class="caption-text">Alpha diversity metrics can look at richness, evenness, or both within a sample. Source: Finotello. Briefings Bioinformatics. 2016.</span></p>
+</div>
 <p><strong>Beta Diversity</strong>: Measure of microbiome similarity between a pair of samples</p>
+<div class="figure" id="id9">
+<a class="reference internal image-reference" href="../_images/beta_div_theory.png"><img alt="beta_div_theory" src="../_images/beta_div_theory.png" style="width: 1184.0px; height: 656.0px;" /></a>
+<p class="caption"><span class="caption-text">Beta diversity calculates how similar two total ecosystems are. Source: Kate M. Socratic.org.</span></p>
+</div>
 <p><a class="reference external" href="https://forum.qiime2.org/t/alpha-and-beta-diversity-explanations-and-commands/2282">There are many metrics (ways to measure) Alpha and Beta Diversity</a></p>
 <p><strong>Both Alpha and Beta Diversity can take into account the microbial phylogeny with certain metrics</strong></p>
 <p>Metrics are assigned with the <em>-p-metric</em> argument:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Alpha Diversity - Non-Phylogenetic Observed OTUs</span>
 qiime diversity alpha <span class="se">\</span>
-  --i-table table.qza <span class="se">\</span>
+  --i-table <span class="s2">&quot;</span><span class="nv">$table</span><span class="s2">&quot;</span> <span class="se">\</span>
   --p-metric observed_otus <span class="se">\</span>
-  --o-alpha-diversity observed_otus_vector.qza
+  --o-alpha-diversity american_gut/2_2_observed_otus_vector.qza
 
 <span class="c1"># Alpha Diversity - Non-Phylogenetic Observed OTUs</span>
 qiime diversity alpha-phylogenetic <span class="se">\</span>
-  --i-table table.qza <span class="se">\</span>
-  --i-phylogeny rooted-tree.qza <span class="se">\</span>
+  --i-table <span class="s2">&quot;</span><span class="nv">$table</span><span class="s2">&quot;</span> <span class="se">\</span>
+  --i-phylogeny <span class="s2">&quot;</span><span class="nv">$tre</span><span class="s2">&quot;</span> <span class="se">\</span>
   --p-metric faith_pd <span class="se">\</span>
-  --o-alpha-diversity faith_pd_vector.qza
+  --o-alpha-diversity american_gut/2_2_faith_pd_vector.qza
 
 <span class="c1"># Beta Diversity - Non-Phylogenetic Bray-Curtis</span>
 qiime diversity beta <span class="se">\</span>
-  --i-table table.qza <span class="se">\</span>
+  --i-table <span class="s2">&quot;</span><span class="nv">$table</span><span class="s2">&quot;</span> <span class="se">\</span>
   --p-metric braycurtis <span class="se">\</span>
-  --o-distance-matrix unweighted_unifrac_distance_matrix.qza
+  --o-distance-matrix american_gut/2_2_unweighted_unifrac_distance_matrix.qza
 
 <span class="c1"># Beta Diversity - Phylogenetic Unweighted UNIFRAC</span>
 qiime diversity beta-phylogenetic <span class="se">\</span>
-   --i-table table.qza <span class="se">\</span>
-   --i-phylogeny rooted-tree.qza <span class="se">\</span>
+   --i-table <span class="s2">&quot;</span><span class="nv">$table</span><span class="s2">&quot;</span><span class="se">\</span>
+   --i-phylogeny <span class="s2">&quot;</span><span class="nv">$tre</span><span class="s2">&quot;</span> <span class="se">\</span>
    --p-metric unweighted_unifrac <span class="se">\</span>
-   --o-distance-matrix unweighted_unifrac_distance_matrix.qza
+   --o-distance-matrix american_gut/2_2_unweighted_unifrac_distance_matrix.qza
 </pre></div>
 </div>
 <dl class="docutils">
@@ -482,23 +644,23 @@ qiime diversity beta-phylogenetic <span class="se">\</span>
 <dt>Calculates Alpha and Beta Diversity</dt>
 <dd><ul class="first last">
 <li><dl class="first docutils">
-<dt>Alpha Metrics:</dt>
+<dt><strong>Alpha Metrics</strong>:</dt>
 <dd><ul class="first last">
-<li>Faith’s PD: Phylogenetic diversity</li>
-<li>Observed OTUs: Richness of community</li>
-<li>Shannon: Balances richness and evenness</li>
-<li>Pielou’s Evenness: Evenness of community</li>
+<li><strong>Faith’s PD</strong>: Phylogenetic diversity</li>
+<li><strong>Observed OTUs</strong>: Richness of community</li>
+<li><strong>Shannon</strong>: Balances richness and evenness</li>
+<li><strong>Pielou’s Evenness</strong>: Evenness of community</li>
 </ul>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt>Beta Diversity</dt>
+<dt><strong>Beta Diversity</strong></dt>
 <dd><ul class="first last">
-<li>Unweighted Unifrac: Presence / absence phylogenetic distance between samples</li>
-<li>Weighted Unifrac: Abundance weighted phylogenetic distance between samples</li>
-<li>Jaccard: Presence / absence distance between samples</li>
-<li>Bray Curtis: Abundance weighted distance between samples</li>
+<li><strong>Unweighted Unifrac</strong>: Presence / absence phylogenetic distance between samples</li>
+<li><strong>Weighted Unifrac</strong>: Abundance weighted phylogenetic distance between samples</li>
+<li><strong>Jaccard</strong>: Presence / absence distance between samples</li>
+<li><strong>Bray Curtis</strong>: Abundance weighted distance between samples</li>
 </ul>
 </dd>
 </dl>
@@ -566,57 +728,120 @@ sklearn.metrics.pairwise_distances)
 </dl>
 </dd>
 </dl>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">###############################################################################</span>
-<span class="c1">##### SETUP DIVERSITY ANALYSES #####</span>
-<span class="c1"># !!! SET RAREFACTION DEPTH BASED ON SAMPLE COUNTS !!! #</span>
-qiime tools view 1_10_deblur_table.qzv
-<span class="nv">rarefaction_depth</span><span class="o">==</span><span class="m">4000</span>
-<span class="c1">### SET PATH TO MAPPING FILE ###</span>
-<span class="c1"># map_path=map.txt</span>
-
-<span class="c1">### RUN DIVERSITY ANALYSES ###</span>
-<span class="nv">diversity_folder</span><span class="o">=</span>1_16_core_metrics_phylogenetic
-qiime diversity core-metrics-phylogenetic <span class="se">\</span>
-  --i-phylogeny 1_15_deblur_tree.qza <span class="se">\</span>
-  --i-table 1_7_deblur_table.qza <span class="se">\</span>
-  --p-sampling-depth <span class="nv">$rarefaction_depth</span> <span class="se">\</span>
-  --m-metadata-file <span class="s2">&quot;</span><span class="nv">$map_path</span><span class="s2">&quot;</span> <span class="se">\</span>
-  --output-dir <span class="s2">&quot;</span><span class="nv">$diversity_folder</span><span class="s2">&quot;</span>
-
-<span class="c1">### VIEW PCoA PLOTS ###</span>
-qiime tools view 1_16_core_metrics_phylogenetic/bray_curtis_emperor.qzv
-qiime tools view 1_16_core_metrics_phylogenetic/jaccard_emperor.qzv
-qiime tools view 1_16_core_metrics_phylogenetic/unweighted_unifrac_emperor.qzv
-qiime tools view 1_16_core_metrics_phylogenetic/weighted_unifrac_emperor.qzv
-
-<span class="c1">##### ALPHA DIVERSITY ANALYSES #####</span>
-<span class="k">for</span> alpha_metric in faith_pd shannon observed_otus evenness
-<span class="k">do</span>
-    <span class="nb">echo</span> <span class="s2">&quot;</span><span class="nv">$diversity_folder</span><span class="s2">&quot;</span>/<span class="s2">&quot;</span><span class="nv">$alpha_metric</span><span class="s2">&quot;</span>_vector.qza
-
-    <span class="c1">### ALPHA ASSOCIATION CATEGORICAL MAPPING ###</span>
-    qiime diversity alpha-group-significance <span class="se">\</span>
-      --i-alpha-diversity <span class="s2">&quot;</span><span class="nv">$divers</span><span class="s2">\ity_folder&quot;</span>/<span class="s2">&quot;</span><span class="nv">$alpha_metric</span><span class="s2">&quot;</span>_vector.qza <span class="se">\</span>
-      --m-metadata-file <span class="s2">&quot;</span><span class="nv">$map_path</span><span class="s2">&quot;</span> <span class="se">\</span>
-      --o-visualization 1_17_<span class="s2">&quot;</span><span class="nv">$alpha_metric</span><span class="s2">&quot;</span>_group_significance.qzv
-
-    <span class="c1">### ALPHA ASSOCIATION CONTINUOUS MAPPING ###</span>
-
-<span class="k">done</span>
-
-qiime diversity filter-distance-matrix <span class="se">\</span>
-  --i-distance-matrix distance-matrix.qza <span class="se">\</span>
-  --m-metadata-file samples-to-keep.tsv <span class="se">\</span>
-  --o-filtered-distance-matrix identifier-filtered-distance-matrix.qza
-
-<span class="c1">### VIEW RESULTS ###</span>
-<span class="c1"># CATEGORICAL #</span>
-qiime tools view 1_17_shannon_group_significance.qzv
-qiime tools view 1_17_observed_otus_group_significance.qzv
-qiime tools view 1_17_evenness_group_significance.qzv
-qiime tools view 1_17_faith_pd_group_significance.qzv
+<p><strong>Let’s get it running, then I can explain it…</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>qiime diversity core-metrics-phylogenetic <span class="se">\</span>
+   --i-phylogeny <span class="s2">&quot;</span><span class="nv">$tre</span><span class="s2">&quot;</span> <span class="se">\</span>
+   --i-table <span class="s2">&quot;</span><span class="nv">$table</span><span class="s2">&quot;</span> <span class="se">\</span>
+   --p-sampling-depth <span class="m">50000</span> <span class="se">\</span>
+   --m-metadata-file <span class="s2">&quot;</span><span class="nv">$map</span><span class="s2">&quot;</span> <span class="se">\</span>
+   --output-dir american_gut/2_3_diversity_core_phylogenetic
 </pre></div>
 </div>
+<dl class="docutils">
+<dt><strong>Note the –p-sampling-depth Option:</strong></dt>
+<dd><ul class="first last simple">
+<li>This is the depth we will rarefy for each sample</li>
+<li>Since we know each sample has 50,000 counts we will use that</li>
+<li>Essentially we are just randomly picking 50,000 counts from each sample</li>
+<li>While effect size matters, rarefy depth doesn’t hugely affect ability to detect a signal</li>
+<li>More samples is stronger than deeper rarefy depth! Don’t throw away info</li>
+</ul>
+</dd>
+</dl>
+<div class="figure" id="id10">
+<a class="reference internal image-reference" href="../_images/rare_1000_10.png"><img alt="rare_1000_10" src="../_images/rare_1000_10.png" style="width: 898.8px; height: 402.0px;" /></a>
+<p class="caption"><span class="caption-text">The left figure is rarefied to 1,500 seqs/sample, the right is rarefied to 10 seqs/samples. Source: Kuczynski, J. Genome Biology. 2010</span></p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># List files in diversity results</span>
+ls -lsh american_gut/2_3_diversity_core_phylogenetic/
+</pre></div>
+</div>
+<p>What do you notice about the types of files that were made?</p>
+<dl class="docutils">
+<dt>If for some reason you don’t have a phylogeny, there is a non-phylogenetic wrapper method</dt>
+<dd><ul class="first last simple">
+<li>One could also aruge about the degree to which functional similarity parallels genetic similarity of the 16S rRNA gene</li>
+</ul>
+</dd>
+<dt><strong>Let’s look at the alpha diversity</strong></dt>
+<dd><ul class="first last simple">
+<li>Here I get a bit more fancy, wrapping each of the metrics in a for loop</li>
+<li>Don’t have to write the ‘qiime diversity alpha-group-significance…’ command four times</li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a shortcut to our diversity output folder</span>
+<span class="nv">diversity_folder</span><span class="o">=</span>american_gut/2_3_diversity_core_phylogenetic/
+
+<span class="c1">##### ALPHA DIVERSITY ANALYSES #####</span>
+<span class="c1"># for each alpha diversity metric...</span>
+<span class="k">for</span> alpha_metric in faith_pd shannon observed_otus evenness
+<span class="k">do</span>
+   <span class="c1"># print the diversity vector name</span>
+   <span class="nb">echo</span> <span class="s2">&quot;</span><span class="nv">$diversity_folder</span><span class="s2">&quot;&quot;</span><span class="nv">$alpha_metric</span><span class="s2">&quot;</span>_vector.qza
+
+   <span class="c1">### ALPHA ASSOCIATION CATEGORICAL MAPPING ###</span>
+   qiime diversity alpha-group-significance <span class="se">\</span>
+      --i-alpha-diversity <span class="s2">&quot;</span><span class="nv">$diversity_folder</span><span class="s2">&quot;&quot;</span><span class="nv">$alpha_metric</span><span class="s2">&quot;</span>_vector.qza <span class="se">\</span>
+      --m-metadata-file <span class="s2">&quot;</span><span class="nv">$map</span><span class="s2">&quot;</span> <span class="se">\</span>
+      --o-visualization american_gut/2_4_<span class="s2">&quot;</span><span class="nv">$alpha_metric</span><span class="s2">&quot;</span>_group_significance.qzv
+
+<span class="c1"># Close the for loop</span>
+<span class="k">done</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>Using a for loop and shortcut to the diversity folder are really nice because</dt>
+<dd><ul class="first last simple">
+<li>We could easily add or remove alpha metrics</li>
+<li>We could apply this to a different diversity folder by changing one line</li>
+<li><strong>Think about making you code flexible when building pipelines!!!</strong></li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Variable you can change to easily see other metrics</span>
+<span class="nv">alpha_metric</span><span class="o">=</span>shannon
+
+<span class="c1"># View Alpha diversity results</span>
+qiime tools view american_gut/2_4_<span class="s2">&quot;</span><span class="nv">$alpha_metric</span><span class="s2">&quot;</span>_group_significance.qzv
+</pre></div>
+</div>
+<dl class="docutils">
+<dt><strong>Take note of the statistics included</strong></dt>
+<dd><ul class="first last simple">
+<li>Which groups have</li>
+<li>Keep in mind corrections for multiple variables</li>
+</ul>
+</dd>
+</dl>
+<div class="figure" id="id11">
+<a class="reference internal image-reference" href="../_images/kw_test.png"><img alt="kw_test" src="../_images/kw_test.png" style="width: 792.0px; height: 300.3px;" /></a>
+<p class="caption"><span class="caption-text">Kruskal Wallis is non-parametric because it uses the rank order and not the actual values. Source: spss-tutorials.com</span></p>
+</div>
+<dl class="docutils">
+<dt><strong>Let’s look at the beta diversity</strong></dt>
+<dd><ul class="first last simple">
+<li>Here is another useful trick for running different metrics, commenting them out</li>
+<li>Note that if two are left active the beta_metric will be set to the last call</li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Variable you can comment on / off to easily see other metrics, only use one at a time</span>
+<span class="nv">beta_metric</span><span class="o">=</span>weighted_unifrac
+<span class="c1">#beta_metric=unweighted_unifrac</span>
+<span class="nv">beta_metric</span><span class="o">=</span>bray_curtis
+<span class="c1">#beta_metric=jaccard</span>
+
+
+<span class="c1"># View Alpha diversity results</span>
+qiime tools view <span class="s2">&quot;</span><span class="nv">$diversity_folder</span><span class="s2">&quot;&quot;</span><span class="nv">$beta_metric</span><span class="s2">&quot;</span>_emperor.qzv
+</pre></div>
+</div>
+<div class="figure" id="id12">
+<a class="reference internal image-reference" href="../_images/pcoa.png"><img alt="pcoa" src="../_images/pcoa.png" style="width: 699.9px; height: 386.1px;" /></a>
+<p class="caption"><span class="caption-text">Principle Coordinates of Analysis (PCoA)</span></p>
+</div>
+<p><strong>We will talk about this in more detail, and specific ways to test hypotheses. Click ‘Next’ down to the right</strong></p>
 </div>
 </div>
 

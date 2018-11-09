@@ -47,21 +47,21 @@ They also looked at the gut microbiome as an ordination...
       - These are somewhat arbitrary and are a result of the variation in the data
          - Specific to the samples and features going into the analysis
          - Tip: Do not compare between ordinations, only within an ordination!
-		 
+         
    
 **Ok... but what is an ordination?**
    - A way of collapsing variation in complex data along vectors
       - Hundreds of samples and thousands of microbes can be drawn into two dimensions
-	  
+      
    - Each dimension captures a percentage of the total variation in the data
       - 50% of variance like above means there is a lot of difference being captured
-	  - In noisy data (Human Microbiome Project) 5-20% is a lot of variation to be captured by one dimension
-	  
+      - In noisy data (Human Microbiome Project) 5-20% is a lot of variation to be captured by one dimension
+      
    - A really useful approach to quickly see patterns in data, however...
       - Treat these as qualitative exploratory analyses, and not quantitative of effect size
       - Information is lost when data is collapsed from N to two dimensions
-	  - Underlying math can be biased depending on data distributions
-	     - Don't give quantitative stock to things like centroid distance
+      - Underlying math can be biased depending on data distributions
+         - Don't give quantitative stock to things like centroid distance
 
 **Here is my favorite example using human genetic data:**
 
@@ -85,19 +85,168 @@ They also looked at the gut microbiome as an ordination...
    Ordination with horseshoe effect. Source: https://phylonetworks.blogspot.com/2012/12/distortions-and-artifacts-in-pca.html
 
 
-         
-
-Diversity Analysis
+Diversity Analysis in More Detail
 -----------------------------------------------
+
+**Before we assessed alpha diversity between categorical groups**
+   - What if your variable of interest is continuous?
+
+.. code-block:: bash
+
+   # for each alpha diversity metric...
+   for alpha_metric in faith_pd shannon observed_otus evenness
+   do
+      
+      # Calculate alpha diversity correlation
+      qiime diversity alpha-correlation \
+         --i-alpha-diversity "$diversity_folder""$alpha_metric"_vector.qza \
+         --m-metadata-file "$map" \
+         --o-visualization american_gut/2_5_alpha_correlation_"$alpha_metric".qzv
+   
+   #Remember to close the for loop
+   done
+
+**And then we can view the results...**
+
+.. code-block:: bash
+   
+   alpha_metric=shannon
+   #alpha_metric=faith_pd
+   #alpha_metric=observed_otus
+   #alpha_metric=evenness
+   
+   qiime tools view american_gut/2_5_alpha_correlation_"$alpha_metric".qzv
+
+**Uses non-parametric Spearman correlation, which works off ranks like Kruskal Wallis**
+   - Microbiome data is not normal, predictable, and thus will cause problems with many statistical tests
+   - QIIME2 uses the proper tests to account for this
+   - If you are trying to implement your own test make sure you know that limitations and caveats
+
+
+**Let's look at beta diversity across groups**
+   - There are lots of options: qiime diversity beta-group-significance --help
+   - Permanova & Anosim tests
+      - Permanova - mathematically more like a regression
+      - Anosim - more like an anova
+      - If your variable is categorical I'd do both
+       
+.. code-block:: bash
+   
+   # Calculate correlation of variable with beta diversity
+   qiime diversity beta-group-significance \
+      --i-distance-matrix "$diversity_folder"bray_curtis_distance_matrix.qza \
+      --m-metadata-file "$map" \
+      --m-metadata-column bmi_cat \
+      --p-pairwise \
+      --o-visualization american_gut/2_6_beta_significance_bmi_cat_bray_curtis.qzv
+   
+   # View results
+   qiime tools view american_gut/2_6_beta_significance_bmi_cat_bray_curtis.qzv
+
+**How would you change this function to be more adaptable in a pipeline?**
+   - Multiple metadata columns
+   - Multiple beta diversity metrics
 
 Community and Taxonomic Differential Abundance Analysis
 ------------------------------------------------------------------
 
-Specific Hypotheses and Covariates
+**What if we are interested in features or taxa that are shifting in abundance?**
+
+
+First let's examine abundances across samples with a heatmap
+   - But Feature numbers like 48437593 are not very informative
+   - Let's collapse our table by bacterial taxonomy first
+
+.. code-block:: bash
+   
+   # Collapse at taxonomic level
+   qiime taxa collapse \
+      --i-table "$table" \
+      --i-taxonomy "$tax" \
+      --p-level 5 \
+      --o-collapsed-table american_gut/2_7_taxonomy_collapsed_l5.qza
+   
+   # Make a heatmap
+   qiime feature-table heatmap \
+      --i-table american_gut/2_7_taxonomy_collapsed_l5.qza \
+      --o-visualization american_gut/2_8_taxonomy_l5_heatmap.qzv
+   
+   # View the heatmap
+   qiime tools view american_gut/2_8_taxonomy_l5_heatmap.qzv
+
+**Always remember to check the docs**
+   - qiime feature-table heatmap --help
+   - Options to normalize or not (default = True)
+   - Options for the metric to calculate sample distance (default = Euclidian = bad)
+   - Options for the method to use when clustering (default = average)
+   - *I wouldn't use the default metric and clustering method*
+
+.. figure:: ../images/heatmap.png
+   :scale: 90 %
+   :alt: heatmap 
+   
+   Heatmap at the family level.
+
+**Finally let's statistically assess which of these are varying across groups**
+
+.. code-block:: bash
+   
+   qiime composition add-pseudocount \
+      --i-table american_gut/2_7_taxonomy_collapsed_l5.qza \
+      --o-composition-table american_gut/2_7_taxonomy_collapsed_l5_composition.qza
+   
+   qiime composition ancom \
+      --i-table american_gut/2_7_taxonomy_collapsed_l5_composition.qza \
+      --m-metadata-file "$map" \
+      --m-metadata-column age_cat \
+      --o-visualization american_gut/2_9_ancom_l5_age_cat.qzv
+
+   qiime tools view american_gut/2_9_ancom_l5_age_cat.qzv
+
+**Oh No! Nothing significantly varies.** 
+   - Feel free to try other variables
+   - Ancom is very conservative
+   - Keep in mind this may happen to you!
+     
+.. figure:: ../images/ancom.png
+   :scale: 90 %
+   :alt: ancom 
+   
+   Ancom results, with x-axis summarizing difference between species, and y summarizing the test statistic. Source: https://forum.qiime2.org/t/how-to-interpret-ancom-results/1958
+
+Note that the source links to a few great explanations of ANCOM:
+   - https://forum.qiime2.org/t/how-to-interpret-ancom-results/1958
+   - https://forum.qiime2.org/t/specify-w-cutoff-for-anacom/1844/10?u=mortonjt
+   - Remember to use the literature and understand what you are testing!
+
+
+Random Forest
 ------------------------------------------------------------------
 
-Random Forest and Modeling
-------------------------------------------------------------------
+.. figure:: ../images/calssifier.png
+   :scale: 50 %
+   :alt: calssifier 
+   
+   Supervised learning classifiers perform series of steps to predict metadata groups from microbiome profiles. Source: https://docs.qiime2.org/2018.8/tutorials/sample-classifier/
 
-Advanced Analyses
-------------------------------------------------------------------
+.. code-block:: bash
+
+   qiime sample-classifier classify-samples \
+      --i-table "$table" \
+      --m-metadata-file "$map" \
+      --m-metadata-column bmi_cat \
+      --p-optimize-feature-selection \
+      --p-parameter-tuning \
+      --p-estimator RandomForestClassifier \
+      --p-n-estimators 20 \
+      --output-dir american_gut/3_0_random_forest_bmi_cat
+      
+   qiime tools view american_gut/3_0_random_forest_bmi_cat/visualization.qzv
+   
+**Note the caveats, and that you should do a lot more background before throwing advanced statistics around!**
+   - QIIME2 is great for simple straight forward analyses, but to go deeper you need to do the legwork
+   - Don't get caught presenting results you cannot explain thoroughly!
+   
+**There are so many other options for analyses, investigate but always use caution**
+   - The microbiome field as we know it is ~10 years old
+   - Wild-west of statistics and assumptions, best practices are only starting to be enforced

@@ -127,14 +127,8 @@
 <li><dl class="first docutils">
 <dt>Each dimension captures a percentage of the total variation in the data</dt>
 <dd><ul class="first last">
-<li><dl class="first docutils">
-<dt>50% of variance like above means there is a lot of difference being captured</dt>
-<dd><ul class="first last">
+<li>50% of variance like above means there is a lot of difference being captured</li>
 <li>In noisy data (Human Microbiome Project) 5-20% is a lot of variation to be captured by one dimension</li>
-</ul>
-</dd>
-</dl>
-</li>
 </ul>
 </dd>
 </dl>
@@ -143,17 +137,11 @@
 <dt>A really useful approach to quickly see patterns in data, however…</dt>
 <dd><ul class="first last">
 <li>Treat these as qualitative exploratory analyses, and not quantitative of effect size</li>
-<li><dl class="first docutils">
-<dt>Information is lost when data is collapsed from N to two dimensions</dt>
-<dd><ul class="first last">
+<li>Information is lost when data is collapsed from N to two dimensions</li>
 <li><dl class="first docutils">
 <dt>Underlying math can be biased depending on data distributions</dt>
 <dd><ul class="first last">
 <li>Don’t give quantitative stock to things like centroid distance</li>
-</ul>
-</dd>
-</dl>
-</li>
 </ul>
 </dd>
 </dl>
@@ -191,20 +179,195 @@
 <p class="caption"><span class="caption-text">Ordination with horseshoe effect. Source: <a class="reference external" href="https://phylonetworks.blogspot.com/2012/12/distortions-and-artifacts-in-pca.html">https://phylonetworks.blogspot.com/2012/12/distortions-and-artifacts-in-pca.html</a></span></p>
 </div>
 </div>
-<div class="section" id="diversity-analysis">
-<h2>Diversity Analysis<a class="headerlink" href="#diversity-analysis" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="diversity-analysis-in-more-detail">
+<h2>Diversity Analysis in More Detail<a class="headerlink" href="#diversity-analysis-in-more-detail" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt><strong>Before we assessed alpha diversity between categorical groups</strong></dt>
+<dd><ul class="first last simple">
+<li>What if your variable of interest is continuous?</li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># for each alpha diversity metric...</span>
+<span class="k">for</span> alpha_metric in faith_pd shannon observed_otus evenness
+<span class="k">do</span>
+
+   <span class="c1"># Calculate alpha diversity correlation</span>
+   qiime diversity alpha-correlation <span class="se">\</span>
+      --i-alpha-diversity <span class="s2">&quot;</span><span class="nv">$diversity_folder</span><span class="s2">&quot;&quot;</span><span class="nv">$alpha_metric</span><span class="s2">&quot;</span>_vector.qza <span class="se">\</span>
+      --m-metadata-file <span class="s2">&quot;</span><span class="nv">$map</span><span class="s2">&quot;</span> <span class="se">\</span>
+      --o-visualization american_gut/2_5_alpha_correlation_<span class="s2">&quot;</span><span class="nv">$alpha_metric</span><span class="s2">&quot;</span>.qzv
+
+<span class="c1">#Remember to close the for loop</span>
+<span class="k">done</span>
+</pre></div>
+</div>
+<p><strong>And then we can view the results…</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">alpha_metric</span><span class="o">=</span>shannon
+<span class="c1">#alpha_metric=faith_pd</span>
+<span class="c1">#alpha_metric=observed_otus</span>
+<span class="c1">#alpha_metric=evenness</span>
+
+qiime tools view american_gut/2_5_alpha_correlation_<span class="s2">&quot;</span><span class="nv">$alpha_metric</span><span class="s2">&quot;</span>.qzv
+</pre></div>
+</div>
+<dl class="docutils">
+<dt><strong>Uses non-parametric Spearman correlation, which works off ranks like Kruskal Wallis</strong></dt>
+<dd><ul class="first last simple">
+<li>Microbiome data is not normal, predictable, and thus will cause problems with many statistical tests</li>
+<li>QIIME2 uses the proper tests to account for this</li>
+<li>If you are trying to implement your own test make sure you know that limitations and caveats</li>
+</ul>
+</dd>
+<dt><strong>Let’s look at beta diversity across groups</strong></dt>
+<dd><ul class="first last simple">
+<li>There are lots of options: qiime diversity beta-group-significance –help</li>
+<li><dl class="first docutils">
+<dt>Permanova &amp; Anosim tests</dt>
+<dd><ul class="first last">
+<li>Permanova - mathematically more like a regression</li>
+<li>Anosim - more like an anova</li>
+<li>If your variable is categorical I’d do both</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calculate correlation of variable with beta diversity</span>
+qiime diversity beta-group-significance <span class="se">\</span>
+   --i-distance-matrix <span class="s2">&quot;</span><span class="nv">$diversity_folder</span><span class="s2">&quot;</span>bray_curtis_distance_matrix.qza <span class="se">\</span>
+   --m-metadata-file <span class="s2">&quot;</span><span class="nv">$map</span><span class="s2">&quot;</span> <span class="se">\</span>
+   --m-metadata-column bmi_cat <span class="se">\</span>
+   --p-pairwise <span class="se">\</span>
+   --o-visualization american_gut/2_6_beta_significance_bmi_cat_bray_curtis.qzv
+
+<span class="c1"># View results</span>
+qiime tools view american_gut/2_6_beta_significance_bmi_cat_bray_curtis.qzv
+</pre></div>
+</div>
+<dl class="docutils">
+<dt><strong>How would you change this function to be more adaptable in a pipeline?</strong></dt>
+<dd><ul class="first last simple">
+<li>Multiple metadata columns</li>
+<li>Multiple beta diversity metrics</li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="community-and-taxonomic-differential-abundance-analysis">
 <h2>Community and Taxonomic Differential Abundance Analysis<a class="headerlink" href="#community-and-taxonomic-differential-abundance-analysis" title="Permalink to this headline">¶</a></h2>
+<p><strong>What if we are interested in features or taxa that are shifting in abundance?</strong></p>
+<dl class="docutils">
+<dt>First let’s examine abundances across samples with a heatmap</dt>
+<dd><ul class="first last simple">
+<li>But Feature numbers like 48437593 are not very informative</li>
+<li>Let’s collapse our table by bacterial taxonomy first</li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Collapse at taxonomic level</span>
+qiime taxa collapse <span class="se">\</span>
+   --i-table <span class="s2">&quot;</span><span class="nv">$table</span><span class="s2">&quot;</span> <span class="se">\</span>
+   --i-taxonomy <span class="s2">&quot;</span><span class="nv">$tax</span><span class="s2">&quot;</span> <span class="se">\</span>
+   --p-level <span class="m">5</span> <span class="se">\</span>
+   --o-collapsed-table american_gut/2_7_taxonomy_collapsed_l5.qza
+
+<span class="c1"># Make a heatmap</span>
+qiime feature-table heatmap <span class="se">\</span>
+   --i-table american_gut/2_7_taxonomy_collapsed_l5.qza <span class="se">\</span>
+   --o-visualization american_gut/2_8_taxonomy_l5_heatmap.qzv
+
+<span class="c1"># View the heatmap</span>
+qiime tools view american_gut/2_8_taxonomy_l5_heatmap.qzv
+</pre></div>
 </div>
-<div class="section" id="specific-hypotheses-and-covariates">
-<h2>Specific Hypotheses and Covariates<a class="headerlink" href="#specific-hypotheses-and-covariates" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt><strong>Always remember to check the docs</strong></dt>
+<dd><ul class="first last simple">
+<li>qiime feature-table heatmap –help</li>
+<li>Options to normalize or not (default = True)</li>
+<li>Options for the metric to calculate sample distance (default = Euclidian = bad)</li>
+<li>Options for the method to use when clustering (default = average)</li>
+<li><em>I wouldn’t use the default metric and clustering method</em></li>
+</ul>
+</dd>
+</dl>
+<div class="figure" id="id5">
+<a class="reference internal image-reference" href="../_images/heatmap.png"><img alt="heatmap" src="../_images/heatmap.png" style="width: 1066.5px; height: 1213.2px;" /></a>
+<p class="caption"><span class="caption-text">Heatmap at the family level.</span></p>
 </div>
-<div class="section" id="random-forest-and-modeling">
-<h2>Random Forest and Modeling<a class="headerlink" href="#random-forest-and-modeling" title="Permalink to this headline">¶</a></h2>
+<p><strong>Finally let’s statistically assess which of these are varying across groups</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>qiime composition add-pseudocount <span class="se">\</span>
+   --i-table american_gut/2_7_taxonomy_collapsed_l5.qza <span class="se">\</span>
+   --o-composition-table american_gut/2_7_taxonomy_collapsed_l5_composition.qza
+
+qiime composition ancom <span class="se">\</span>
+   --i-table american_gut/2_7_taxonomy_collapsed_l5_composition.qza <span class="se">\</span>
+   --m-metadata-file <span class="s2">&quot;</span><span class="nv">$map</span><span class="s2">&quot;</span> <span class="se">\</span>
+   --m-metadata-column age_cat <span class="se">\</span>
+   --o-visualization american_gut/2_9_ancom_l5_age_cat.qzv
+
+qiime tools view american_gut/2_9_ancom_l5_age_cat.qzv
+</pre></div>
 </div>
-<div class="section" id="advanced-analyses">
-<h2>Advanced Analyses<a class="headerlink" href="#advanced-analyses" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt><strong>Oh No! Nothing significantly varies.</strong></dt>
+<dd><ul class="first last simple">
+<li>Feel free to try other variables</li>
+<li>Ancom is very conservative</li>
+<li>Keep in mind this may happen to you!</li>
+</ul>
+</dd>
+</dl>
+<div class="figure" id="id6">
+<a class="reference internal image-reference" href="../_images/ancom.png"><img alt="ancom" src="../_images/ancom.png" style="width: 551.7px; height: 450.0px;" /></a>
+<p class="caption"><span class="caption-text">Ancom results, with x-axis summarizing difference between species, and y summarizing the test statistic. Source: <a class="reference external" href="https://forum.qiime2.org/t/how-to-interpret-ancom-results/1958">https://forum.qiime2.org/t/how-to-interpret-ancom-results/1958</a></span></p>
+</div>
+<dl class="docutils">
+<dt>Note that the source links to a few great explanations of ANCOM:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference external" href="https://forum.qiime2.org/t/how-to-interpret-ancom-results/1958">https://forum.qiime2.org/t/how-to-interpret-ancom-results/1958</a></li>
+<li><a class="reference external" href="https://forum.qiime2.org/t/specify-w-cutoff-for-anacom/1844/10?u=mortonjt">https://forum.qiime2.org/t/specify-w-cutoff-for-anacom/1844/10?u=mortonjt</a></li>
+<li>Remember to use the literature and understand what you are testing!</li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="random-forest">
+<h2>Random Forest<a class="headerlink" href="#random-forest" title="Permalink to this headline">¶</a></h2>
+<div class="figure" id="id7">
+<a class="reference internal image-reference" href="../_images/calssifier.png"><img alt="calssifier" src="../_images/calssifier.png" style="width: 2000.0px; height: 940.0px;" /></a>
+<p class="caption"><span class="caption-text">Supervised learning classifiers perform series of steps to predict metadata groups from microbiome profiles. Source: <a class="reference external" href="https://docs.qiime2.org/2018.8/tutorials/sample-classifier/">https://docs.qiime2.org/2018.8/tutorials/sample-classifier/</a></span></p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>qiime sample-classifier classify-samples <span class="se">\</span>
+   --i-table <span class="s2">&quot;</span><span class="nv">$table</span><span class="s2">&quot;</span> <span class="se">\</span>
+   --m-metadata-file <span class="s2">&quot;</span><span class="nv">$map</span><span class="s2">&quot;</span> <span class="se">\</span>
+   --m-metadata-column bmi_cat <span class="se">\</span>
+   --p-optimize-feature-selection <span class="se">\</span>
+   --p-parameter-tuning <span class="se">\</span>
+   --p-estimator RandomForestClassifier <span class="se">\</span>
+   --p-n-estimators <span class="m">20</span> <span class="se">\</span>
+   --output-dir american_gut/3_0_random_forest_bmi_cat
+
+qiime tools view american_gut/3_0_random_forest_bmi_cat/visualization.qzv
+</pre></div>
+</div>
+<dl class="docutils">
+<dt><strong>Note the caveats, and that you should do a lot more background before throwing advanced statistics around!</strong></dt>
+<dd><ul class="first last simple">
+<li>QIIME2 is great for simple straight forward analyses, but to go deeper you need to do the legwork</li>
+<li>Don’t get caught presenting results you cannot explain thoroughly!</li>
+</ul>
+</dd>
+<dt><strong>There are so many other options for analyses, investigate but always use caution</strong></dt>
+<dd><ul class="first last simple">
+<li>The microbiome field as we know it is ~10 years old</li>
+<li>Wild-west of statistics and assumptions, best practices are only starting to be enforced</li>
+</ul>
+</dd>
+</dl>
 </div>
 </div>
 
@@ -218,11 +381,9 @@
   <ul>
 <li><a class="reference internal" href="#">Microbiome Analysis and Hypothesis Testing</a><ul>
 <li><a class="reference internal" href="#ordination-and-composition-analysis">Ordination and Composition Analysis</a></li>
-<li><a class="reference internal" href="#diversity-analysis">Diversity Analysis</a></li>
+<li><a class="reference internal" href="#diversity-analysis-in-more-detail">Diversity Analysis in More Detail</a></li>
 <li><a class="reference internal" href="#community-and-taxonomic-differential-abundance-analysis">Community and Taxonomic Differential Abundance Analysis</a></li>
-<li><a class="reference internal" href="#specific-hypotheses-and-covariates">Specific Hypotheses and Covariates</a></li>
-<li><a class="reference internal" href="#random-forest-and-modeling">Random Forest and Modeling</a></li>
-<li><a class="reference internal" href="#advanced-analyses">Advanced Analyses</a></li>
+<li><a class="reference internal" href="#random-forest">Random Forest</a></li>
 </ul>
 </li>
 </ul>

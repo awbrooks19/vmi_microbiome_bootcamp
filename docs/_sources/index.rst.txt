@@ -25,8 +25,7 @@ Welcome to the Second VMI Bootcamp!
 
    - Organized by the `Vanderbilt Microbiome Initiative (VMI) <https://my.vanderbilt.edu/microbiome/>`_ and funded by `Vanderbilt University Trans-Institutional Programs (TIPs) <https://www.vanderbilt.edu/strategicplan/trans-institutional-programs/tipshome.php>`_
    - Founded By - Members of the Dept. Biological Sciences, Peabody college, School of Engineering, and the Medical Center
-   - Research – 120 Vanderbilt scholars committed to fundamental and translational microbiome research
-   - Multidisciplinary Community - Biological Sciences, Biostatistics, Cell and Developmental Biology, Chemistry, Medicine, Epidemiology, PMI, GHN, Vantage
+   - Research – 160 Vanderbilt scholars across 5 schools committed to fundamental and translational microbiome research
    - Education and Training – Campus-wide programs to deploy state-of-the-art tools to propel microbiome research
    - Ongoing Clinical Trial - Multi'omic, dietary intervention, temporal sampling, multi-ethnic
 

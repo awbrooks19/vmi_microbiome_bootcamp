@@ -546,7 +546,7 @@ Taxonomy Assignment
 **We will use the GreenGenes 94% reference database for a minimal example, but I would suggest another database for your actual project**
    - Silva
    - GreenGenes 99%
-   - Another? Others might be better for your goals
+   - `Other options, please learn which is best for your project! <https://docs.qiime2.org/2018.8/data-resources/>`_
 
 **First import the GreenGenes Database*
    - 94% Unique 16S Sequences

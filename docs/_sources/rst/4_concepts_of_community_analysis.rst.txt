@@ -6,7 +6,7 @@ Concepts of Community Analysis
 **Let's switch datasets and look at:** `The American Gut Project (AGP) <http://humanfoodproject.com/americangut/>`_
 
 .. figure:: ../images/agp.jpg
-   :scale: 40 %
+   :scale: 140 %
    :alt: agp 
    
    American Gut Project (AGP) logo. Source: http://humanfoodproject.com/americangut/
@@ -18,9 +18,14 @@ Concepts of Community Analysis
       - This subset of the AGP has 1,375 individuals
       - There are 5,590 features (bacteria) and ~200 metadata measurements
    
-   - You may get processed data already as a table, phylogeny...
+   - You may get processed data from a colaborator / website already as a table, phylogeny...
       - Need to know how to import at any stage of the project
-     
+      - `QIIME2 Importing Tutorial <https://docs.qiime2.org/2018.8/tutorials/importing/>`_
+      - There are far more options than even they show 
+         - Check the docs: qiime tools import --help
+         - There are many types of data: qiime tools import --show-importable-types
+         - For each type there are many subformats: qiime tools import --show-importable-formats
+         
 **Importing the AGP**
    1. Look at the files in the american_gut folder
    2. Import the biom table
@@ -45,6 +50,13 @@ Concepts of Community Analysis
      --output-path american_gut/1_1_tree.qza \
      --type 'Phylogeny[Rooted]'
 
+   # Import the bacterial taxonomy
+   qiime tools import \
+      --input-path american_gut/1_0_tax.tsv \
+      --output-path american_gut/1_1_tax.qza \
+      --type FeatureData[Taxonomy] \
+      --source-format HeaderlessTSVTaxonomyFormat
+
    # Create a visual of the metadata (map.txt)
    qiime metadata tabulate \
      --m-input-file american_gut/1_0_map.txt \
@@ -52,14 +64,35 @@ Concepts of Community Analysis
 
    # Look at metadata available
    qiime tools view american_gut/1_1_metadata.qzv
+   
+   # See the new files we generated
+   ls -lsh american_gut
+
 
 .. figure:: ../images/agp_metadata.png
-   :scale: 60 %
+   :scale: 80 %
    :alt: agp_metadata 
    
-   AGP metadata. 
+   AGP metadata is quite extensive, giving us a lot of options. 
+
+**We should also look at the table to see what we're working with...**
+
+.. code-block:: bash
+
+   # Summarize the table
+   qiime feature-table summarize \
+      --i-table american_gut/1_1_biom.qza \
+      --o-visualization american_gut/1_1_biom_sumamry.qzv
+
+   # View the table summary
+   qiime tools view american_gut/1_1_biom_sumamry.qzv
 
 
+.. figure:: ../images/agp_table_raw.png
+   :scale: 40 %
+   :alt: agp_table_raw 
+   
+   Over 29 million sequences passed QC and were assigned to samples. 
 
 
 Quality Control
@@ -74,6 +107,8 @@ Quality Control
    - Removing specific samples by the unqiue id
 
 **Options for specifically filtering features:**
+   - Lots of options: qiime feature-table filter-features --help
+
 
   --i-table ARTIFACT_PATH   The feature table from which features should
                                   be filtered.  [required]
@@ -115,46 +150,57 @@ Quality Control
 
 
 **Let's remove really rare features, to cut down on sequencing artefacts**
+   - This is filtering by total **abundance**
 
 **Let's also remove features not in at least 20% of samples**
+   - The percentage or proportion of individuals a feature appears in is known as the **ubiquity**
 
 .. code-block:: bash
 
+   # Filter features with less than 50 total counts across all samples
    qiime feature-table filter-features \
       --i-table american_gut/1_1_biom.qza \
       --o-filtered-table american_gut/1_2_biom_min_50.qza \
       --p-min-frequency 50
    
+   # Filter features in less than 20 percent of samples
+   # Note: I know N = 1,375 / 5 = 275
    qiime feature-table filter-features \
       --i-table american_gut/1_2_biom_min_50.qza \
       --o-filtered-table american_gut/1_2_biom_min_50_ubiq_20.qza \
       --p-min-samples 275  
    
+   # Summarize the table 
    qiime feature-table summarize \
       --i-table american_gut/1_2_biom_min_50_ubiq_20.qza \
       --o-visualization american_gut/1_2_biom_summary.qzv
-
+   
+   # View the table summary
    qiime tools view american_gut/1_2_biom_summary.qzv
 
 **Let's see how we did:**
 
-Looks like we cut down our features from 5,590 to 664, not bad...
+
 
 .. figure:: ../images/agp_filtered.png
    :scale: 70 %
-   :alt: agp_filtered 
+   :alt: agp_filtered
+   
+   Looks like we cut down our features from 5,590 to 664, not bad...
 
-A couple features dominate the counts...
 
 .. figure:: ../images/agp_feature_counts.png
    :scale: 80 %
-   :alt: agp_feature_counts 
+   :alt: agp_feature_counts
+   
+   A few features dominate the counts...
 
-Keep in mind that microbiome counts are *not* normally distributed
+**Keep in mind that microbiome counts are not normally distributed**
    - More often follow a Poisson / Negative Binomial distribution
+   - This roughly means there are often many low / rare values and some very high outliers
 
 .. figure:: ../images/poisson.png
-   :scale: 90 %
+   :scale: 150 %
    :alt: poisson
    
    Different Poisson distributions can be modeled, microbiome counts will look like the yellow most often. Source: Wikipedia 
@@ -162,7 +208,7 @@ Keep in mind that microbiome counts are *not* normally distributed
 We also want to remove samples with low counts, and there is a nice tool to choose that cutoff...
 
 .. figure:: ../images/agp_sample_cutoff.png
-   :scale: 90 %
+   :scale: 120 %
    :alt: agp_sample_cutoff 
    
 **Keep in mind you could also:**
@@ -201,6 +247,8 @@ This is nice for our purposes today, but note that some samples still have much 
    - Remove samples and features based on the mock community: qiime quality-control evaluate-composition
    - `More extensive filtering documentation <https://docs.qiime2.org/2018.8/tutorials/filtering/>`_.
 
+**Keep in mind:**
+   - At this point in a real analysis I would back up the filtered files
 
 Community Transformation and Examination
 ----------------------------------------------------------------------------
@@ -231,48 +279,70 @@ Commands:
   -summarize           Summarize table
   -tabulate-seqs       View sequence associated with each feature
 
+**Options include:**
+   - filtering
+   - grouping / collapsing
+   - transforming - rarefy, relative abundance, presence / absence
+   - creating summaries and figures
 
-I'm going to create a shortcut variable for the path to our table, since we will always come back to it
+**I'd suggest creating shortcut variables for the data we imported:**
+   - It's easier than typing the full path everytime, and easier to remember
+   - Their names can be arbitrary, I like to go with something logical though
+   - For best practices they should be called with quotes and a number sign
+      - "$XXXXX"
+      - Without the number sign it will be treated as a word and not a variable holding something else
+      - The quotes are optional today, but in more complex work they will save you a lot of weird errors
+   - If you wanted to analyze different data you only have to switch paths in one place, not in every function call
 
 .. code-block:: bash
-
-   table=american_gut/1_3_biom_samplemin_50k.qza
-
-At this point in a real analysis I would also back up the raw and filtered tables elsewhere
-
-Note how I use the shortcut to our table instead of writing it out...
-
-
-.. code-block:: bash
-
-   qiime feature-table heatmap \
-      --i-table "$table" \
-      --o-visualization american_gut/2_0_table_heatmap.qzv
    
-   qiime tools view american_gut/2_0_table_heatmap.qzv
+   # The Feature table can now be called as: "$table"
+   table=american_gut/1_3_biom_samplemin_50k.qza
+   echo "$table"
+   echo $table
+   echo table
+   
+   # The taxononomy table can now be called as: "$tax"
+   tax=american_gut/1_1_tax.qza
+   echo "$tax"
+   
+   # The phylogeny can now be called as: "$tre"
+   tre=american_gut/1_1_tree.qza
+   echo "$tre"
+   
+   # The metadata can now be called as: "$map"
+   map=american_gut/1_0_map.txt
+   echo "$map"
 
 
 
-
-
-
-
-**How is our community taxonomically distributed?**
-   - Let's examine barplots of the taxonomic distribution for each sample
+**So let's exmaine how our community is taxonomically distributed!**
+   - Barplots of the taxonomic distribution of features for each sample
    - These plots are based on relative abundance within a total sample
    - Do not provide information about absolute microbial load
-
+   - Note below how I use the shortcuts instead of writing out full paths...
+      - It just looks so much cleaner too!
 
 .. code-block:: bash
-
-   ### MAKE TAXONOMY BARPLOT ###
+   
+   # Make and view a taxonomy barplot
    qiime taxa barplot \
       --i-table "$table" \
-      --i-taxonomy american_gut/1_1_biom.qza \
-      --m-metadata-file american_gut/1_0_map.txt \
-      --o-visualization 1_2_taxonomy_barplot.qzv 
+      --i-taxonomy "$tax" \
+      --m-metadata-file "$map" \
+      --o-visualization american_gut/2_0_taxonomy_barplot.qzv 
 
-   qiime tools view 1_18_taxonomy_barplot.qzv
+   qiime tools view american_gut/2_0_taxonomy_barplot.qzv 
+
+.. figure:: ../images/agp_taxa_barplot.png
+   :scale: 70 %
+   :alt: agp_taxa_barplot 
+
+**This is a really useful tool for examining our microbial communities**
+   - Just remember how the relative abundance works...
+      - Everything is relative to everything else!
+      - One abundant microbe *decreasing* makes rarer microbes look *more* abundant
+      - One abundant microbe *increasing* makes rarer microbes look *less* abundant
 
 
 Rarefaction and Normalization
@@ -281,7 +351,7 @@ Rarefaction and Normalization
 **Raw counts are biased:**
    - Samples have different numbers of sequence counts
    - Not indicative of absolute bacterial abundance
-   - Artefact of extraction, library preparation and pooling, and sequencing efficiency
+   - Artifact of extraction, library preparation and pooling, and sequencing efficiency
    
 **Some ways to transform the counts:**
 
@@ -296,14 +366,40 @@ Rarefaction and Normalization
    qiime feature-table relative-frequency \ ...
    
 **Presence / Absence**: value of 1 if taxon is present in sample, 0 otherwise
+
 **Rarefy**: subsample the same number of sequence from each sample
+    
 **Relative Frequency**: propotion of each feature out of the total feature counts for each sample
 
 **There are other normalization methods, often based on RNA sequencing methods.**
    - Generally seem more biased than rarefy / relative abundance
    - Better fit in standard sense, don't seem to adapt well to wide bias across different datasets
+
+.. figure:: ../images/norm_rare_rel.gif
+   :scale: 150 %
+   :alt: norm_rare_rel 
    
-I'd suggest sticking to relative abundance and rarefied communities!
+   Comparison of different methods to control for different sequence counts. Purple and Orange are what we care about! Source: Weiss, S. *et. al.* Microbiome. 2017
+
+
+
+-None	    No correction for unequal library sizes is applied
+
+-Proportion	    Counts in each column are scaled by the column’s sum
+
+-Rarefy      Each column is subsampled to even depth without replacement (hypergeometric model)
+
+-logUQ	    Log upper quartile—Each sample is scaled by the 75th percentile of its count distribution; then, the counts are log transformed
+
+-CSS	   Cumulative sum scaling—This method is similar to logUQ, except that CSS enables a flexible sample distribution-dependent threshold for determining each sample’s quantile divisor. Only the segment of each sample’s count distribution that is relatively invariant across samples is scaled by CSS. This attempts to mitigate the influence of larger count values in the same matrix column
+
+-DESeqVS	  Variance stabilization (VS)—For each column, a scaling factor for each OTU is calculated as that OTU’s value divided by its geometric mean across all samples. All of the reads for each column are then divided by the median of the scaling factors for that column. The median is chosen to prevent OTUs with large count values from having undue influence on the values of other OTUs. Then, using the scaled counts for all the OTUs and assuming a Negative Binomial (NB) distribution, a mean-variance relation is fit. This adjusts the matrix counts using a log-like transformation in the NB generalized linear model (GLM) such that the variance in an OTU’s counts across samples is approximately independent of its mean
+
+-edgeR-TMM	  Trimmed Mean by M-Values (TMM)—The TMM scaling factor is calculated as the weighted mean of log-ratios between each pair of samples, after excluding the highest count OTUs and OTUs with the largest log-fold change. This minimizes the log-fold change between samples for most OTUs. The TMM scaling factors are usually around 1, since TMM normalization, like DESeqVS, assumes that the majority of OTUs are not differentially abundant. The normalization factors for each sample are the product of the TMM scaling factor and the original library size
+
+**Summary: I'd suggest sticking to relative abundance and rarefied communities!**
+   - Remember how many things can bias microbiome data
+   - The Poisson / Negative Binomial fit in more advanced models doesn't seem to adapt well
    
 
 Alpha and Beta Diversity
@@ -313,7 +409,21 @@ Alpha and Beta Diversity
 
 **Alpha Diversity**: Measure of diversity within a sample
 
+.. figure:: ../images/alpha_div_theory.jpg
+   :scale: 80 %
+   :alt: alpha_div_theory 
+   
+   Alpha diversity metrics can look at richness, evenness, or both within a sample. Source: Finotello. Briefings Bioinformatics. 2016.
+   
+
 **Beta Diversity**: Measure of microbiome similarity between a pair of samples 
+
+.. figure:: ../images/beta_div_theory.png
+   :scale: 80 %
+   :alt: beta_div_theory 
+   
+   Beta diversity calculates how similar two total ecosystems are. Source: Kate M. Socratic.org.
+
 
 `There are many metrics (ways to measure) Alpha and Beta Diversity <https://forum.qiime2.org/t/alpha-and-beta-diversity-explanations-and-commands/2282>`_
 
@@ -325,43 +435,43 @@ Metrics are assigned with the *-p-metric* argument:
    
    # Alpha Diversity - Non-Phylogenetic Observed OTUs
    qiime diversity alpha \
-     --i-table table.qza \
+     --i-table "$table" \
      --p-metric observed_otus \
-     --o-alpha-diversity observed_otus_vector.qza
+     --o-alpha-diversity american_gut/2_2_observed_otus_vector.qza
    
    # Alpha Diversity - Non-Phylogenetic Observed OTUs
    qiime diversity alpha-phylogenetic \
-     --i-table table.qza \
-     --i-phylogeny rooted-tree.qza \
+     --i-table "$table" \
+     --i-phylogeny "$tre" \
      --p-metric faith_pd \
-     --o-alpha-diversity faith_pd_vector.qza
+     --o-alpha-diversity american_gut/2_2_faith_pd_vector.qza
    
    # Beta Diversity - Non-Phylogenetic Bray-Curtis
    qiime diversity beta \
-     --i-table table.qza \
+     --i-table "$table" \
      --p-metric braycurtis \
-     --o-distance-matrix unweighted_unifrac_distance_matrix.qza
+     --o-distance-matrix american_gut/2_2_unweighted_unifrac_distance_matrix.qza
    
    # Beta Diversity - Phylogenetic Unweighted UNIFRAC
    qiime diversity beta-phylogenetic \
-      --i-table table.qza \
-      --i-phylogeny rooted-tree.qza \
+      --i-table "$table"\
+      --i-phylogeny "$tre" \
       --p-metric unweighted_unifrac \
-      --o-distance-matrix unweighted_unifrac_distance_matrix.qza
+      --o-distance-matrix american_gut/2_2_unweighted_unifrac_distance_matrix.qza
  
 **QIIME2 has done a good job wrapping diversity computation with my favorite metrics into one easy script:**
    - Rarefies the table to a specified depth (necessary for diversity to be computed accurately)
    - Calculates Alpha and Beta Diversity
-      - Alpha Metrics:
-         - Faith's PD: Phylogenetic diversity
-         - Observed OTUs: Richness of community
-         - Shannon: Balances richness and evenness
-         - Pielou's Evenness: Evenness of community
-      - Beta Diversity
-         - Unweighted Unifrac: Presence / absence phylogenetic distance between samples
-         - Weighted Unifrac: Abundance weighted phylogenetic distance between samples
-         - Jaccard: Presence / absence distance between samples
-         - Bray Curtis: Abundance weighted distance between samples
+      - **Alpha Metrics**:
+         - **Faith's PD**: Phylogenetic diversity
+         - **Observed OTUs**: Richness of community
+         - **Shannon**: Balances richness and evenness
+         - **Pielou's Evenness**: Evenness of community
+      - **Beta Diversity**
+         - **Unweighted Unifrac**: Presence / absence phylogenetic distance between samples
+         - **Weighted Unifrac**: Abundance weighted phylogenetic distance between samples
+         - **Jaccard**: Presence / absence distance between samples
+         - **Bray Curtis**: Abundance weighted distance between samples
    - Can be parallelized across multiple CPUs
    - Generates output visuals
    
@@ -395,59 +505,118 @@ Metrics are assigned with the *-p-metric* argument:
                                    are used. (Description from
                                    sklearn.metrics.pairwise_distances)
                                    [default: 1]
- 
+
+
+**Let's get it running, then I can explain it...**
+
 .. code-block:: bash
 
-
-   ###############################################################################
-   ##### SETUP DIVERSITY ANALYSES #####
-   # !!! SET RAREFACTION DEPTH BASED ON SAMPLE COUNTS !!! #
-   qiime tools view 1_10_deblur_table.qzv
-   rarefaction_depth==4000
-   ### SET PATH TO MAPPING FILE ###
-   # map_path=map.txt
-
-   ### RUN DIVERSITY ANALYSES ###
-   diversity_folder=1_16_core_metrics_phylogenetic
    qiime diversity core-metrics-phylogenetic \
-     --i-phylogeny 1_15_deblur_tree.qza \
-     --i-table 1_7_deblur_table.qza \
-     --p-sampling-depth $rarefaction_depth \
-     --m-metadata-file "$map_path" \
-     --output-dir "$diversity_folder"
+      --i-phylogeny "$tre" \
+      --i-table "$table" \
+      --p-sampling-depth 50000 \
+      --m-metadata-file "$map" \
+      --output-dir american_gut/2_3_diversity_core_phylogenetic
 
-   ### VIEW PCoA PLOTS ###
-   qiime tools view 1_16_core_metrics_phylogenetic/bray_curtis_emperor.qzv
-   qiime tools view 1_16_core_metrics_phylogenetic/jaccard_emperor.qzv
-   qiime tools view 1_16_core_metrics_phylogenetic/unweighted_unifrac_emperor.qzv
-   qiime tools view 1_16_core_metrics_phylogenetic/weighted_unifrac_emperor.qzv
 
+**Note the --p-sampling-depth Option:**
+   - This is the depth we will rarefy for each sample
+   - Since we know each sample has 50,000 counts we will use that
+   - Essentially we are just randomly picking 50,000 counts from each sample
+   - While effect size matters, rarefy depth doesn't hugely affect ability to detect a signal
+   - More samples is stronger than deeper rarefy depth! Don't throw away info
+
+.. figure:: ../images/rare_1000_10.png
+   :scale: 60 %
+   :alt: rare_1000_10 
+   
+   The left figure is rarefied to 1,500 seqs/sample, the right is rarefied to 10 seqs/samples. Source: Kuczynski, J. Genome Biology. 2010
+
+
+.. code-block:: bash
+
+   # List files in diversity results
+   ls -lsh american_gut/2_3_diversity_core_phylogenetic/
+
+What do you notice about the types of files that were made?
+
+If for some reason you don't have a phylogeny, there is a non-phylogenetic wrapper method
+   - One could also aruge about the degree to which functional similarity parallels genetic similarity of the 16S rRNA gene
+
+
+**Let's look at the alpha diversity**
+   - Here I get a bit more fancy, wrapping each of the metrics in a for loop
+   - Don't have to write the 'qiime diversity alpha-group-significance...' command four times
+
+.. code-block:: bash
+   
+   # Create a shortcut to our diversity output folder
+   diversity_folder=american_gut/2_3_diversity_core_phylogenetic/
+   
    ##### ALPHA DIVERSITY ANALYSES #####
+   # for each alpha diversity metric...
    for alpha_metric in faith_pd shannon observed_otus evenness
    do
-       echo "$diversity_folder"/"$alpha_metric"_vector.qza
+      # print the diversity vector name
+      echo "$diversity_folder""$alpha_metric"_vector.qza
 
-       ### ALPHA ASSOCIATION CATEGORICAL MAPPING ###
-       qiime diversity alpha-group-significance \
-         --i-alpha-diversity "$divers\ity_folder"/"$alpha_metric"_vector.qza \
-         --m-metadata-file "$map_path" \
-         --o-visualization 1_17_"$alpha_metric"_group_significance.qzv
-
-       ### ALPHA ASSOCIATION CONTINUOUS MAPPING ###
-
+      ### ALPHA ASSOCIATION CATEGORICAL MAPPING ###
+      qiime diversity alpha-group-significance \
+         --i-alpha-diversity "$diversity_folder""$alpha_metric"_vector.qza \
+         --m-metadata-file "$map" \
+         --o-visualization american_gut/2_4_"$alpha_metric"_group_significance.qzv
+   
+   # Close the for loop
    done
 
-   qiime diversity filter-distance-matrix \
-     --i-distance-matrix distance-matrix.qza \
-     --m-metadata-file samples-to-keep.tsv \
-     --o-filtered-distance-matrix identifier-filtered-distance-matrix.qza
+Using a for loop and shortcut to the diversity folder are really nice because
+   - We could easily add or remove alpha metrics
+   - We could apply this to a different diversity folder by changing one line
+   - **Think about making you code flexible when building pipelines!!!**
 
-   ### VIEW RESULTS ###
-   # CATEGORICAL #
-   qiime tools view 1_17_shannon_group_significance.qzv
-   qiime tools view 1_17_observed_otus_group_significance.qzv
-   qiime tools view 1_17_evenness_group_significance.qzv
-   qiime tools view 1_17_faith_pd_group_significance.qzv
+.. code-block:: bash
+   
+   # Variable you can change to easily see other metrics
+   alpha_metric=shannon
+   
+   # View Alpha diversity results
+   qiime tools view american_gut/2_4_"$alpha_metric"_group_significance.qzv
+   
+
+**Take note of the statistics included**
+   - Which groups have 
+   - Keep in mind corrections for multiple variables
+
+.. figure:: ../images/kw_test.png
+   :scale: 110 %
+   :alt: kw_test 
+   
+   Kruskal Wallis is non-parametric because it uses the rank order and not the actual values. Source: spss-tutorials.com
+
+
+**Let's look at the beta diversity**
+   - Here is another useful trick for running different metrics, commenting them out
+   - Note that if two are left active the beta_metric will be set to the last call
+   
+.. code-block:: bash
+   
+   # Variable you can comment on / off to easily see other metrics, only use one at a time
+   beta_metric=weighted_unifrac
+   #beta_metric=unweighted_unifrac
+   beta_metric=bray_curtis
+   #beta_metric=jaccard
+
+   
+   # View Alpha diversity results
+   qiime tools view "$diversity_folder""$beta_metric"_emperor.qzv
+
+.. figure:: ../images/pcoa.png
+   :scale: 30 %
+   :alt: pcoa 
+   
+   Principle Coordinates of Analysis (PCoA)
+
+**We will talk about this in more detail, and specific ways to test hypotheses. Click 'Next' down to the right**
 
 
 
