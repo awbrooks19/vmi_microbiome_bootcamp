@@ -1,6 +1,8 @@
 From Sequences to Community Composition
 =================================================================
 
+Data Source: https://github.com/awbrooks19/vmi_microbiome_bootcamp
+
 **What to do when you get back your sequence files?**
 
 Sequence File Formats
