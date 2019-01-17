@@ -101,7 +101,7 @@ ls -lsh american_gut
 qiime tools import <span class="se">\</span>
   --input-path  american_gut/1_0_biom.biom <span class="se">\</span>
   --type <span class="s1">&#39;FeatureTable[Frequency]&#39;</span> <span class="se">\</span>
-  --source-format BIOMV100Format <span class="se">\</span>
+  --input-format BIOMV100Format <span class="se">\</span>
   --output-path american_gut/1_1_biom.qza
 
 <span class="c1"># Import the bacterial 16S phylogeny</span>
@@ -115,7 +115,7 @@ qiime tools import <span class="se">\</span>
    --input-path american_gut/1_0_tax.tsv <span class="se">\</span>
    --output-path american_gut/1_1_tax.qza <span class="se">\</span>
    --type FeatureData<span class="o">[</span>Taxonomy<span class="o">]</span> <span class="se">\</span>
-   --source-format HeaderlessTSVTaxonomyFormat
+   --input-format HeaderlessTSVTaxonomyFormat
 
 <span class="c1"># Create a visual of the metadata (map.txt)</span>
 qiime metadata tabulate <span class="se">\</span>

@@ -239,7 +239,7 @@ qiime tools import <span class="se">\</span>
   --type <span class="s1">&#39;SampleData[PairedEndSequencesWithQuality]&#39;</span> <span class="se">\ </span><span class="c1"># Change for paired/single end sequences</span>
   --input-path my_manifest.txt <span class="se">\</span>
   --output-path 1_0_input_seqs.qza <span class="se">\</span>
-  --source-format PairedEndFastqManifestPhred64 <span class="c1"># Change for paired/single and phred format</span>
+  --input-format PairedEndFastqManifestPhred64 <span class="c1"># Change for paired/single and phred format</span>
 </pre></div>
 </div>
 <p><strong>Earth Microbiome Project format</strong></p>
@@ -718,7 +718,7 @@ qiime tools import <span class="se">\</span>
 <span class="c1">### IMPORT TAXONOMY REFERENCE TABLE ###</span>
 qiime tools import <span class="se">\</span>
    --type <span class="s1">&#39;FeatureData[Taxonomy]&#39;</span> <span class="se">\</span>
-   --source-format HeaderlessTSVTaxonomyFormat <span class="se">\</span>
+   --input-format HeaderlessTSVTaxonomyFormat <span class="se">\</span>
    --input-path <span class="s2">&quot;</span><span class="nv">$greengenes_path</span><span class="s2">&quot;</span>94_otu_taxonomy.txt <span class="se">\</span>
    --output-path paired_end/greengenes_94_taxonomy.qza
 </pre></div>

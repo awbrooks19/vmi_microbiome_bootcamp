@@ -41,7 +41,7 @@ Concepts of Community Analysis
    qiime tools import \
      --input-path  american_gut/1_0_biom.biom \
      --type 'FeatureTable[Frequency]' \
-     --source-format BIOMV100Format \
+     --input-format BIOMV100Format \
      --output-path american_gut/1_1_biom.qza
 
    # Import the bacterial 16S phylogeny
@@ -55,7 +55,7 @@ Concepts of Community Analysis
       --input-path american_gut/1_0_tax.tsv \
       --output-path american_gut/1_1_tax.qza \
       --type FeatureData[Taxonomy] \
-      --source-format HeaderlessTSVTaxonomyFormat
+      --input-format HeaderlessTSVTaxonomyFormat
 
    # Create a visual of the metadata (map.txt)
    qiime metadata tabulate \

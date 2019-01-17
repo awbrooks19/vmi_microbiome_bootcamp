@@ -154,7 +154,7 @@ Depending on your formats it will look something like:
      --type 'SampleData[PairedEndSequencesWithQuality]' \ # Change for paired/single end sequences
      --input-path my_manifest.txt \
      --output-path 1_0_input_seqs.qza \
-     --source-format PairedEndFastqManifestPhred64 # Change for paired/single and phred format
+     --input-format PairedEndFastqManifestPhred64 # Change for paired/single and phred format
    
 **Earth Microbiome Project format**
 
@@ -570,7 +570,7 @@ Taxonomy Assignment
    ### IMPORT TAXONOMY REFERENCE TABLE ###
    qiime tools import \
       --type 'FeatureData[Taxonomy]' \
-      --source-format HeaderlessTSVTaxonomyFormat \
+      --input-format HeaderlessTSVTaxonomyFormat \
       --input-path "$greengenes_path"94_otu_taxonomy.txt \
       --output-path paired_end/greengenes_94_taxonomy.qza
 
